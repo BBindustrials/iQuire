@@ -1,0 +1,184 @@
+@import '../../styles/theme.css';
+
+.jobSeeker {
+  padding: 5rem 0;
+  background-color: var(--color-white);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.badge {
+  display: inline-block;
+  background-color: var(--color-accent-gold);
+  color: var(--color-text-primary);
+  padding: 0.25rem 1rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.description {
+  font-size: 1.125rem;
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.opportunityTypes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.typeTag {
+  background-color: var(--color-background-light);
+  color: var(--color-text-secondary);
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.typeTag:hover {
+  background-color: #2E7D32; /* Green instead of blue */
+  color: var(--color-white);
+  transform: translateY(-2px);
+}
+
+.opportunitiesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.opportunityCard {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: all var(--transition-base);
+}
+
+.opportunityCard:hover {
+  transform: translateY(-4px);
+}
+
+.opportunityTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-primary);
+}
+
+.opportunityMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.metaTag {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.75rem;
+  border-radius: 50px;
+  background-color: var(--color-background-light);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.applyButton {
+  margin-top: auto;
+  background-color: transparent !important;
+  color: #2E7D32 !important;
+  border: 2px solid #2E7D32 !important;
+  box-shadow: none !important;
+  transition: all 0.3s ease !important;
+}
+
+.applyButton:hover {
+  background-color: #2E7D32 !important;
+  color: #FFFFFF !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(46, 125, 50, 0.3) !important;
+}
+
+.ctaGroup {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Green Primary Button - Explore Opportunities */
+.ctaGroup .button:first-child {
+  background-color: #2E7D32 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 20px rgba(46, 125, 50, 0.3) !important;
+}
+
+.ctaGroup .button:first-child:hover {
+  background-color: #1B5E20 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(46, 125, 50, 0.4) !important;
+}
+
+/* Gold Secondary Button - Build Your Profile */
+.ctaGroup .button:last-child {
+  background-color: transparent !important;
+  color: #FFB300 !important;
+  border: 2px solid #FFB300 !important;
+  box-shadow: none !important;
+}
+
+.ctaGroup .button:last-child:hover {
+  background-color: #FFB300 !important;
+  color: #000000 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(255, 179, 0, 0.3) !important;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .opportunitiesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .opportunitiesGrid {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .opportunityTypes {
+    gap: 0.4rem;
+  }
+
+  .typeTag {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.75rem;
+  }
+
+  .ctaGroup {
+    flex-direction: column;
+    align-items: center;
+  }
+}

@@ -1,0 +1,239 @@
+@import '../../styles/theme.css';
+
+.blog {
+  padding: 5rem 0;
+  background-color: #F8F9FA; /* Same as FAQ - light gray */
+  width: 100%;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1.5rem;
+}
+
+.badge {
+  display: inline-block;
+  background-color: #FFB300;
+  color: #000000;
+  padding: 0.25rem 1rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #000000;
+}
+
+.title .highlight-gold {
+  color: #FFB300;
+}
+
+.description {
+  font-size: 1.125rem;
+  color: #000000;
+  max-width: 600px;
+  margin: 0 auto;
+  opacity: 0.8;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 3rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1.5rem;
+}
+
+.blogCard {
+  overflow: hidden;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background-color: #FFFFFF;
+  border-radius: var(--radius-lg);
+}
+
+.blogCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+  border-color: #FFB300;
+}
+
+.blogImage {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.blogImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.blogCard:hover .blogImage img {
+  transform: scale(1.05);
+}
+
+.categoryBadge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: #FFB300;
+  color: #000000;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.blogContent {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.blogMeta {
+  font-size: 0.875rem;
+  color: #000000;
+  margin-bottom: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  opacity: 0.6;
+}
+
+.blogTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+  color: #000000;
+}
+
+.blogExcerpt {
+  font-size: 0.95rem;
+  color: #000000;
+  line-height: 1.6;
+  flex: 1;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+/* Read More Button - Green */
+.blogContent .button {
+  background-color: transparent !important;
+  color: #2E7D32 !important;
+  padding: 0 !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.blogContent .button:hover {
+  color: #1B5E20 !important;
+  transform: translateX(4px);
+}
+
+.ctaWrapper {
+  text-align: center;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1.5rem;
+}
+
+.ctaWrapper .button {
+  background-color: transparent !important;
+  color: #FFB300 !important;
+  border: 2px solid #FFB300 !important;
+  box-shadow: none !important;
+}
+
+.ctaWrapper .button:hover {
+  background-color: #FFB300 !important;
+  color: #000000 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(255, 179, 0, 0.3) !important;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .blog {
+    padding: 3rem 0;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1rem;
+    gap: 1.5rem;
+  }
+
+  .blogImage {
+    height: 180px;
+  }
+
+  .header {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    padding: 0 0.5rem;
+  }
+
+  .blogImage {
+    height: 160px;
+  }
+
+  .blogContent {
+    padding: 1.25rem;
+  }
+
+  .blogTitle {
+    font-size: 1rem;
+  }
+
+  .blogExcerpt {
+    font-size: 0.875rem;
+  }
+
+  .header {
+    padding: 0 1rem;
+  }
+
+  .ctaWrapper {
+    padding: 0 1rem;
+  }
+}

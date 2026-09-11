@@ -1,0 +1,184 @@
+@import '../../styles/theme.css';
+
+.problem {
+  padding: 5rem 0;
+  background-color: #FFFFFF;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.badge {
+  display: inline-block;
+  background-color: #FFB300;
+  color: #000000;
+  padding: 0.25rem 1rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+  color: #000000;
+}
+
+.title .highlight-gold {
+  color: #FFB300;
+}
+
+.problemStatement p {
+  font-size: 1.125rem;
+  color: #000000;
+  line-height: 1.7;
+}
+
+.employerProblem {
+  background-color: #F8F9FA;
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  margin: 1.5rem 0;
+  border-left: 4px solid #FFB300;
+}
+
+.employerProblem h4 {
+  color: #000000;
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+}
+
+.employerProblem p {
+  margin: 0;
+  font-size: 1rem;
+  color: #000000;
+}
+
+.solution {
+  margin-top: 1.5rem;
+}
+
+.solution h4 {
+  color: #2E7D32; /* Changed to green */
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+}
+
+.solution p {
+  color: #000000;
+  margin-bottom: 1.5rem;
+}
+
+.solution p strong {
+  color: #FFB300;
+}
+
+/* Visual - Image */
+.visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.problemImage {
+  width: 100%;
+  max-width: 550px;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-lg);
+  transition: transform 0.5s ease;
+}
+
+.problemImage:hover {
+  transform: scale(1.02);
+}
+
+/* CTA Button - Green */
+.cta {
+  background-color: #2E7D32 !important;
+  color: #FFFFFF !important;
+}
+
+.cta:hover {
+  background-color: #1B5E20 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(46, 125, 50, 0.4) !important;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .grid {
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .problem {
+    padding: 3rem 0;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .visual {
+    order: -1;
+  }
+
+  .problemImage {
+    max-width: 100%;
+  }
+
+  .content {
+    text-align: left;
+  }
+
+  .problemStatement p {
+    text-align: left;
+  }
+
+  .employerProblem {
+    text-align: left;
+  }
+
+  .solution {
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.8rem;
+  }
+
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .problemStatement p {
+    font-size: 1rem;
+  }
+
+  .employerProblem {
+    padding: 1rem;
+  }
+
+  .employerProblem h4 {
+    font-size: 1rem;
+  }
+
+  .solution h4 {
+    font-size: 1rem;
+  }
+}

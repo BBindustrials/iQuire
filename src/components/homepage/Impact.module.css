@@ -1,0 +1,199 @@
+@import '../../styles/theme.css';
+
+.impact {
+  padding: 5rem 0;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+  color: #FFFFFF;
+  width: 100%;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1.5rem;
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 1.5rem;
+}
+
+.title .highlight-gold {
+  color: #FFB300;
+}
+
+.description {
+  font-size: 1.125rem;
+  color: #FFFFFF; /* Pure white */
+  max-width: 700px;
+  margin: 0 auto 1.5rem;
+  line-height: 1.7;
+  opacity: 1; /* Full opacity */
+}
+
+.reach {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.reachBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #FFFFFF; /* Pure white */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2rem;
+  margin: 3rem 0;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1.5rem;
+}
+
+.metricCard {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2rem 1rem;
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+}
+
+.metricCard:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #FFB300;
+}
+
+.metricIcon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.metricValue {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #FFB300;
+  margin-bottom: 0.25rem;
+}
+
+.metricLabel {
+  font-size: 0.95rem;
+  color: #FFFFFF; /* Pure white */
+  opacity: 1; /* Full opacity */
+}
+
+.ctaWrapper {
+  text-align: center;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1.5rem;
+}
+
+.ctaWrapper .button {
+  background-color: transparent !important;
+  color: #FFB300 !important;
+  border: 2px solid #FFB300 !important;
+  box-shadow: none !important;
+}
+
+.ctaWrapper .button:hover {
+  background-color: #FFB300 !important;
+  color: #000000 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(255, 179, 0, 0.3) !important;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .metricsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .impact {
+    padding: 3rem 0;
+  }
+
+  .metricsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+
+  .metricCard {
+    padding: 1.5rem 1rem;
+  }
+
+  .metricValue {
+    font-size: 1.75rem;
+  }
+
+  .reach {
+    gap: 1rem;
+  }
+
+  .reachBadge {
+    font-size: 0.875rem;
+    padding: 0.4rem 1rem;
+  }
+
+  .header {
+    padding: 0 1rem;
+  }
+
+  .ctaWrapper {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .metricsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    padding: 0 0.5rem;
+  }
+
+  .metricCard {
+    padding: 1rem;
+  }
+
+  .metricIcon {
+    font-size: 2rem;
+  }
+
+  .metricValue {
+    font-size: 1.5rem;
+  }
+
+  .metricLabel {
+    font-size: 0.8rem;
+  }
+
+  .description {
+    font-size: 1rem;
+    padding: 0 0.5rem;
+  }
+}

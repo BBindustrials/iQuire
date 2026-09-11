@@ -1,0 +1,51 @@
+@import '../../styles/theme.css';
+
+.card {
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base);
+}
+
+/* Elevation */
+.elevation-none {
+  box-shadow: none;
+}
+
+.elevation-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+.elevation-md {
+  box-shadow: var(--shadow-md);
+}
+
+.elevation-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+/* Padding */
+.padding-sm {
+  padding: var(--spacing-sm);
+}
+
+.padding-md {
+  padding: var(--spacing-md);
+}
+
+.padding-lg {
+  padding: var(--spacing-lg);
+}
+
+.padding-none {
+  padding: 0;
+}
+
+/* Hover effect */
+.hover {
+  cursor: pointer;
+}
+
+.hover:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}

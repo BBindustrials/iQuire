@@ -1,0 +1,218 @@
+@import '../../styles/theme.css';
+
+.finalCTA {
+  padding: 4rem 0 0 0; /* No bottom padding at all */
+  background: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin: 0;
+}
+
+/* Remove decorative elements that may cause spacing */
+.finalCTA::before,
+.finalCTA::after {
+  display: none;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: end;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  margin-bottom: 0;
+}
+
+/* Image Wrapper - no space below */
+.imageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  width: 100%;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.ctaImage {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  margin-bottom: -5px; /* Pull image down slightly to touch footer */
+}
+
+/* Text Content - no bottom padding */
+.textContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  text-align: left;
+  padding-bottom: 3rem; /* Some padding to align with image */
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: #000000;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Gold highlight with shadow to make it POP */
+.title .highlight-gold {
+  color: #FFB300;
+  text-shadow: 
+    0 2px 8px rgba(255, 179, 0, 0.3),
+    0 4px 16px rgba(255, 179, 0, 0.15);
+}
+
+.subtitle {
+  font-size: 1.125rem;
+  color: #000000;
+  margin: 0;
+  line-height: 1.7;
+  opacity: 0.8;
+}
+
+.ctaGroup {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+/* Green Primary Button */
+.ctaGroup .button:first-child {
+  background-color: #2E7D32 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 20px rgba(46, 125, 50, 0.3) !important;
+}
+
+.ctaGroup .button:first-child:hover {
+  background-color: #1B5E20 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(46, 125, 50, 0.4) !important;
+}
+
+/* Gold Secondary Button - Enhanced Pop */
+.ctaGroup .button:last-child {
+  background-color: transparent !important;
+  color: #FFB300 !important;
+  border: 2px solid #FFB300 !important;
+  box-shadow: 
+    0 0 20px rgba(255, 179, 0, 0.2),
+    0 4px 15px rgba(255, 179, 0, 0.15) !important;
+  text-shadow: 0 1px 4px rgba(255, 179, 0, 0.2);
+}
+
+.ctaGroup .button:last-child:hover {
+  background-color: #FFB300 !important;
+  color: #000000 !important;
+  transform: translateY(-2px);
+  box-shadow: 
+    0 0 30px rgba(255, 179, 0, 0.4),
+    0 8px 30px rgba(255, 179, 0, 0.3) !important;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .content {
+    gap: 2rem;
+  }
+
+  .ctaImage {
+    max-width: 400px;
+  }
+
+  .textContent {
+    padding-bottom: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .finalCTA {
+    padding: 3rem 0 0 0;
+  }
+
+  .content {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 0 1.5rem;
+    text-align: center;
+  }
+
+  .imageWrapper {
+    order: -1;
+    margin-bottom: -10px;
+  }
+
+  .ctaImage {
+    max-width: 320px;
+  }
+
+  .textContent {
+    text-align: center;
+    align-items: center;
+    padding-bottom: 2rem;
+    gap: 1rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1.125rem;
+  }
+
+  .ctaGroup {
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .ctaGroup .button {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .finalCTA {
+    padding: 2rem 0 0 0;
+  }
+
+  .content {
+    padding: 0 1rem;
+    gap: 0;
+  }
+
+  .ctaImage {
+    max-width: 260px;
+  }
+
+  .textContent {
+    padding-bottom: 1.5rem;
+    gap: 0.875rem;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .ctaGroup .button {
+    max-width: 100%;
+  }
+}
