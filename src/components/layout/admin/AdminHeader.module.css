@@ -1,0 +1,257 @@
+@import '../../../styles/theme.css';
+
+/* ============================================================================
+   Admin Header
+   ============================================================================ */
+
+.header {
+  height: 64px;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  gap: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+/* ----------------------------------------------------------------------------
+   Menu toggle (mobile only)
+   ---------------------------------------------------------------------------- */
+
+.menuToggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  background-color: #FFFFFF;
+  color: #1A1A2E;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.menuToggle:hover {
+  background-color: #F8F9FA;
+}
+
+/* ----------------------------------------------------------------------------
+   Header title
+   ---------------------------------------------------------------------------- */
+
+.headerTitle {
+  flex: 1;
+}
+
+.headerLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 0.02em;
+}
+
+/* ----------------------------------------------------------------------------
+   Header actions
+   ---------------------------------------------------------------------------- */
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.viewSiteBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  color: #4A4A6A;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.viewSiteBtn:hover {
+  border-color: #1565C0;
+  color: #1565C0;
+}
+
+/* ----------------------------------------------------------------------------
+   User menu
+   ---------------------------------------------------------------------------- */
+
+.userMenu {
+  position: relative;
+}
+
+.userButton {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.4rem 0.65rem 0.4rem 0.4rem;
+  border-radius: 8px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: #1A1A2E;
+}
+
+.userButton:hover {
+  background-color: #F8F9FA;
+  border-color: #E5E7EB;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #F9A825;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+
+.userMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+}
+
+.userName {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1A1A2E;
+}
+
+.userRole {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.68rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* ----------------------------------------------------------------------------
+   Dropdown
+   ---------------------------------------------------------------------------- */
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 240px;
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
+  z-index: 100;
+  animation: dropdownIn 0.15s ease;
+}
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdownHeader {
+  padding: 0.65rem 0.75rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.dropdownName {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1A1A2E;
+}
+
+.dropdownEmail {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdownDivider {
+  height: 1px;
+  background-color: #E5E7EB;
+  margin: 0.35rem 0;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  background-color: transparent;
+  border: none;
+  color: #4A4A6A;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.dropdownItem:hover {
+  background-color: #F8F9FA;
+  color: #1A1A2E;
+}
+
+/* ============================================================================
+   Responsive
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+  .menuToggle {
+    display: flex;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0 1rem;
+  }
+
+  .viewSiteBtn span {
+    display: none;
+  }
+
+  .userMeta {
+    display: none;
+  }
+}

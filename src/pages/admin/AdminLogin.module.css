@@ -1,0 +1,133 @@
+@import '../../styles/theme.css';
+
+/* ============================================================================
+   Admin Login — Restricted area styling
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   Restricted access badge
+   ---------------------------------------------------------------------------- */
+
+.adminBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  background-color: #0f172a;
+  color: #F9A825;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 50px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.adminBadge svg {
+  color: #F9A825;
+}
+
+/* ----------------------------------------------------------------------------
+   Submit button — dark navy admin styling
+   ---------------------------------------------------------------------------- */
+
+.adminSubmitButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.95rem 1.5rem;
+  background-color: #0f172a;
+  color: #FFFFFF;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 1rem;
+}
+
+.adminSubmitButton:hover:not(:disabled) {
+  background-color: #1e293b;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.3);
+}
+
+.adminSubmitButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.adminSubmitButton:disabled {
+  background-color: #475569;
+  cursor: wait;
+  opacity: 0.85;
+}
+
+/* ----------------------------------------------------------------------------
+   Error banner
+   ---------------------------------------------------------------------------- */
+
+.submitError {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.85rem 1rem;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-left: 4px solid #C62828;
+  border-radius: 6px;
+  color: #991b1b;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.submitError svg {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  color: #C62828;
+}
+
+/* ----------------------------------------------------------------------------
+   Footer — back to public site
+   ---------------------------------------------------------------------------- */
+
+.adminFooter {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.backLink {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.875rem;
+  color: #667085;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: #1565C0;
+}
+
+/* ----------------------------------------------------------------------------
+   Responsive
+   ---------------------------------------------------------------------------- */
+
+@media (max-width: 640px) {
+  .adminSubmitButton {
+    font-size: 0.9rem;
+    padding: 0.85rem 1.25rem;
+  }
+
+  .adminBadge {
+    font-size: 0.7rem;
+    padding: 0.35rem 0.75rem;
+  }
+}

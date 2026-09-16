@@ -1,0 +1,497 @@
+@import '../../styles/theme.css';
+
+/* ============================================================================
+   Admin Dashboard
+   ============================================================================ */
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+/* ----------------------------------------------------------------------------
+   Page header
+   ---------------------------------------------------------------------------- */
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.pageTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.35rem 0;
+  letter-spacing: -0.01em;
+}
+
+.pageSubtitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ----------------------------------------------------------------------------
+   Error banner (with retry button)
+   ---------------------------------------------------------------------------- */
+
+.errorBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1.1rem;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-left: 4px solid #dc2626;
+  border-radius: 6px;
+  color: #991b1b;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  flex-wrap: wrap;
+}
+
+.retryButton {
+  padding: 0.4rem 0.9rem;
+  background-color: #dc2626;
+  color: #FFFFFF;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.retryButton:hover {
+  background-color: #b91c1c;
+  transform: translateY(-1px);
+}
+
+.retryButton:active {
+  transform: translateY(0);
+}
+
+/* ----------------------------------------------------------------------------
+   Stats grid
+   ---------------------------------------------------------------------------- */
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  transition: all 0.2s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  border-color: #cbd5e1;
+}
+
+.statIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  flex-shrink: 0;
+  background-color: #f1f5f9;
+}
+
+.accent-blue .statIcon { background-color: #e0f2fe; }
+.accent-green .statIcon { background-color: #dcfce7; }
+.accent-gold .statIcon { background-color: #fef3c7; }
+.accent-dark .statIcon { background-color: #e2e8f0; }
+
+.statBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.statValue {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+  margin-bottom: 0.2rem;
+  letter-spacing: -0.02em;
+}
+
+.statLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.valueSkeleton {
+  display: inline-block;
+  width: 48px;
+  height: 22px;
+  background: linear-gradient(90deg, #e2e8f0 0%, #f1f5f9 50%, #e2e8f0 100%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+/* ----------------------------------------------------------------------------
+   Two column layout
+   ---------------------------------------------------------------------------- */
+
+.twoCol {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 1rem;
+}
+
+/* ----------------------------------------------------------------------------
+   Panel
+   ---------------------------------------------------------------------------- */
+
+.panel {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 1.25rem 1.35rem;
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.panelTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.panelMeta {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.panelLink {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.8rem;
+  color: #1565C0;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.panelLink:hover {
+  text-decoration: underline;
+}
+
+/* ----------------------------------------------------------------------------
+   Trend chart
+   ---------------------------------------------------------------------------- */
+
+.trendChart {
+  min-height: 160px;
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.5rem;
+  height: 160px;
+  padding-top: 1.25rem;
+}
+
+.barWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  height: 100%;
+}
+
+.barTrack {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.barFill {
+  width: 80%;
+  max-width: 32px;
+  background: linear-gradient(180deg, #1565C0 0%, #0d47a1 100%);
+  border-radius: 6px 6px 0 0;
+  position: relative;
+  min-height: 4px;
+  transition: all 0.3s ease;
+}
+
+.barFill:hover {
+  filter: brightness(1.1);
+}
+
+.barValue {
+  position: absolute;
+  top: -1.35rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.barLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.7rem;
+  color: #64748b;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.chartSkeleton {
+  height: 160px;
+  background: linear-gradient(90deg, #e2e8f0 0%, #f1f5f9 50%, #e2e8f0 100%);
+  background-size: 200% 100%;
+  border-radius: 8px;
+  animation: shimmer 1.2s infinite;
+}
+
+.emptyText {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  text-align: center;
+  padding: 2rem 0;
+  margin: 0;
+}
+
+/* ----------------------------------------------------------------------------
+   Recent users list
+   ---------------------------------------------------------------------------- */
+
+.recentList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.userRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.65rem;
+  border-radius: 8px;
+  transition: background-color 0.15s ease;
+}
+
+.userRow:hover {
+  background-color: #f8fafc;
+}
+
+.userAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1565C0 0%, #0d47a1 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.userInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.userName {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userEmail {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.userDate {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.68rem;
+  color: #94a3b8;
+}
+
+/* Role badges */
+.roleBadge {
+  display: inline-block;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.role-student { background-color: #e0f2fe; color: #0369a1; }
+.role-nysc { background-color: #dcfce7; color: #166534; }
+.role-recruiter { background-color: #fef3c7; color: #a16207; }
+.role-admin { background-color: #e2e8f0; color: #334155; }
+
+.listSkeleton {
+  height: 52px;
+  background: linear-gradient(90deg, #e2e8f0 0%, #f1f5f9 50%, #e2e8f0 100%);
+  background-size: 200% 100%;
+  border-radius: 8px;
+  animation: shimmer 1.2s infinite;
+}
+
+/* ----------------------------------------------------------------------------
+   Quick actions
+   ---------------------------------------------------------------------------- */
+
+.quickActions {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.75rem;
+}
+
+.quickAction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 0.75rem;
+  background-color: #f8fafc;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.quickAction:hover {
+  background-color: #FFFFFF;
+  border-color: #1565C0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(21, 101, 192, 0.1);
+}
+
+.qaIcon {
+  font-size: 1.5rem;
+}
+
+.qaLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #334155;
+  text-align: center;
+}
+
+/* ============================================================================
+   Responsive
+   ============================================================================ */
+
+@media (max-width: 1280px) {
+  .statsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .quickActions {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .twoCol {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .quickActions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pageTitle {
+    font-size: 1.25rem;
+  }
+
+  .statCard {
+    padding: 0.9rem 1rem;
+  }
+
+  .statValue {
+    font-size: 1.25rem;
+  }
+
+  .statIcon {
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem;
+  }
+}

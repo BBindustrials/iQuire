@@ -1,0 +1,333 @@
+@import '../../../styles/theme.css';
+
+/* ============================================================================
+   Signup / Login Form Shared Styles
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   Two-column grid layout for form fields
+   ---------------------------------------------------------------------------- */
+
+.twoCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.twoCol > * {
+  margin-bottom: 0;
+}
+
+/* ----------------------------------------------------------------------------
+   Password strength indicator
+   ---------------------------------------------------------------------------- */
+
+.strengthWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+}
+
+.strengthBars {
+  display: flex;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.strengthBar {
+  height: 4px;
+  flex: 1;
+  background-color: #E5E7EB;
+  border-radius: 2px;
+  transition: background-color 0.2s ease;
+}
+
+.strength-weak {
+  background-color: #C62828;
+}
+
+.strength-medium {
+  background-color: #F9A825;
+}
+
+.strength-strong {
+  background-color: #2E7D32;
+}
+
+.strengthLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.strength-label-weak {
+  color: #C62828;
+}
+
+.strength-label-medium {
+  color: #F9A825;
+}
+
+.strength-label-strong {
+  color: #2E7D32;
+}
+
+/* ----------------------------------------------------------------------------
+   Terms wrapper
+   ---------------------------------------------------------------------------- */
+
+.termsWrapper {
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem 1.25rem 0.5rem;
+  background-color: #FAFBFC;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+}
+
+/* ----------------------------------------------------------------------------
+   Submit button
+   ---------------------------------------------------------------------------- */
+
+.submitButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.9rem 1.5rem;
+  background-color: #2E7D32;
+  color: #FFFFFF;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 0.5rem;
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: #1B5E20;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.25);
+}
+
+.submitButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submitButton:disabled {
+  background-color: #86b388;
+  cursor: wait;
+  opacity: 0.85;
+}
+
+/* ----------------------------------------------------------------------------
+   Success state
+   ---------------------------------------------------------------------------- */
+
+.successBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 3rem 1rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.successIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #f0fdf4;
+  color: #2E7D32;
+  margin-bottom: 1.5rem;
+}
+
+.successTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1A1A2E;
+  margin: 0 0 0.75rem 0;
+  letter-spacing: -0.01em;
+}
+
+.successText {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  color: #4A4A6A;
+  line-height: 1.7;
+  margin: 0 0 2rem 0;
+}
+
+.successText strong {
+  color: #1A1A2E;
+  font-weight: 700;
+}
+
+.successButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 2rem;
+  background-color: #2E7D32;
+  color: #FFFFFF;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 200px;
+}
+
+.successButton:hover {
+  background-color: #1B5E20;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.25);
+}
+
+.successFooter {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  color: #667085;
+  margin: 1.5rem 0 0 0;
+}
+
+.successResend {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #F9A825;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.successResend:hover {
+  color: #F57F17;
+}
+
+/* ============================================================================
+   Responsive
+   ============================================================================ */
+
+@media (max-width: 640px) {
+  .twoCol {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .strengthWrapper {
+    margin-top: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .strengthLabel {
+    font-size: 0.7rem;
+  }
+
+  .termsWrapper {
+    padding: 1rem 1rem 0.25rem;
+  }
+
+  .submitButton {
+    font-size: 0.95rem;
+    padding: 0.85rem 1.25rem;
+  }
+
+  .successBox {
+    padding: 2rem 0.5rem;
+  }
+
+  .successTitle {
+    font-size: 1.5rem;
+  }
+
+  .successText {
+    font-size: 0.9rem;
+  }
+}
+/* ----------------------------------------------------------------------------
+   Login page - options row (Remember me + Forgot password)
+   ---------------------------------------------------------------------------- */
+
+.loginOptions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0.5rem 0 1.75rem;
+  flex-wrap: wrap;
+}
+
+.loginOptions > * {
+  margin-bottom: 0;
+}
+
+.forgotLink {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1565C0;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.forgotLink:hover {
+  color: #0D47A1;
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .loginOptions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Submit-level error (form-wide error, e.g., "Email already registered")
+   ---------------------------------------------------------------------------- */
+
+.submitError {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-left: 4px solid #C62828;
+  border-radius: 6px;
+  color: #991b1b;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.submitError::before {
+  content: '⚠';
+  flex-shrink: 0;
+  color: #C62828;
+  font-size: 1rem;
+}

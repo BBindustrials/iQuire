@@ -1,0 +1,244 @@
+@import '../../styles/theme.css';
+
+/* ============================================================================
+   Auth Page Layout
+   - Generous outer margin on both sides (matches NIYA template)
+   - Narrower container width
+   - Green border wrapping the whole bordered container
+   - Left image stretches to match form panel height
+   - Right form panel is the taller side that defines container height
+   ============================================================================ */
+
+.page {
+  min-height: 100vh;
+  background-color: #F7F8FA;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Outer wrapper — creates the visible margin on both sides */
+.pageInner {
+  flex: 1;
+  padding: 2.5rem 6rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Green-bordered container — narrower to match template */
+.container {
+  display: grid;
+  grid-template-columns: 38% 62%;
+  width: 100%;
+  max-width: 1100px;
+  background-color: #FFFFFF;
+  border: 1.5px solid #2E7D32;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* ----------------------------------------------------------------------------
+   Left panel — image stretches to match form height
+   ---------------------------------------------------------------------------- */
+
+.imagePanel {
+  position: relative;
+  background-color: #F0F0F0;
+  overflow: hidden;
+  align-self: stretch;
+  min-height: 100%;
+}
+
+.image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+/* ----------------------------------------------------------------------------
+   Right panel — form
+   ---------------------------------------------------------------------------- */
+
+.formPanel {
+  padding: 2.5rem 3rem;
+  background-color: #FFFFFF;
+  overflow-y: auto;
+}
+
+.formInner {
+  width: 100%;
+  max-width: 620px;
+}
+
+/* ============================================================================
+   Welcome Banner
+   ============================================================================ */
+
+.welcomeBanner {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+  border-left: 4px solid #2E7D32;
+  border-radius: 8px;
+  padding: 1.1rem 1.4rem;
+  margin-bottom: 1.75rem;
+}
+
+.welcomeTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #2E7D32;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 0.01em;
+}
+
+.welcomeDescription {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.875rem;
+  color: #4A4A6A;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ============================================================================
+   Page Title
+   ============================================================================ */
+
+.pageTitleWrapper {
+  margin-bottom: 1.75rem;
+}
+
+.pageTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #1A1A2E;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.pageSubtitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  color: #667085;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ============================================================================
+   Auth Footer
+   ============================================================================ */
+
+.authFooter {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  color: #4A4A6A;
+  text-align: center;
+  margin-top: 1.25rem;
+  margin-bottom: 0;
+}
+
+.authFooterLink {
+  color: #F9A825;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.authFooterLink:hover {
+  color: #F57F17;
+  text-decoration: underline;
+}
+
+/* ============================================================================
+   Responsive
+   ============================================================================ */
+
+@media (max-width: 1200px) {
+  .pageInner {
+    padding: 2rem 3rem;
+  }
+
+  .container {
+    max-width: 1000px;
+  }
+
+  .formPanel {
+    padding: 2.25rem 2.5rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .pageInner {
+    padding: 1.5rem 2rem;
+  }
+
+  .formPanel {
+    padding: 2rem 2rem;
+  }
+
+  .pageTitle {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .pageInner {
+    padding: 1rem;
+  }
+
+  .container {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+    border-radius: 6px;
+  }
+
+  .imagePanel {
+    aspect-ratio: 16 / 9;
+    min-height: auto;
+  }
+
+  .formPanel {
+    padding: 1.75rem 1.5rem 2.25rem;
+  }
+
+  .formInner {
+    max-width: 100%;
+  }
+
+  .pageTitle {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pageInner {
+    padding: 0.5rem;
+  }
+
+  .imagePanel {
+    aspect-ratio: 3 / 2;
+    min-height: auto;
+  }
+
+  .formPanel {
+    padding: 1.5rem 1.25rem 2rem;
+  }
+
+  .welcomeBanner {
+    padding: 1rem 1.2rem;
+  }
+
+  .welcomeTitle {
+    font-size: 0.95rem;
+  }
+
+  .welcomeDescription {
+    font-size: 0.825rem;
+  }
+}

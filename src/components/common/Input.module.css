@@ -1,0 +1,83 @@
+@import '../../styles/theme.css';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.label {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1A1A2E;
+  letter-spacing: 0.01em;
+}
+
+.required {
+  color: #C62828;
+  margin-left: 0.2rem;
+  font-weight: 700;
+}
+
+.input {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #1A1A2E;
+  background-color: #FFFFFF;
+  border: 1px solid #D0D5DD;
+  border-radius: 6px;
+  padding: 0.7rem 0.9rem;
+  width: 100%;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.input::placeholder {
+  color: #98A2B3;
+  font-weight: 400;
+}
+
+.input:hover {
+  border-color: #98A2B3;
+}
+
+.input:focus {
+  border-color: #1565C0;
+  box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.1);
+}
+
+.input:disabled {
+  background-color: #F8F9FA;
+  color: #98A2B3;
+  cursor: not-allowed;
+}
+
+.inputError {
+  border-color: #C62828;
+}
+
+.inputError:focus {
+  border-color: #C62828;
+  box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.1);
+}
+
+.error {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.8rem;
+  color: #C62828;
+  font-weight: 500;
+}
+
+.helperText {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.8rem;
+  color: #667085;
+  line-height: 1.4;
+}
