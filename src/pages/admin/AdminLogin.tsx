@@ -2,7 +2,7 @@
 // iQuire — Admin Login
 // ============================================================================
 // Secure entry point for IQuire administrators.
-// Only users with role = 'admin' in the profiles table can access this.
+// Only users with account_type = 'admin' can access the admin dashboard.
 // ============================================================================
 
 import React, { useState, useEffect, type FormEvent } from 'react';
@@ -14,7 +14,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import styles from './AdminLogin.module.css';
 
 import adminLoginImg from '../../assets/images/auth/login-admin.jpg';
-import { login } from '../../services/auth.service';
+import { loginAdmin } from '../../services/auth.service';
 import { isValidEmail, normalizeString } from '../../utils/validation';
 import type { FormErrors } from '../../types/auth.types';
 
@@ -25,7 +25,7 @@ import type { FormErrors } from '../../types/auth.types';
 export const AdminLogin: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuthenticated, role, isLoading: authLoading } = useAuth();
+  const { isAuthenticated, isAdmin, isLoading: authLoading } = useAuth();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -35,16 +35,18 @@ export const AdminLogin: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Where to redirect after successful admin login
-  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/admin/dashboard';
+  const from =
+    (location.state as { from?: { pathname: string } })?.from?.pathname ||
+    '/admin/dashboard';
 
   // --------------------------------------------------------------------------
   // If already logged in as admin, skip the login page
   // --------------------------------------------------------------------------
   useEffect(() => {
-    if (!authLoading && isAuthenticated && role === 'admin') {
+    if (!authLoading && isAuthenticated && isAdmin) {
       navigate(from, { replace: true });
     }
-  }, [authLoading, isAuthenticated, role, navigate, from]);
+  }, [authLoading, isAuthenticated, isAdmin, navigate, from]);
 
   // --------------------------------------------------------------------------
   // Handlers
@@ -83,7 +85,7 @@ export const AdminLogin: React.FC = () => {
   };
 
   // --------------------------------------------------------------------------
-  // Submit
+  // Submit — uses loginAdmin (handles auth + admin role verification)
   // --------------------------------------------------------------------------
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -97,44 +99,16 @@ export const AdminLogin: React.FC = () => {
     setIsSubmitting(true);
     setErrors({});
 
-    // 1. Authenticate with Supabase
-    const result = await login({
-      email: formData.email,
-      password: formData.password,
-      rememberMe: false,
-    });
+    const result = await loginAdmin(formData.email, formData.password);
+
+    setIsSubmitting(false);
 
     if (!result.success) {
-      setIsSubmitting(false);
       setErrors({ submit: result.message });
       return;
     }
 
-    // 2. Wait a moment for AuthContext to fetch the profile
-    await new Promise((resolve) => setTimeout(resolve, 400));
-
-    // 3. Verify the authenticated user has role = 'admin'
-    //    We read the fresh profile from the DB to avoid stale state
-    const { supabase } = await import('../../integrations/supabase/client');
-    const { data: profile } = (await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', result.userId!)
-      .single()) as { data: { role: string } | null };
-
-    setIsSubmitting(false);
-
-    if (!profile || profile.role !== 'admin') {
-      // Sign out non-admins immediately
-      await supabase.auth.signOut();
-      setErrors({
-        submit:
-          'Access denied. This account does not have administrator privileges.',
-      });
-      return;
-    }
-
-    // 4. Success — redirect to admin dashboard
+    // Success — redirect to admin dashboard
     navigate(from, { replace: true });
   };
 

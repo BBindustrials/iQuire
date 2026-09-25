@@ -1,0 +1,201 @@
+@import '../../../styles/theme.css';
+
+/* ============================================================================
+   Recruiter Login Page Styles
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   Recruiter badge — differentiates from member login
+   ---------------------------------------------------------------------------- */
+
+.recruiterBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  background-color: #0f172a;
+  color: #F9A825;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 50px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.recruiterBadge svg {
+  color: #F9A825;
+  flex-shrink: 0;
+}
+
+/* ----------------------------------------------------------------------------
+   Remember me + Forgot password row
+   ---------------------------------------------------------------------------- */
+
+.loginOptions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0.5rem 0 1.75rem;
+  flex-wrap: wrap;
+}
+
+.loginOptions > * {
+  margin-bottom: 0;
+}
+
+.forgotLink {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1565C0;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.forgotLink:hover {
+  color: #0D47A1;
+  text-decoration: underline;
+}
+
+/* ----------------------------------------------------------------------------
+   Submit button — recruiter branded (dark navy)
+   ---------------------------------------------------------------------------- */
+
+.submitButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.9rem 1.5rem;
+  background-color: #0f172a;
+  color: #FFFFFF;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 1rem;
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: #1e293b;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.3);
+}
+
+.submitButton:disabled {
+  background-color: #475569;
+  cursor: wait;
+  opacity: 0.85;
+}
+
+/* ----------------------------------------------------------------------------
+   Submit error
+   ---------------------------------------------------------------------------- */
+
+.submitError {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.85rem 1rem;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-left: 4px solid #C62828;
+  border-radius: 6px;
+  color: #991b1b;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.submitError svg {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  color: #C62828;
+}
+
+/* ----------------------------------------------------------------------------
+   Footer links
+   ---------------------------------------------------------------------------- */
+
+.footer {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  color: #4A4A6A;
+  text-align: center;
+  margin: 1rem 0 0 0;
+}
+
+.footerLink {
+  color: #F9A825;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footerLink:hover {
+  color: #F57F17;
+  text-decoration: underline;
+}
+
+.memberFooter {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  color: #667085;
+  text-align: center;
+  margin: 0.75rem 0 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid #E5E7EB;
+}
+
+/* ----------------------------------------------------------------------------
+   Back to Hire From Us link
+   ---------------------------------------------------------------------------- */
+
+.backHome {
+  text-align: center;
+  margin: 1.25rem 0 0 0;
+}
+
+.backHomeLink {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  color: #667085;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.backHomeLink:hover {
+  color: #1565C0;
+  text-decoration: underline;
+}
+
+/* ============================================================================
+   Responsive
+   ============================================================================ */
+
+@media (max-width: 640px) {
+  .loginOptions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .submitButton {
+    font-size: 0.95rem;
+    padding: 0.85rem 1.25rem;
+  }
+
+  .recruiterBadge {
+    font-size: 0.65rem;
+    padding: 0.35rem 0.7rem;
+  }
+}

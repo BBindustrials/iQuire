@@ -1,0 +1,101 @@
+/* ============================================================================
+   ScrollReveal — scroll-triggered animations
+   ============================================================================ */
+
+.reveal {
+  opacity: 0;
+  transition-property: opacity, transform;
+  transition-duration: 0.9s;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+/* ----------------------------------------------------------------------------
+   Direction variants (initial state)
+   ---------------------------------------------------------------------------- */
+
+.anim-up {
+  transform: translate3d(0, 50px, 0);
+}
+
+.anim-down {
+  transform: translate3d(0, -50px, 0);
+}
+
+.anim-left {
+  transform: translate3d(-50px, 0, 0);
+}
+
+.anim-right {
+  transform: translate3d(50px, 0, 0);
+}
+
+.anim-fade {
+  transform: none;
+}
+
+.anim-zoom {
+  transform: scale(0.92);
+}
+
+/* ----------------------------------------------------------------------------
+   Delay steps
+   ---------------------------------------------------------------------------- */
+
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+.delay-5 { transition-delay: 0.5s; }
+.delay-6 { transition-delay: 0.6s; }
+.delay-7 { transition-delay: 0.7s; }
+.delay-8 { transition-delay: 0.8s; }
+
+/* ----------------------------------------------------------------------------
+   Stagger — direct children animate one after another
+   ---------------------------------------------------------------------------- */
+
+.stagger > * {
+  opacity: 0;
+  transform: translate3d(0, 40px, 0);
+  transition-property: opacity, transform;
+  transition-duration: 0.8s;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.stagger.is-visible > * {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.stagger.is-visible > *:nth-child(1)  { transition-delay: 0.1s; }
+.stagger.is-visible > *:nth-child(2)  { transition-delay: 0.2s; }
+.stagger.is-visible > *:nth-child(3)  { transition-delay: 0.3s; }
+.stagger.is-visible > *:nth-child(4)  { transition-delay: 0.4s; }
+.stagger.is-visible > *:nth-child(5)  { transition-delay: 0.5s; }
+.stagger.is-visible > *:nth-child(6)  { transition-delay: 0.6s; }
+.stagger.is-visible > *:nth-child(7)  { transition-delay: 0.7s; }
+.stagger.is-visible > *:nth-child(8)  { transition-delay: 0.8s; }
+.stagger.is-visible > *:nth-child(9)  { transition-delay: 0.9s; }
+.stagger.is-visible > *:nth-child(10) { transition-delay: 1.0s; }
+.stagger.is-visible > *:nth-child(11) { transition-delay: 1.1s; }
+.stagger.is-visible > *:nth-child(12) { transition-delay: 1.2s; }
+
+/* ----------------------------------------------------------------------------
+   Reduced motion
+   ---------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

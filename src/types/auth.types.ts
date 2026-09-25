@@ -1,22 +1,190 @@
 // ============================================================================
-// iQuire Auth Types
+// iQuire Auth Types — Phase 7A.2
 // ============================================================================
 
-export type UserRole = 'student' | 'nysc' | 'recruiter' | 'admin';
+// ============================================================================
+// Core Enums (mirror Supabase enums)
+// ============================================================================
 
+/** Top-level account kind — determines login portal + dashboard */
+export type AccountType = 'member' | 'recruiter' | 'admin';
+
+/** Access tier — guest can use limited features; verified has full access */
+export type AccountTier = 'guest' | 'verified';
+
+/** Additive roles — a user can have multiple simultaneously */
+export type UserRole = 'student' | 'alumni' | 'recruiter' | 'admin';
+
+/** Legacy enum (kept for backward compatibility in DB) */
+export type LegacyUserRole = 'student' | 'nysc' | 'recruiter' | 'admin';
+
+/** Gender */
 export type Gender = 'male' | 'female' | 'other' | 'prefer-not-to-say';
 
-// ----------------------------------------------------------------------------
-// Signup Form Data
-// ----------------------------------------------------------------------------
+/** Enrollment status */
+export type EnrollmentStatus = 'applied' | 'active' | 'completed' | 'dropped';
 
-export interface BaseSignupData {
-  firstName: string;
-  middleName?: string;
-  lastName: string;
-  gender: Gender | '';
-  phone: string;
+/** Verification status (legacy — kept for compatibility) */
+export type VerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected';
+
+/** Account status */
+export type AccountStatus = 'active' | 'suspended' | 'deleted';
+
+// ============================================================================
+// Profile (matches public.profiles table — updated)
+// ============================================================================
+
+export interface Profile {
+  id: string;
+
+  // Top-level account classification
+  account_type: AccountType;
+  tier: AccountTier;
+
+  // Legacy role field (kept for backward compat with old code)
+  role: LegacyUserRole;
+
+  // Public identifier
+  participant_id: string;
+
+  // Personal
+  first_name: string;
+  middle_name: string | null;
+  last_name: string;
+  gender: Gender | null;
+
+  // Contact
   email: string;
+  phone: string | null;
+
+  // Location
+  country: string | null;
+  state: string | null;
+  lga: string | null;
+
+  // Media
+  avatar_url: string | null;
+
+  // Progress & status
+  profile_completion: number;
+  verification_status: VerificationStatus;
+  account_status: AccountStatus;
+  marketing_opt_in: boolean;
+
+  // Timestamps
+  created_at: string;
+  updated_at: string;
+}
+
+// ============================================================================
+// User Roles (additive) — matches public.user_roles table
+// ============================================================================
+
+export interface UserRoleRecord {
+  id: string;
+  user_id: string;
+  role: UserRole;
+  course_id: string | null;
+  cohort_id: string | null;
+  granted_at: string;
+  granted_by: string | null;
+  revoked_at: string | null;
+  revoked_by: string | null;
+}
+
+// ============================================================================
+// Courses — matches public.courses table
+// ============================================================================
+
+export interface Course {
+  id: string;
+  slug: string;
+  title: string;
+  description: string | null;
+  thumbnail_url: string | null;
+  status: 'draft' | 'published' | 'archived';
+  created_at: string;
+  updated_at: string;
+}
+
+// ============================================================================
+// Cohorts — matches public.cohorts table
+// ============================================================================
+
+export interface Cohort {
+  id: string;
+  course_id: string;
+  name: string;
+  start_date: string | null;
+  end_date: string | null;
+  capacity: number | null;
+  status: 'open' | 'closed' | 'completed';
+  created_at: string;
+  updated_at: string;
+}
+
+// ============================================================================
+// Enrollments — matches public.enrollments table
+// ============================================================================
+
+export interface Enrollment {
+  id: string;
+  user_id: string;
+  course_id: string;
+  cohort_id: string | null;
+  status: EnrollmentStatus;
+  applied_at: string;
+  started_at: string | null;
+  completed_at: string | null;
+  dropped_at: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// ============================================================================
+// Auth Context Value
+// ============================================================================
+
+export interface AuthContextValue {
+  // Supabase user
+  user: import('@supabase/supabase-js').User | null;
+
+  // Full profile
+  profile: Profile | null;
+
+  // Derived shortcuts
+  accountType: AccountType | null;
+  tier: AccountTier | null;
+  roles: UserRole[];
+
+  // Convenience flags
+  isAuthenticated: boolean;
+  isVerified: boolean;
+  isAdmin: boolean;
+  isRecruiter: boolean;
+  isMember: boolean;
+  isStudent: boolean;
+  isAlumni: boolean;
+
+  // State
+  isLoading: boolean;
+
+  // Methods
+  signOut: () => Promise<void>;
+  refreshProfile: () => Promise<void>;
+  refreshRoles: () => Promise<void>;
+}
+
+// ============================================================================
+// Form Data — Register (Member)
+// ============================================================================
+
+export interface RegisterMemberData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
   password: string;
   confirmPassword: string;
   country: string;
@@ -24,22 +192,16 @@ export interface BaseSignupData {
   lga: string;
   agreeToTerms: boolean;
   marketingOptIn: boolean;
+  // Optional
+  desiredCourseId?: string; // if they want to register for a course
+  wantsAiCounselor?: boolean; // if they want AI access
 }
 
-export interface StudentSignupData extends BaseSignupData {
-  userType: 'student';
-}
+// ============================================================================
+// Form Data — Register (Recruiter)
+// ============================================================================
 
-export interface NyscSignupData extends BaseSignupData {
-  userType: 'nysc';
-  yearOfDeployment: string;
-  stateOfDeployment: string;
-  cohortBatch: string;
-  cohortStream: string;
-}
-
-export interface RecruiterSignupData {
-  userType: 'recruiter';
+export interface RegisterRecruiterData {
   firstName: string;
   lastName: string;
   position: string;
@@ -55,47 +217,59 @@ export interface RecruiterSignupData {
   marketingOptIn: boolean;
 }
 
-export type SignupData = StudentSignupData | NyscSignupData | RecruiterSignupData;
+// ============================================================================
+// Form Data — Login (Member)
+// ============================================================================
 
-// ----------------------------------------------------------------------------
-// Login Form Data
-// ----------------------------------------------------------------------------
-
-export interface LoginData {
-  email: string;
+export interface LoginMemberData {
+  identifier: string; // email OR participant_id
   password: string;
   rememberMe?: boolean;
 }
 
-// ----------------------------------------------------------------------------
+// ============================================================================
+// Form Data — Login (Recruiter)
+// ============================================================================
+
+export interface LoginRecruiterData {
+  email: string; // work email
+  password: string;
+  rememberMe?: boolean;
+}
+
+// ============================================================================
+// Form Data — Admin Login
+// ============================================================================
+
+export interface LoginAdminData {
+  email: string;
+  password: string;
+}
+
+// ============================================================================
 // Form Errors
-// ----------------------------------------------------------------------------
+// ============================================================================
 
 export interface FormErrors {
   [key: string]: string;
 }
 
-export interface SignupResponse {
+// ============================================================================
+// Service Responses
+// ============================================================================
+
+export interface AuthResponse {
   success: boolean;
   message: string;
   userId?: string;
-  requiresVerification?: boolean;
+  requiresEmailVerification?: boolean;
   error?: string;
+  redirectTo?: string; // suggested redirect based on account type
 }
 
-// ----------------------------------------------------------------------------
-// Location Types
-// ----------------------------------------------------------------------------
-
-export interface NigerianState {
-  code: string;
-  name: string;
-  lgas: string[];
-}
-
-// ----------------------------------------------------------------------------
-// Dropdown Options
-// ----------------------------------------------------------------------------
+// ============================================================================
+// Dropdown Options (unchanged)
+// ============================================================================
 
 export interface SelectOption {
   label: string;
@@ -137,6 +311,10 @@ export const INDUSTRY_OPTIONS: SelectOption[] = [
   { label: 'Other', value: 'other' },
 ];
 
+// ============================================================================
+// Legacy dropdowns (kept for backward compatibility; remove later)
+// ============================================================================
+
 export const YEAR_OF_DEPLOYMENT_OPTIONS: SelectOption[] = [
   { label: '2024', value: '2024' },
   { label: '2025', value: '2025' },
@@ -153,43 +331,4 @@ export const COHORT_BATCH_OPTIONS: SelectOption[] = [
 export const COHORT_STREAM_OPTIONS: SelectOption[] = [
   { label: 'Stream 1', value: 'stream-1' },
   { label: 'Stream 2', value: 'stream-2' },
-];// ============================================================================
-// Profile (matches public.profiles table)
-// ============================================================================
-
-export interface Profile {
-  id: string;
-  role: UserRole;
-  first_name: string;
-  middle_name: string | null;
-  last_name: string;
-  gender: 'male' | 'female' | 'other' | 'prefer-not-to-say' | null;
-  email: string;
-  phone: string | null;
-  country: string | null;
-  state: string | null;
-  lga: string | null;
-  avatar_url: string | null;
-  profile_completion: number;
-  verification_status: 'unverified' | 'pending' | 'verified' | 'rejected';
-  account_status: 'active' | 'suspended' | 'deleted';
-  marketing_opt_in: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-// ============================================================================
-// Auth Context Value
-// ============================================================================
-
-export interface AuthContextValue {
-  user: import('@supabase/supabase-js').User | null;
-  profile: Profile | null;
-  role: UserRole | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  signOut: () => Promise<void>;
-  refreshProfile: () => Promise<void>;
-}
-
-
+];

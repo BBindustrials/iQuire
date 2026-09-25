@@ -1,0 +1,1034 @@
+@import '../../styles/theme.css';
+
+/* ============================================================================
+   Alumni Profile Page
+   ============================================================================ */
+
+.profilePage {
+  background-color: #ffffff;
+}
+
+/* ----------------------------------------------------------------------------
+   Breadcrumb
+   ---------------------------------------------------------------------------- */
+
+.breadcrumb {
+  padding: 1.5rem 0 0;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+
+.breadcrumbLink {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumbLink:hover {
+  color: #1565C0;
+}
+
+/* ----------------------------------------------------------------------------
+   STAGE 1 — HERO
+   ---------------------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  padding: 2rem 0 4rem;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  overflow: hidden;
+}
+
+.heroBgBlob {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #1565C0 0%, transparent 70%);
+  opacity: 0.1;
+  filter: blur(120px);
+  top: -200px;
+  right: -180px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.heroInner {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 3.5rem;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* Photo */
+.heroPhotoWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.heroPhotoFrame {
+  width: 100%;
+  max-width: 300px;
+  aspect-ratio: 1 / 1;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 24px 48px -20px rgba(15, 23, 42, 0.25);
+  background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+}
+
+.heroPhoto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.heroPhotoPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 4rem;
+  font-weight: 800;
+  color: #1565C0;
+  letter-spacing: 0.02em;
+}
+
+/* Intro */
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.heroBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.programmeBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  background-color: #F9A825;
+  color: #1A1A2E;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(249, 168, 37, 0.25);
+}
+
+.cohortBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  background-color: #eff6ff;
+  color: #1565C0;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.heroName {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: #0f172a;
+  margin: 0;
+}
+
+.heroTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1565C0;
+  margin: 0;
+}
+
+.heroSummary {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: #334155;
+  margin: 0.5rem 0 0;
+  max-width: 620px;
+}
+
+/* ----------------------------------------------------------------------------
+   GENERIC SECTION
+   ---------------------------------------------------------------------------- */
+
+.section {
+  padding: 4rem 0;
+  background-color: #ffffff;
+}
+
+/* Content layout — main + sidebar */
+.contentLayout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 3.5rem;
+  align-items: start;
+}
+
+.mainColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.sideColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: sticky;
+  top: 100px;
+}
+
+/* Block */
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.blockTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.02em;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #F9A825;
+  display: inline-block;
+  align-self: flex-start;
+}
+
+/* Prose */
+.prose {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.prose p {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #334155;
+  margin: 0;
+}
+
+/* Skills */
+.skillsGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.skillsGroupLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
+.skillsTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skillTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.9rem;
+  background-color: #f1f5f9;
+  color: #334155;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.skillTag:hover {
+  background-color: #e0f2fe;
+  color: #1565C0;
+}
+
+.skillTagPrimary {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.9rem;
+  background-color: #e0f2fe;
+  color: #1565C0;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.skillTagPrimary:hover {
+  background-color: #1565C0;
+  color: #ffffff;
+}
+
+/* Sidebar cards */
+.sideCard {
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sideCardTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.sideRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.sideRow:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.sideLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.sideValue {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Accent sidebar card (dark) */
+.sideCardAccent {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.sideCardAccent::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(
+    circle,
+    rgba(249, 168, 37, 0.2) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.sideCardTitleLight {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  letter-spacing: -0.01em;
+}
+
+.sideCardTextLight {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.6;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.sideCardCtaLight {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.25rem;
+  background-color: #F9A825;
+  color: #1A1A2E;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 1;
+  align-self: flex-start;
+  box-shadow: 0 6px 16px rgba(249, 168, 37, 0.35);
+}
+
+.sideCardCtaLight:hover {
+  background-color: #F57F17;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(249, 168, 37, 0.5);
+}
+
+/* ----------------------------------------------------------------------------
+   STAGE 3 — Feedback (quote section)
+   ---------------------------------------------------------------------------- */
+
+.feedbackSection {
+  position: relative;
+  padding: 5rem 0;
+  background: linear-gradient(135deg, #0f172a 0%, #1a2942 100%);
+  overflow: hidden;
+}
+
+.feedbackBgBlob {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #F9A825 0%, transparent 70%);
+  opacity: 0.15;
+  filter: blur(120px);
+  top: -180px;
+  right: -140px;
+  pointer-events: none;
+}
+
+.feedbackInner {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.feedbackQuoteMark {
+  font-family: Georgia, serif;
+  font-size: 5rem;
+  line-height: 1;
+  color: #F9A825;
+  opacity: 0.6;
+  margin-bottom: -1.5rem;
+  user-select: none;
+}
+
+.feedbackQuote {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(1.15rem, 2.4vw, 1.6rem);
+  font-weight: 600;
+  line-height: 1.5;
+  color: #ffffff;
+  margin: 0 0 1.75rem 0;
+  letter-spacing: -0.01em;
+  font-style: italic;
+}
+
+.feedbackAttribution {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-family: 'Satoshi', sans-serif;
+}
+
+.feedbackDash {
+  color: #F9A825;
+  font-weight: 800;
+}
+
+.feedbackName {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.feedbackDot {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.feedbackProgramme {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #F9A825;
+}
+
+/* ----------------------------------------------------------------------------
+   STAGE 4 — View More
+   ---------------------------------------------------------------------------- */
+
+.viewMoreHeader {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 2.5rem;
+}
+
+.viewMoreTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.viewMoreSubtitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.98rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.65;
+}
+
+.viewMoreGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.viewMoreCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+  padding: 1.5rem;
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 16px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.viewMoreCard:hover {
+  transform: translateY(-4px);
+  border-color: #F9A825;
+  box-shadow: 0 20px 40px -16px rgba(249, 168, 37, 0.25);
+}
+
+.viewMoreIconWrapper {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #F9A825 0%, #F57F17 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  box-shadow: 0 8px 20px -8px rgba(249, 168, 37, 0.4);
+}
+
+.viewMoreIconLinkedIn {
+  background: #0077b5;
+  box-shadow: 0 8px 20px -8px rgba(0, 119, 181, 0.4);
+}
+
+.viewMoreCardContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.viewMoreCardTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.viewMoreCardText {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #475569;
+  margin: 0;
+}
+
+.viewMoreCardLink {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #F57F17;
+  margin-top: 0.35rem;
+  transition: all 0.15s ease;
+}
+
+.viewMoreCard:hover .viewMoreCardLink {
+  color: #92400e;
+}
+
+/* ----------------------------------------------------------------------------
+   More profiles
+   ---------------------------------------------------------------------------- */
+
+.moreProfilesSection {
+  padding: 5rem 0;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.moreProfilesHeader {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.moreProfilesTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.35rem;
+  letter-spacing: -0.02em;
+}
+
+.moreProfilesSubtitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.moreProfilesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.moreCard {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.moreCard:hover {
+  transform: translateY(-4px);
+  border-color: #F9A825;
+  box-shadow: 0 20px 40px -16px rgba(15, 23, 42, 0.15);
+}
+
+.moreCardPhoto {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+}
+
+.moreCardPhoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.moreCardPhotoPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1565C0;
+  letter-spacing: 0.02em;
+}
+
+.moreCardBody {
+  padding: 1.1rem 1.25rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.moreCardName {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.moreCardTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1565C0;
+  margin: 0;
+}
+
+.moreCardProgramme {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 0.3rem;
+}
+
+/* ----------------------------------------------------------------------------
+   Final CTA
+   ---------------------------------------------------------------------------- */
+
+.finalCta {
+  position: relative;
+  padding: 5rem 0 6rem;
+  background: linear-gradient(135deg, #0f172a 0%, #1a2942 100%);
+  overflow: hidden;
+}
+
+.finalCtaBgBlob {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #F9A825 0%, transparent 70%);
+  opacity: 0.15;
+  filter: blur(120px);
+  top: -180px;
+  right: -140px;
+  pointer-events: none;
+}
+
+.finalCtaInner {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.finalCtaTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.finalCtaSubtitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  line-height: 1.7;
+}
+
+.finalCtaButtons {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.finalCtaPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2.25rem;
+  background-color: #F9A825;
+  color: #1A1A2E;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 12px 28px -8px rgba(249, 168, 37, 0.5);
+}
+
+.finalCtaPrimary:hover {
+  background-color: #F57F17;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px -8px rgba(249, 168, 37, 0.6);
+}
+
+.finalCtaSecondary {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #F9A825;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.finalCtaSecondary:hover {
+  color: #ffffff;
+  gap: 0.5rem;
+}
+
+/* ----------------------------------------------------------------------------
+   Loading / not found states
+   ---------------------------------------------------------------------------- */
+
+.loadingState,
+.notFoundState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 6rem 1rem;
+  text-align: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #1565C0;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loadingState p {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.notFoundIcon {
+  font-size: 3.5rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.notFoundTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.notFoundText {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 0 0 0.5rem;
+  max-width: 420px;
+  line-height: 1.65;
+}
+
+.notFoundActions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.notFoundPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.75rem;
+  background-color: #2E7D32;
+  color: #ffffff;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.notFoundPrimary:hover {
+  background-color: #1B5E20;
+  transform: translateY(-1px);
+}
+
+.notFoundSecondary {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1565C0;
+  text-decoration: none;
+  padding: 0.85rem 1.25rem;
+  transition: color 0.15s ease;
+}
+
+.notFoundSecondary:hover {
+  color: #0D47A1;
+  text-decoration: underline;
+}
+
+/* ============================================================================
+   Responsive
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+  .heroInner {
+    grid-template-columns: 240px 1fr;
+    gap: 2.5rem;
+  }
+
+  .contentLayout {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .sideColumn {
+    position: static;
+  }
+
+  .moreProfilesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .viewMoreGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 1.5rem 0 3rem;
+  }
+
+  .heroInner {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    text-align: center;
+  }
+
+  .heroPhotoFrame {
+    max-width: 220px;
+  }
+
+  .heroBadges {
+    justify-content: center;
+  }
+
+  .heroSummary {
+    margin: 0.5rem auto 0;
+  }
+
+  .section {
+    padding: 3rem 0;
+  }
+
+  .feedbackSection {
+    padding: 3.5rem 0;
+  }
+
+  .moreProfilesGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .finalCtaButtons {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .notFoundActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroName {
+    font-size: 1.85rem;
+  }
+
+  .heroTitle {
+    font-size: 1.05rem;
+  }
+
+  .blockTitle {
+    font-size: 1.2rem;
+  }
+
+  .prose p {
+    font-size: 0.95rem;
+  }
+
+  .viewMoreCard {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

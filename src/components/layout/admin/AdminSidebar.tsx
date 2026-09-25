@@ -177,7 +177,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: 'Community',
     items: [
-      { label: 'Alumni', path: '/admin/community/alumni', icon: Icons.community },
+      { label: 'Alumni', path: '/admin/alumni', icon: Icons.community },
       { label: 'Announcements', path: '/admin/community/announcements', icon: Icons.community },
     ],
   },

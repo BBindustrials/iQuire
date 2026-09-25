@@ -1,0 +1,704 @@
+@import '../../styles/theme.css';
+
+/* ============================================================================
+   About Us Page
+   ============================================================================ */
+
+.about {
+  background-color: #ffffff;
+}
+
+/* Common section utilities */
+.sectionBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  background-color: #F9A825;
+  color: #1A1A2E;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(249, 168, 37, 0.25);
+  margin-bottom: 1.25rem;
+}
+
+.sectionBadgeLight {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  background-color: #F9A825;
+  color: #1A1A2E;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(249, 168, 37, 0.35);
+  margin-bottom: 1.25rem;
+}
+
+.sectionTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+  margin: 0 0 1.5rem 0;
+}
+
+.sectionTitleLight {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin: 0 0 1.5rem 0;
+}
+
+.highlight {
+  color: #F57F17;
+  text-shadow: 0 2px 8px rgba(245, 127, 23, 0.2);
+}
+
+.sectionHeader {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 3.5rem;
+}
+
+/* ----------------------------------------------------------------------------
+   HERO
+   ---------------------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  padding: 6rem 0 5rem;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  overflow: hidden;
+}
+
+.heroBgBlobOne,
+.heroBgBlobTwo {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.heroBgBlobOne {
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, #1565C0 0%, transparent 70%);
+  opacity: 0.12;
+  top: -180px;
+  right: -120px;
+}
+
+.heroBgBlobTwo {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #F9A825 0%, transparent 70%);
+  opacity: 0.1;
+  bottom: -120px;
+  left: -140px;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  background-color: #F9A825;
+  color: #1A1A2E;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(249, 168, 37, 0.25);
+  margin-bottom: 1.5rem;
+}
+
+.heroTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(2.25rem, 4.5vw, 3.75rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: #0f172a;
+  margin: 0 0 1.5rem 0;
+  text-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+}
+
+.heroSubtitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #000000;
+  font-weight: 500;
+  margin: 0;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ----------------------------------------------------------------------------
+   STORY
+   ---------------------------------------------------------------------------- */
+
+.story {
+  padding: 6rem 0;
+  background-color: #ffffff;
+}
+
+.storyGrid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.storyContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.storyContent p {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.02rem;
+  line-height: 1.75;
+  color: #334155;
+  margin: 0;
+}
+
+.storyConclusion {
+  font-weight: 700;
+  color: #0f172a !important;
+  padding: 1.25rem 1.5rem;
+  background-color: #f0f9ff;
+  border-left: 4px solid #1565C0;
+  border-radius: 8px;
+  margin-top: 0.5rem !important;
+}
+
+.storyVisual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.storyImageCard {
+  width: 100%;
+  max-width: 460px;
+  aspect-ratio: 1 / 1;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px -20px rgba(15, 23, 42, 0.25);
+}
+
+.storyImageCard img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ----------------------------------------------------------------------------
+   MISSION & VISION
+   ---------------------------------------------------------------------------- */
+
+.missionVision {
+  padding: 6rem 0;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.missionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.missionCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2.5rem 2rem;
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 20px;
+  box-shadow: 0 12px 32px -12px rgba(15, 23, 42, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.missionCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #1565C0 0%, #2E7D32 100%);
+}
+
+.missionCard:hover {
+  transform: translateY(-6px);
+  border-color: #F9A825;
+  box-shadow: 0 24px 48px -12px rgba(15, 23, 42, 0.15);
+}
+
+.missionIcon {
+  font-size: 2.5rem;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.missionTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.015em;
+}
+
+.missionText {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.98rem;
+  line-height: 1.75;
+  color: #475569;
+  margin: 0;
+}
+
+/* ----------------------------------------------------------------------------
+   COMMITMENT
+   ---------------------------------------------------------------------------- */
+
+.commitment {
+  padding: 6rem 0;
+  background-color: #ffffff;
+}
+
+.commitmentGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.commitmentCard {
+  position: relative;
+  padding: 2.5rem 2rem 2rem;
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.commitmentCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #F9A825 0%, #F57F17 100%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.commitmentCard:hover::before {
+  transform: scaleX(1);
+}
+
+.commitmentCard:hover {
+  transform: translateY(-6px);
+  border-color: #F9A825;
+  box-shadow: 0 24px 48px -12px rgba(15, 23, 42, 0.12);
+}
+
+.commitmentNumber {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #f1f5f9;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+.commitmentCard:hover .commitmentNumber {
+  color: #fef3c7;
+}
+
+.commitmentTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.85rem 0;
+  letter-spacing: -0.01em;
+  position: relative;
+  z-index: 1;
+  max-width: 80%;
+}
+
+.commitmentText {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #475569;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* ----------------------------------------------------------------------------
+   IMPACT SNAPSHOT
+   ---------------------------------------------------------------------------- */
+
+.impactSnapshot {
+  position: relative;
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #0f172a 0%, #1a2942 100%);
+  overflow: hidden;
+}
+
+.impactBgBlob {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #F9A825 0%, transparent 70%);
+  opacity: 0.15;
+  filter: blur(120px);
+  top: -180px;
+  right: -140px;
+  pointer-events: none;
+}
+
+.impactGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.impactItem {
+  text-align: center;
+  padding: 2rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.impactItem:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(249, 168, 37, 0.4);
+  transform: translateY(-4px);
+}
+
+.impactValue {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: #F9A825;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 4px 12px rgba(249, 168, 37, 0.4);
+}
+
+.impactLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.01em;
+}
+
+/* ----------------------------------------------------------------------------
+   FOUNDER
+   ---------------------------------------------------------------------------- */
+
+.founder {
+  padding: 6rem 0;
+  background-color: #ffffff;
+}
+
+.founderGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.founderVisual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.founderImageFrame {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 1 / 1;
+}
+
+.founderImageOffset {
+  position: absolute;
+  inset: 0;
+  background: #F9A825;
+  border-radius: 28px;
+  transform: translate(-14px, 14px);
+  z-index: 0;
+}
+
+.founderImageCard {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 28px;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 0 30px 60px -20px rgba(15, 23, 42, 0.25);
+}
+
+.founderImageCard img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.founderContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.founderName {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.founderCredentials {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #F57F17;
+  margin: 0;
+  letter-spacing: 0.03em;
+}
+
+.founderRoles {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #64748b;
+  margin: 0 0 1rem 0;
+  letter-spacing: 0.01em;
+}
+
+.founderBio {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.founderBio p {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.98rem;
+  line-height: 1.75;
+  color: #475569;
+  margin: 0;
+}
+
+.founderLinkedIn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: flex-start;
+  padding: 0.75rem 1.35rem;
+  background-color: #0077b5;
+  color: #ffffff;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin-top: 0.75rem;
+  box-shadow: 0 6px 16px rgba(0, 119, 181, 0.25);
+}
+
+.founderLinkedIn:hover {
+  background-color: #005f8e;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 119, 181, 0.35);
+}
+
+/* ----------------------------------------------------------------------------
+   FINAL CTA
+   ---------------------------------------------------------------------------- */
+
+.cta {
+  padding: 5rem 0 6rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.ctaInner {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.ctaTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.ctaSubtitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.05rem;
+  color: #475569;
+  margin: 0;
+  line-height: 1.7;
+}
+
+.ctaButtons {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.ctaSecondary {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1565C0;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.ctaSecondary:hover {
+  color: #0D47A1;
+  gap: 0.5rem;
+}
+
+/* ============================================================================
+   Responsive
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+  .storyGrid,
+  .founderGrid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .founderVisual {
+    order: -1;
+  }
+
+  .missionGrid,
+  .commitmentGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .impactGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero { padding: 5rem 0 3.5rem; }
+  .story,
+  .missionVision,
+  .commitment,
+  .impactSnapshot,
+  .founder { padding: 4rem 0; }
+
+  .heroTitle { font-size: 2rem; }
+  .heroSubtitle { font-size: 1rem; }
+
+  .storyImageCard { max-width: 100%; }
+  .founderImageFrame { max-width: 320px; }
+
+  .sectionHeader { margin-bottom: 2.5rem; }
+
+  .impactValue { font-size: 2rem; }
+
+  .ctaButtons {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .impactGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .impactItem { padding: 1.5rem 0.75rem; }
+  .impactValue { font-size: 1.75rem; }
+  .impactLabel { font-size: 0.8rem; }
+
+  .missionCard { padding: 1.75rem 1.25rem; }
+  .commitmentCard { padding: 2rem 1.25rem 1.5rem; }
+  .commitmentNumber { font-size: 2.25rem; }
+  .commitmentTitle { font-size: 1.05rem; }
+
+  .founderImageOffset {
+    transform: translate(-10px, 10px);
+    border-radius: 20px;
+  }
+  .founderImageCard { border-radius: 20px; }
+}

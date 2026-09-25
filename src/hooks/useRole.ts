@@ -1,41 +1,52 @@
 // ============================================================================
-// iQuire — Role Hooks
+// iQuire — Role Hooks (Phase 7A.4)
 // ============================================================================
 // Convenience hooks for role checks across the app.
 // ============================================================================
 
 import { useAuth } from '../contexts/AuthContext';
+import type { UserRole } from '../types/auth.types';
 
 export const useIsAdmin = (): boolean => {
-  const { role } = useAuth();
-  return role === 'admin';
-};
-
-export const useIsStudent = (): boolean => {
-  const { role } = useAuth();
-  return role === 'student';
-};
-
-export const useIsNysc = (): boolean => {
-  const { role } = useAuth();
-  return role === 'nysc';
+  const { isAdmin } = useAuth();
+  return isAdmin;
 };
 
 export const useIsRecruiter = (): boolean => {
-  const { role } = useAuth();
-  return role === 'recruiter';
+  const { isRecruiter } = useAuth();
+  return isRecruiter;
+};
+
+export const useIsMember = (): boolean => {
+  const { isMember } = useAuth();
+  return isMember;
+};
+
+export const useIsStudent = (): boolean => {
+  const { isStudent } = useAuth();
+  return isStudent;
+};
+
+export const useIsAlumni = (): boolean => {
+  const { isAlumni } = useAuth();
+  return isAlumni;
+};
+
+export const useIsVerified = (): boolean => {
+  const { isVerified } = useAuth();
+  return isVerified;
 };
 
 /**
- * Check if user has any of the given roles
+ * Check if user has ANY of the given roles
  */
-export const useHasRole = (...roles: string[]): boolean => {
-  const { role } = useAuth();
-  return !!role && roles.includes(role);
+export const useHasRole = (...checkRoles: UserRole[]): boolean => {
+  const { roles } = useAuth();
+  return checkRoles.some((role) => roles.includes(role));
 };
 
 /**
- * Get display name for the current user
+ * Get display name for current user
  */
 export const useUserDisplayName = (): string => {
   const { profile } = useAuth();

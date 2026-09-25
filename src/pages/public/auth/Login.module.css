@@ -1,0 +1,189 @@
+@import '../../../styles/theme.css';
+
+/* ============================================================================
+   Member Login Page Styles
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   Identifier field with live detection badge
+   ---------------------------------------------------------------------------- */
+
+.identifierField {
+  position: relative;
+}
+
+.identifierBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  background-color: #f0fdf4;
+  color: #2E7D32;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 50px;
+  letter-spacing: 0.02em;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+  animation: fadeInBadge 0.2s ease;
+}
+
+.identifierBadge svg {
+  color: #2E7D32;
+}
+
+@keyframes fadeInBadge {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Remember me + Forgot password row
+   ---------------------------------------------------------------------------- */
+
+.loginOptions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0.5rem 0 1.75rem;
+  flex-wrap: wrap;
+}
+
+.loginOptions > * {
+  margin-bottom: 0;
+}
+
+.forgotLink {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1565C0;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.forgotLink:hover {
+  color: #0D47A1;
+  text-decoration: underline;
+}
+
+/* ----------------------------------------------------------------------------
+   Submit button
+   ---------------------------------------------------------------------------- */
+
+.submitButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.9rem 1.5rem;
+  background-color: #2E7D32;
+  color: #FFFFFF;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 1rem;
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: #1B5E20;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.25);
+}
+
+.submitButton:disabled {
+  background-color: #86b388;
+  cursor: wait;
+  opacity: 0.85;
+}
+
+/* ----------------------------------------------------------------------------
+   Submit error
+   ---------------------------------------------------------------------------- */
+
+.submitError {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.85rem 1rem;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-left: 4px solid #C62828;
+  border-radius: 6px;
+  color: #991b1b;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.submitError svg {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  color: #C62828;
+}
+
+/* ----------------------------------------------------------------------------
+   Footer links
+   ---------------------------------------------------------------------------- */
+
+.footer {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  color: #4A4A6A;
+  text-align: center;
+  margin: 1rem 0 0 0;
+}
+
+.footerLink {
+  color: #F9A825;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footerLink:hover {
+  color: #F57F17;
+  text-decoration: underline;
+}
+
+.recruiterFooter {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  color: #667085;
+  text-align: center;
+  margin: 0.75rem 0 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid #E5E7EB;
+}
+
+/* ============================================================================
+   Responsive
+   ============================================================================ */
+
+@media (max-width: 640px) {
+  .loginOptions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .submitButton {
+    font-size: 0.95rem;
+    padding: 0.85rem 1.25rem;
+  }
+}

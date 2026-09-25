@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 // ============================================================================
-// iQuire — Protected Route
+// iQuire — Protected Route (Phase 7A.4)
 // ============================================================================
-// Wraps routes that require authentication and/or a specific role.
+// Wraps routes that require authentication and/or a specific account type.
 // ============================================================================
 
 import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import type { UserRole } from '../../types/auth.types';
+import type { AccountType } from '../../types/auth.types';
 import styles from './ProtectedRoute.module.css';
 
 // ============================================================================
@@ -18,13 +18,13 @@ import styles from './ProtectedRoute.module.css';
 interface ProtectedRouteProps {
   children: React.ReactNode;
   /**
-   * If provided, the authenticated user must have this role.
-   * If not provided, any authenticated user is allowed.
+   * If provided, user's account_type must match.
+   * e.g., 'admin' | 'recruiter' | 'member'
    */
-  requiredRole?: UserRole;
+  requiredAccountType?: AccountType;
   /**
    * Where to redirect if not authenticated.
-   * Defaults to '/admin/login' for admin routes, '/login/student' otherwise.
+   * Defaults to '/admin/login' for admin routes, '/login' otherwise.
    */
   redirectTo?: string;
 }
@@ -46,64 +46,69 @@ const LoadingScreen: React.FC = () => (
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
-  requiredRole,
+  requiredAccountType,
   redirectTo,
 }) => {
-  const { isAuthenticated, isLoading, role, signOut } = useAuth();
+  const { isAuthenticated, isLoading, accountType, signOut } = useAuth();
   const location = useLocation();
-  const [roleMismatch, setRoleMismatch] = useState(false);
+  const [accountMismatch, setAccountMismatch] = useState(false);
 
   // Determine redirect target
   const defaultRedirect =
-    requiredRole === 'admin' ? '/admin/login' : '/login/student';
+    requiredAccountType === 'admin' ? '/admin/login' : '/login';
   const finalRedirect = redirectTo ?? defaultRedirect;
 
   // --------------------------------------------------------------------------
-  // Role mismatch handling — sign out non-admins trying to access admin routes
+  // Account type mismatch → sign out
   // --------------------------------------------------------------------------
   useEffect(() => {
     if (
       !isLoading &&
       isAuthenticated &&
-      requiredRole &&
-      role !== requiredRole &&
-      !roleMismatch
+      requiredAccountType &&
+      accountType !== requiredAccountType &&
+      !accountMismatch
     ) {
-      setRoleMismatch(true);
-      // Sign out silently, then let the redirect happen
+      setAccountMismatch(true);
       signOut().catch(() => {
-        // ignore errors — signOut will clear state regardless
+        // ignore
       });
     }
-  }, [isLoading, isAuthenticated, requiredRole, role, roleMismatch, signOut]);
+  }, [
+    isLoading,
+    isAuthenticated,
+    requiredAccountType,
+    accountType,
+    accountMismatch,
+    signOut,
+  ]);
 
   // --------------------------------------------------------------------------
-  // 1. Still loading initial session
+  // 1. Loading
   // --------------------------------------------------------------------------
   if (isLoading) {
     return <LoadingScreen />;
   }
 
   // --------------------------------------------------------------------------
-  // 2. Not authenticated → redirect to login
+  // 2. Not authenticated → redirect
   // --------------------------------------------------------------------------
   if (!isAuthenticated) {
     return <Navigate to={finalRedirect} state={{ from: location }} replace />;
   }
 
   // --------------------------------------------------------------------------
-  // 3. Role required but user has different role → redirect (after signOut)
+  // 3. Account type required but mismatched → redirect
   // --------------------------------------------------------------------------
-  if (requiredRole && role !== requiredRole) {
-    // If signOut is in flight, keep showing loading to avoid flash
-    if (roleMismatch) {
+  if (requiredAccountType && accountType !== requiredAccountType) {
+    if (accountMismatch) {
       return <LoadingScreen />;
     }
     return <Navigate to={finalRedirect} state={{ from: location }} replace />;
   }
 
   // --------------------------------------------------------------------------
-  // 4. Allowed → render children
+  // 4. Allowed
   // --------------------------------------------------------------------------
   return <>{children}</>;
 };

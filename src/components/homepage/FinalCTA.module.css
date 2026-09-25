@@ -1,41 +1,76 @@
 @import '../../styles/theme.css';
 
+/* ============================================================================
+   Final CTA Section
+   ============================================================================ */
+
 .finalCTA {
-  padding: 4rem 0 0 0; /* No bottom padding at all */
-  background: #FFFFFF;
   position: relative;
+  padding: 7rem 0 0;
+  background: #ffffff;             /* ← pure white */
   overflow: hidden;
   width: 100%;
-  margin: 0;
 }
 
-/* Remove decorative elements that may cause spacing */
-.finalCTA::before,
-.finalCTA::after {
-  display: none;
+/* ----------------------------------------------------------------------------
+   Background accents
+   ---------------------------------------------------------------------------- */
+
+.bgAccentOne,
+.bgAccentTwo {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 0;
 }
 
-.content {
+.bgAccentOne {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #2E7D32 0%, transparent 70%);
+  top: -180px;
+  left: -140px;
+}
+
+.bgAccentTwo {
+  width: 460px;
+  height: 460px;
+  background: radial-gradient(circle, #F9A825 0%, transparent 70%);
+  bottom: 80px;
+  right: -140px;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
   position: relative;
   z-index: 1;
+}
+
+/* ----------------------------------------------------------------------------
+   Grid content
+   ---------------------------------------------------------------------------- */
+
+.content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: 4rem;
   align-items: end;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
   margin-bottom: 0;
 }
 
-/* Image Wrapper - no space below */
+/* ----------------------------------------------------------------------------
+   Image
+   ---------------------------------------------------------------------------- */
+
 .imageWrapper {
   display: flex;
   justify-content: center;
   align-items: flex-end;
   width: 100%;
-  margin-bottom: 0;
-  padding-bottom: 0;
 }
 
 .ctaImage {
@@ -44,131 +79,274 @@
   height: auto;
   display: block;
   object-fit: contain;
-  margin-bottom: -5px; /* Pull image down slightly to touch footer */
+  margin-bottom: 3.0rem;             /* ← moved UP slightly off the wave */
 }
 
-/* Text Content - no bottom padding */
+/* ----------------------------------------------------------------------------
+   Text content
+   ---------------------------------------------------------------------------- */
+
 .textContent {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
   text-align: left;
-  padding-bottom: 3rem; /* Some padding to align with image */
+  padding-bottom: 10rem;              /* ← moved UP — clear of the wave */
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: 0.4rem 1rem;
+  background-color: #F9A825;
+  color: #1A1A2E;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(249, 168, 37, 0.25);
+  margin-bottom: 0.5rem;
 }
 
 .title {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 700;
-  color: #000000;
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 800;
+  color: #0f172a;
   margin: 0;
-  line-height: 1.2;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
 }
 
-/* Gold highlight with shadow to make it POP */
-.title .highlight-gold {
-  color: #FFB300;
-  text-shadow: 
-    0 2px 8px rgba(255, 179, 0, 0.3),
-    0 4px 16px rgba(255, 179, 0, 0.15);
+.highlight {
+  color: #F57F17;
+  text-shadow: 0 2px 8px rgba(245, 127, 23, 0.2);
 }
 
 .subtitle {
-  font-size: 1.125rem;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.05rem;
   color: #000000;
   margin: 0;
   line-height: 1.7;
-  opacity: 0.8;
+  font-weight: 500;
 }
+
+/* ----------------------------------------------------------------------------
+   CTA group
+   ---------------------------------------------------------------------------- */
 
 .ctaGroup {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
 }
 
-/* Green Primary Button */
-.ctaGroup .button:first-child {
-  background-color: #2E7D32 !important;
-  color: #FFFFFF !important;
-  box-shadow: 0 4px 20px rgba(46, 125, 50, 0.3) !important;
+.ctaPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.95rem 2rem;
+  background-color: #2E7D32;
+  color: #ffffff;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 12px 24px -10px rgba(46, 125, 50, 0.4);
+  white-space: nowrap;
 }
 
-.ctaGroup .button:first-child:hover {
-  background-color: #1B5E20 !important;
+.ctaPrimary:hover {
+  background-color: #1B5E20;
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(46, 125, 50, 0.4) !important;
+  box-shadow: 0 16px 32px -10px rgba(46, 125, 50, 0.55);
+  gap: 0.7rem;
 }
 
-/* Gold Secondary Button - Enhanced Pop */
-.ctaGroup .button:last-child {
-  background-color: transparent !important;
-  color: #FFB300 !important;
-  border: 2px solid #FFB300 !important;
-  box-shadow: 
-    0 0 20px rgba(255, 179, 0, 0.2),
-    0 4px 15px rgba(255, 179, 0, 0.15) !important;
-  text-shadow: 0 1px 4px rgba(255, 179, 0, 0.2);
+.ctaPrimary svg {
+  transition: transform 0.2s ease;
 }
 
-.ctaGroup .button:last-child:hover {
-  background-color: #FFB300 !important;
-  color: #000000 !important;
+.ctaPrimary:hover svg {
+  transform: translateX(3px);
+}
+
+.ctaSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.95rem 2rem;
+  background-color: transparent;
+  color: #F57F17;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: 2px solid #F9A825;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px rgba(249, 168, 37, 0.15);
+  white-space: nowrap;
+}
+
+.ctaSecondary:hover {
+  background-color: #F9A825;
+  color: #1A1A2E;
   transform: translateY(-2px);
-  box-shadow: 
-    0 0 30px rgba(255, 179, 0, 0.4),
-    0 8px 30px rgba(255, 179, 0, 0.3) !important;
+  box-shadow: 0 12px 28px rgba(249, 168, 37, 0.35);
+  gap: 0.7rem;
 }
 
-/* Responsive */
+.ctaSecondary svg {
+  transition: transform 0.2s ease;
+}
+
+.ctaSecondary:hover svg {
+  transform: translateX(3px);
+}
+
+/* ============================================================================
+   BOTTOM demarcation
+   ============================================================================ */
+
+.demarcationBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  line-height: 0;
+  z-index: 1;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.demarcationBottom .demarcationWave {
+  width: 100%;
+  height: 120px;
+  display: block;
+  filter: drop-shadow(0 -6px 16px rgba(0, 0, 0, 0.12))
+    drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.06));
+}
+
+.demarcationLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto 1.5rem;
+  padding: 0 1rem;
+  position: relative;
+  z-index: 3;
+}
+
+.demarcationLine {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #000000, #000000);
+  border-radius: 2px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.demarcationLine:last-child {
+  background: linear-gradient(to left, transparent, #000000, #000000);
+}
+
+.demarcationDot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: #F9A825;
+  box-shadow: 0 0 0 6px rgba(249, 168, 37, 0.25),
+    0 0 0 12px rgba(249, 168, 37, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.25);
+  position: relative;
+  z-index: 4;
+  flex-shrink: 0;
+}
+
+.demarcationDot::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background-color: rgba(249, 168, 37, 0.3);
+  animation: pulseDot 2.5s ease-out infinite;
+  z-index: -1;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* ============================================================================
+   Responsive
+   ============================================================================ */
+
 @media (max-width: 1024px) {
   .content {
-    gap: 2rem;
+    gap: 2.5rem;
   }
 
   .ctaImage {
-    max-width: 400px;
+    max-width: 420px;
   }
 
   .textContent {
-    padding-bottom: 2rem;
+    padding-bottom: 5rem;
   }
 }
 
 @media (max-width: 768px) {
   .finalCTA {
-    padding: 3rem 0 0 0;
+    padding: 5rem 0 0;
+  }
+
+  .container {
+    padding: 0 1.5rem;
   }
 
   .content {
     grid-template-columns: 1fr;
-    gap: 0;
-    padding: 0 1.5rem;
+    gap: 2rem;
     text-align: center;
+    margin-bottom: 0;
   }
 
   .imageWrapper {
     order: -1;
-    margin-bottom: -10px;
+    align-items: center;
   }
 
   .ctaImage {
-    max-width: 320px;
+    max-width: 340px;
+    margin-bottom: 1rem;
   }
 
   .textContent {
     text-align: center;
     align-items: center;
-    padding-bottom: 2rem;
-    gap: 1rem;
+    padding-bottom: 5.5rem;         /* ← clear of wave on mobile */
+  }
+
+  .badge {
+    align-self: center;
   }
 
   .title {
     font-size: 2rem;
-  }
-
-  .subtitle {
-    font-size: 1.125rem;
   }
 
   .ctaGroup {
@@ -178,30 +356,25 @@
     width: 100%;
   }
 
-  .ctaGroup .button {
+  .ctaPrimary,
+  .ctaSecondary {
     width: 100%;
-    max-width: 300px;
+    max-width: 320px;
     justify-content: center;
+  }
+
+  .demarcationBottom .demarcationWave {
+    height: 90px;
   }
 }
 
 @media (max-width: 480px) {
-  .finalCTA {
-    padding: 2rem 0 0 0;
-  }
-
-  .content {
+  .container {
     padding: 0 1rem;
-    gap: 0;
   }
 
   .ctaImage {
-    max-width: 260px;
-  }
-
-  .textContent {
-    padding-bottom: 1.5rem;
-    gap: 0.875rem;
+    max-width: 280px;
   }
 
   .title {
@@ -209,10 +382,14 @@
   }
 
   .subtitle {
-    font-size: 1rem;
+    font-size: 0.98rem;
   }
 
-  .ctaGroup .button {
-    max-width: 100%;
+  .textContent {
+    padding-bottom: 4.5rem;
+  }
+
+  .demarcationBottom .demarcationWave {
+    height: 70px;
   }
 }

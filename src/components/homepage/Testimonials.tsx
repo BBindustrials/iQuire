@@ -1,170 +1,255 @@
-import React, { useRef, useEffect, useState } from 'react';
+// ============================================================================
+// iQuire — Alumni / Testimonials Section (Phase 7C.10)
+// ============================================================================
+
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '../common/Button';
-import { Card } from '../common/Card';
+import { ScrollReveal } from '../common/ScrollReveal';
 import styles from './Testimonials.module.css';
 
+// ============================================================================
+// Testimonial data
+// ============================================================================
+
 interface Testimonial {
-  id: number;
+  id: string;
   name: string;
-  role: string;
-  organization: string;
+  photo: string;
+  course: string;
   program: string;
+  quote: string;
+  currentRole: string;
+  currentOrg: string;
+  linkedin: string;
   before: string;
-  experience: string;
   after: string;
-  photo?: string;
+  accent: 'blue' | 'green' | 'gold' | 'purple';
 }
 
-const testimonials: Testimonial[] = [
+const TESTIMONIALS: Testimonial[] = [
   {
-    id: 1,
-    name: 'Chioma Okafor',
-    role: 'Junior Data Analyst',
-    organization: 'TechHub Nigeria',
-    program: 'IEESP',
-    before: 'I had a degree but couldn\'t get interviews because I didn\'t know how to present my skills effectively.',
-    experience: 'IEESP taught me practical workplace skills, how to build a professional CV, and how to communicate my value to employers.',
-    after: 'I landed my first job within 3 months of completing the program. I now work as a Data Analyst at TechHub Nigeria.',
-    photo: 'https://images.unsplash.com/photo-1494790108373-be9c7b9f1f8a?w=100&h=100&fit=crop&crop=face',
+    id: 't1',
+    name: 'Chidera Okafor',
+    photo:
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&crop=face',
+    course: 'Tech 360',
+    program: 'Cohort 4',
+    quote:
+      'I went from being unsure about my career to landing a product role in three months. The training was practical — not just theory.',
+    currentRole: 'Junior Product Manager',
+    currentOrg: 'TechHub Africa',
+    linkedin: 'https://linkedin.com',
+    before: 'Business analyst with no tech exposure',
+    after: 'Junior Product Manager at a top tech company',
+    accent: 'blue',
   },
   {
-    id: 2,
-    name: 'Emeka Nwosu',
-    role: 'Product Manager',
-    organization: 'AfriTech Solutions',
-    program: 'Tech360',
-    before: 'I wanted to transition into tech but didn\'t know where to start or what skills I needed.',
-    experience: 'Tech360 gave me a comprehensive foundation in product and project management. The practical approach made all the difference.',
-    after: 'I successfully transitioned into product management. The skills I learned helped me land a role at AfriTech Solutions.',
-    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face',
+    id: 't2',
+    name: 'Ahmed Ibrahim',
+    photo:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
+    course: 'Digital Work Readiness',
+    program: 'Cohort 7',
+    quote:
+      'The workplace skills I learned here made the difference in my first job interview. I felt prepared for the first time.',
+    currentRole: 'Operations Associate',
+    currentOrg: 'GreenBuild Co.',
+    linkedin: 'https://linkedin.com',
+    before: 'Fresh graduate applying with no direction',
+    after: 'Full-time operations role within 6 weeks',
+    accent: 'green',
   },
   {
-    id: 3,
-    name: 'Aisha Bello',
-    role: 'Office Manager',
-    organization: 'Green Energy Corp',
-    program: 'AI Workshops',
-    before: 'AI felt overwhelming and I worried about being left behind in my career.',
-    experience: 'The AI Workshops made AI accessible. I learned practical tools I could use immediately in my daily work.',
-    after: 'I now use AI daily to automate tasks and improve productivity. My team has noticed and I\'ve become more valuable to the organization.',
-    photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face',
+    id: 't3',
+    name: 'Fatima Hassan',
+    photo:
+      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face',
+    course: 'AI for Everyone',
+    program: 'Cohort 2',
+    quote:
+      'I was worried AI would replace my job. Now I am the one training my team on how to use it.',
+    currentRole: 'Digital Marketing Lead',
+    currentOrg: 'Brightline Media',
+    linkedin: 'https://linkedin.com',
+    before: 'Marketer struggling with new tools',
+    after: 'Leading AI adoption for her team',
+    accent: 'gold',
   },
   {
-    id: 4,
-    name: 'Tunde Adeyemi',
-    role: 'NYSC Corps Member',
-    organization: 'Lagos State Government',
-    program: 'CV Optimization',
-    before: 'My CV was generic and I wasn\'t getting any callbacks after applying to jobs.',
-    experience: 'The CV Optimization program helped me understand what employers are looking for and how to position myself effectively.',
-    after: 'My CV now gets attention. I\'ve had multiple interview invitations and received two job offers during my service year.',
-    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face',
+    id: 't4',
+    name: 'Kwame Mensah',
+    photo:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face',
+    course: 'Apprenticeship Preparation',
+    program: 'Cohort 3',
+    quote:
+      'The interview prep and CV reviews gave me confidence I never had before. I got two offers in one week.',
+    currentRole: 'Junior Engineer',
+    currentOrg: 'SkyWorks Ltd',
+    linkedin: 'https://linkedin.com',
+    before: 'Graduate with 50+ unanswered applications',
+    after: 'Hired as a Junior Engineer within 2 months',
+    accent: 'purple',
   },
 ];
 
+// ============================================================================
+// Component
+// ============================================================================
+
 export const Testimonials: React.FC = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
-  const animationRef = useRef<number | null>(null);
-  const scrollPositionRef = useRef(0);
-
-  // Continuous smooth scroll animation
-  useEffect(() => {
-    const scrollContainer = scrollRef.current;
-    if (!scrollContainer) return;
-
-    const speed = 0.4; // Pixels per frame - smooth continuous movement
-
-    const animate = () => {
-      if (!isPaused) {
-        // Move scroll position
-        scrollPositionRef.current += speed;
-        
-        const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
-        
-        // Reset when reaching the end (for seamless loop)
-        if (scrollPositionRef.current >= maxScroll) {
-          scrollPositionRef.current = 0;
-        }
-        
-        scrollContainer.scrollLeft = scrollPositionRef.current;
-      }
-
-      animationRef.current = requestAnimationFrame(animate);
-    };
-
-    animationRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = null;
-      }
-    };
-  }, [isPaused]);
-
-  // Duplicate testimonials for seamless loop
-  const allTestimonials = [...testimonials, ...testimonials];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const active = TESTIMONIALS[activeIndex];
 
   return (
-    <section className={styles.testimonials}>
+    <section className={styles.alumni}>
       <div className="container">
-        <div className={styles.header}>
+        {/* ================================================================
+            HEADER
+            ================================================================ */}
+        <ScrollReveal animation="up" className={styles.header}>
           <span className={styles.badge}>Alumni Stories</span>
-          <h2 className={styles.title}>Hear From <span className="highlight-gold">Our Alumni</span></h2>
-          <p className={styles.description}>
-            Real stories from real people who transformed their careers through IQuire.
+          <h2 className={styles.title}>
+            Hear from our{' '}
+            <span className={styles.highlight}>alumni.</span>
+          </h2>
+          <p className={styles.subtitle}>
+            Real people. Real careers. Verified profiles you can find on
+            LinkedIn.
           </p>
-        </div>
-        <div 
-          className={styles.scrollContainer} 
-          ref={scrollRef}
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-        >
-          {allTestimonials.map((testimonial, index) => (
-            <Card 
-              key={`${testimonial.id}-${index}`} 
-              hover 
-              elevation="md" 
-              className={styles.testimonialCard}
-            >
-              <div className={styles.testimonialContent}>
-                <div className={styles.testimonialHeader}>
-                  {testimonial.photo && (
-                    <img src={testimonial.photo} alt={testimonial.name} className={styles.avatar} />
-                  )}
-                  <div>
-                    <h4 className={styles.testimonialName}>{testimonial.name}</h4>
-                    <p className={styles.testimonialRole}>
-                      {testimonial.role} • {testimonial.organization}
-                    </p>
-                    <span className={styles.programBadge}>{testimonial.program}</span>
-                  </div>
+        </ScrollReveal>
+
+        {/* ================================================================
+            FEATURED TESTIMONIAL — large rotating card
+            ================================================================ */}
+        <ScrollReveal animation="up" delay={1}>
+          <div className={styles.featured}>
+            {/* Left — Photo */}
+            <div className={styles.featuredImage}>
+              <img
+                src={active.photo}
+                alt={active.name}
+                className={styles.photo}
+              />
+              <div className={styles.photoBadge}>
+                <span className={styles.photoBadgeCourse}>
+                  {active.course}
+                </span>
+                <span className={styles.photoBadgeCohort}>
+                  {active.program}
+                </span>
+              </div>
+            </div>
+
+            {/* Right — Content */}
+            <div className={styles.featuredContent}>
+              <div className={styles.quoteMark}>"</div>
+
+              <p className={styles.quote}>{active.quote}</p>
+
+              <div className={styles.journeyRow}>
+                <div className={styles.journeyItem}>
+                  <span className={styles.journeyLabel}>Before</span>
+                  <span className={styles.journeyText}>{active.before}</span>
                 </div>
-                <div className={styles.testimonialBody}>
-                  <div className={styles.storyPart}>
-                    <span className={styles.storyLabel}>Before IQuire</span>
-                    <p>{testimonial.before}</p>
-                  </div>
-                  <div className={styles.storyPart}>
-                    <span className={styles.storyLabel}>IQuire Experience</span>
-                    <p>{testimonial.experience}</p>
-                  </div>
-                  <div className={styles.storyPart}>
-                    <span className={styles.storyLabel}>After IQuire</span>
-                    <p className={styles.afterText}>{testimonial.after}</p>
-                  </div>
+                <div className={styles.journeyArrow}>→</div>
+                <div className={styles.journeyItem}>
+                  <span className={styles.journeyLabel}>After</span>
+                  <span className={styles.journeyText}>{active.after}</span>
                 </div>
               </div>
-            </Card>
-          ))}
-        </div>
-        <div className={styles.ctaWrapper}>
-          <Button variant="secondary" color="gold" href="/about#alumni">
+
+              <div className={styles.featuredFooter}>
+                <div className={styles.featuredMeta}>
+                  <strong className={styles.featuredName}>{active.name}</strong>
+                  <span className={styles.featuredRole}>
+                    {active.currentRole} · {active.currentOrg}
+                  </span>
+                </div>
+
+                <a
+                  href={active.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.linkedinBtn}
+                  aria-label={`${active.name} on LinkedIn`}
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                  </svg>
+                  Verify on LinkedIn
+                </a>
+              </div>
+            </div>
+          </div>
+        </ScrollReveal>
+
+        {/* ================================================================
+            AVATAR SWITCHER — small row of all alumni
+            ================================================================ */}
+        <ScrollReveal animation="up" delay={2}>
+          <div className={styles.switcher} role="tablist">
+            {TESTIMONIALS.map((t, index) => (
+              <button
+                key={t.id}
+                type="button"
+                className={`${styles.switcherItem} ${
+                  index === activeIndex ? styles.switcherItemActive : ''
+                }`}
+                onClick={() => setActiveIndex(index)}
+                aria-label={`View ${t.name}'s story`}
+                aria-selected={index === activeIndex}
+                role="tab"
+              >
+                <img src={t.photo} alt={t.name} />
+                <span className={styles.switcherName}>{t.name}</span>
+                <span className={styles.switcherCourse}>{t.course}</span>
+              </button>
+            ))}
+          </div>
+        </ScrollReveal>
+
+        {/* ================================================================
+            CTA
+            ================================================================ */}
+        <ScrollReveal animation="zoom" delay={1} className={styles.ctaWrapper}>
+          <Button variant="primary" color="green" size="lg" href="/alumni">
             Meet More of Our Alumni
           </Button>
+          <Link to="/hire-from-us" className={styles.secondaryLink}>
+            Hire our alumni →
+          </Link>
+        </ScrollReveal>
+      </div>
+
+      {/* BOTTOM demarcation */}
+      <div className={styles.demarcationBottom} aria-hidden="true">
+        <div className={styles.demarcationLabel}>
         </div>
+        <svg
+          className={styles.demarcationWave}
+          viewBox="0 0 1440 120"
+          preserveAspectRatio="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z"
+            fill="none"
+            stroke="#F9A825"
+            strokeWidth="3"
+            opacity="0.6"
+          />
+          <path
+            d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z"
+            fill="#ffffff"
+          />
+        </svg>
       </div>
     </section>
   );

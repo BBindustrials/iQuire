@@ -1,0 +1,449 @@
+@import '../../styles/theme.css';
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+/* ----------------------------------------------------------------------------
+   Welcome banner
+   ---------------------------------------------------------------------------- */
+
+.welcomeBanner {
+  background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
+  color: #FFFFFF;
+  border-radius: 16px;
+  padding: 2rem 2rem 2.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.welcomeBanner::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(249, 168, 37, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.welcomeContent {
+  position: relative;
+  z-index: 1;
+}
+
+.welcomeTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.01em;
+}
+
+.welcomeSubtitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  line-height: 1.6;
+  max-width: 640px;
+}
+
+.participantId {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 1.25rem;
+  padding: 0.5rem 1rem;
+  background-color: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+}
+
+.participantIdLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.participantIdValue {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  color: #F9A825;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* ----------------------------------------------------------------------------
+   Guest notice
+   ---------------------------------------------------------------------------- */
+
+.guestNotice {
+  display: flex;
+  gap: 1rem;
+  padding: 1.1rem 1.35rem;
+  background-color: #fffbf0;
+  border: 1px solid #FDE68A;
+  border-left: 4px solid #F9A825;
+  border-radius: 12px;
+}
+
+.guestIcon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.guestText strong {
+  display: block;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #713f12;
+  margin-bottom: 0.25rem;
+}
+
+.guestText p {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.875rem;
+  color: #78350f;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ----------------------------------------------------------------------------
+   Stats grid
+   ---------------------------------------------------------------------------- */
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  transition: all 0.2s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  border-color: #cbd5e1;
+}
+
+.statIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  flex-shrink: 0;
+  background-color: #f1f5f9;
+}
+
+.accent-blue .statIcon { background-color: #e0f2fe; }
+.accent-green .statIcon { background-color: #dcfce7; }
+.accent-gold .statIcon { background-color: #fef3c7; }
+.accent-purple .statIcon { background-color: #f3e8ff; }
+
+.statBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.statValue {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+  margin-bottom: 0.2rem;
+  letter-spacing: -0.02em;
+}
+
+.statLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* ----------------------------------------------------------------------------
+   Two column layout
+   ---------------------------------------------------------------------------- */
+
+.twoCol {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1rem;
+}
+
+.panel {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 1.35rem 1.5rem;
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.panelTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+/* ----------------------------------------------------------------------------
+   Checklist
+   ---------------------------------------------------------------------------- */
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.checklistItem {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.checklistItem:hover {
+  background-color: #f8fafc;
+  border-color: #E5E7EB;
+}
+
+.checklistCheckbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1.5px solid #cbd5e1;
+  background-color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #FFFFFF;
+  font-size: 0.75rem;
+  font-weight: 800;
+  transition: all 0.15s ease;
+}
+
+.checklistDone .checklistCheckbox {
+  background-color: #2E7D32;
+  border-color: #2E7D32;
+}
+
+.checklistBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.checklistLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.checklistDone .checklistLabel {
+  color: #64748b;
+  text-decoration: line-through;
+}
+
+.checklistHint {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.checklistArrow {
+  color: #cbd5e1;
+  font-size: 1rem;
+  transition: all 0.15s ease;
+}
+
+.checklistItem:hover .checklistArrow {
+  color: #1565C0;
+  transform: translateX(3px);
+}
+
+/* ----------------------------------------------------------------------------
+   AI panel
+   ---------------------------------------------------------------------------- */
+
+.aiPanel {
+  background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
+  border-color: #bae6fd;
+}
+
+.aiHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.aiIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.aiDescription {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.875rem;
+  color: #4A4A6A;
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+}
+
+.aiFeatures {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.25rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.aiFeatures li {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  color: #4A4A6A;
+  padding-left: 1.35rem;
+  position: relative;
+}
+
+.aiFeatures li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #2E7D32;
+  font-weight: 800;
+}
+
+.aiButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.7rem 1.25rem;
+  background-color: #1565C0;
+  color: #FFFFFF;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.aiButton:hover {
+  background-color: #0D47A1;
+  transform: translateY(-1px);
+}
+
+/* ----------------------------------------------------------------------------
+   Quick links
+   ---------------------------------------------------------------------------- */
+
+.quickLinks {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.75rem;
+}
+
+.quickLink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 0.75rem;
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.quickLink:hover {
+  background-color: #FFFFFF;
+  border-color: #1565C0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(21, 101, 192, 0.1);
+}
+
+.quickIcon {
+  font-size: 1.5rem;
+}
+
+.quickLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #334155;
+  text-align: center;
+}
+
+/* ============================================================================
+   Responsive
+   ============================================================================ */
+
+@media (max-width: 1280px) {
+  .statsGrid { grid-template-columns: repeat(2, 1fr); }
+  .quickLinks { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 1024px) {
+  .twoCol { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .welcomeBanner { padding: 1.5rem 1.25rem; }
+  .welcomeTitle { font-size: 1.25rem; }
+  .statsGrid { grid-template-columns: 1fr 1fr; }
+  .quickLinks { grid-template-columns: repeat(2, 1fr); }
+  .participantId { padding: 0.4rem 0.85rem; }
+  .participantIdValue { font-size: 0.8rem; }
+}

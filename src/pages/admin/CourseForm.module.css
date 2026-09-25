@@ -1,0 +1,569 @@
+@import '../../styles/theme.css';
+
+/* ============================================================================
+   Admin Course Form
+   ============================================================================ */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Header */
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.breadcrumb {
+  display: inline-block;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #64748b;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+  transition: color 0.15s ease;
+}
+
+.breadcrumb:hover {
+  color: #1565C0;
+}
+
+.pageTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.35rem 0;
+  letter-spacing: -0.02em;
+}
+
+.pageSubtitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.viewBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.1rem;
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #475569;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.viewBtn:hover {
+  border-color: #1565C0;
+  color: #1565C0;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1.5px solid #e5e7eb;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  padding: 0.85rem 1.25rem;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  margin-bottom: -1.5px;
+}
+
+.tab:hover {
+  color: #0f172a;
+}
+
+.tabActive {
+  color: #1565C0;
+  border-bottom-color: #1565C0;
+}
+
+/* Banners */
+.errorBanner,
+.successBanner {
+  padding: 0.85rem 1.1rem;
+  border-radius: 6px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.errorBanner {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-left: 4px solid #C62828;
+  color: #991b1b;
+}
+
+.successBanner {
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-left: 4px solid #16a34a;
+  color: #166534;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.threeCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.twoCol > *,
+.threeCol > * {
+  margin-bottom: 0;
+}
+
+/* Textarea */
+.textareaWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.textareaLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1A1A2E;
+  letter-spacing: 0.01em;
+}
+
+.textarea {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  background-color: #ffffff;
+  border: 1.5px solid #D0D5DD;
+  border-radius: 8px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.92rem;
+  color: #0f172a;
+  line-height: 1.55;
+  resize: vertical;
+  transition: all 0.15s ease;
+  outline: none;
+}
+
+.textarea:focus {
+  border-color: #1565C0;
+  box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.1);
+}
+
+/* Select */
+.selectWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.selectLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1A1A2E;
+}
+
+.select {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  background-color: #ffffff;
+  border: 1.5px solid #D0D5DD;
+  border-radius: 8px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.92rem;
+  color: #0f172a;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.select:focus {
+  border-color: #1565C0;
+  box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.1);
+}
+
+/* Checkbox */
+.checkboxWrapper {
+  display: flex;
+  align-items: center;
+  padding-top: 1.65rem;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1A1A2E;
+  cursor: pointer;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #2E7D32;
+  cursor: pointer;
+}
+
+/* Hero preview */
+.heroPreview {
+  margin-top: 0.75rem;
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 400px;
+  aspect-ratio: 16 / 9;
+}
+
+.heroPreview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.85rem;
+  padding-top: 1.5rem;
+  border-top: 1.5px solid #e5e7eb;
+  margin-top: 0.5rem;
+}
+
+.cancelBtn {
+  padding: 0.8rem 1.5rem;
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #475569;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cancelBtn:hover {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.submitBtn {
+  padding: 0.8rem 2rem;
+  background-color: #2E7D32;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 16px rgba(46, 125, 50, 0.25);
+}
+
+.submitBtn:hover:not(:disabled) {
+  background-color: #1B5E20;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(46, 125, 50, 0.35);
+}
+
+.submitBtn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+/* Loading & error states */
+.loadingState,
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 4rem 1rem;
+  text-align: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #1565C0;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loadingState p {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.errorStateText {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #991b1b;
+  margin: 0;
+}
+
+.backLink {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1565C0;
+  text-decoration: none;
+}
+
+.backLink:hover {
+  text-decoration: underline;
+}
+
+/* Cohort tab */
+.cohortTab,
+.previousTab {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.cohortHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.cohortTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.35rem 0;
+  letter-spacing: -0.015em;
+}
+
+.cohortSubtitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+  max-width: 540px;
+  line-height: 1.55;
+}
+
+.deleteCohortBtn {
+  padding: 0.55rem 1rem;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #991b1b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.deleteCohortBtn:hover {
+  background-color: #fee2e2;
+}
+
+.addCohortBtn {
+  padding: 0.55rem 1rem;
+  background-color: #2E7D32;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.addCohortBtn:hover {
+  background-color: #1B5E20;
+}
+
+/* Previous cohorts list */
+.previousRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  background-color: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  position: relative;
+}
+
+.previousInfo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+.previousInfo strong {
+  font-weight: 800;
+  color: #0f172a;
+  font-size: 0.9rem;
+}
+
+.previousOutcome {
+  grid-column: 1 / -1;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.82rem;
+  color: #1565C0;
+  font-weight: 600;
+  margin: 0.35rem 0 0;
+  padding-top: 0.35rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.deleteRowBtn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #e5e7eb;
+  background-color: #ffffff;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #C62828;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  align-self: flex-start;
+}
+
+.deleteRowBtn:hover {
+  background-color: #fef2f2;
+  border-color: #fecaca;
+}
+
+.emptyCohorts {
+  padding: 2rem;
+  text-align: center;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  background-color: #f8fafc;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 12px;
+  margin: 0;
+}
+
+.addCohortForm {
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  margin-top: 0.5rem;
+}
+
+/* ============================================================================
+   Responsive
+   ============================================================================ */
+
+@media (max-width: 900px) {
+  .twoCol,
+  .threeCol {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .form {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .tabs {
+    gap: 0;
+  }
+
+  .tab {
+    padding: 0.75rem 0.9rem;
+    font-size: 0.82rem;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .cancelBtn,
+  .submitBtn {
+    text-align: center;
+    justify-content: center;
+  }
+}

@@ -1,8 +1,9 @@
+/* eslint-disable react-refresh/only-export-components */
 // ============================================================================
-// iQuire — Auth Context
+// iQuire — Auth Context (Phase 7A.4)
 // ============================================================================
-// Global authentication state provider.
-// Wraps the entire app and syncs with Supabase session.
+// Global authentication state. Tracks user, profile, account type, tier,
+// and additive roles. Syncs with Supabase session automatically.
 // ============================================================================
 
 import React, {
@@ -16,7 +17,17 @@ import React, {
 } from 'react';
 import type { User } from '@supabase/supabase-js';
 import { supabase } from '../integrations/supabase/client';
-import type { AuthContextValue, Profile, UserRole } from '../types/auth.types';
+import {
+  fetchCurrentProfile,
+  fetchCurrentRoles,
+} from '../services/auth.service';
+import type {
+  AuthContextValue,
+  Profile,
+  UserRole,
+  AccountType,
+  AccountTier,
+} from '../types/auth.types';
 
 // ============================================================================
 // Context
@@ -35,33 +46,38 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [roles, setRoles] = useState<UserRole[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // --------------------------------------------------------------------------
-  // Fetch profile from public.profiles for a given user id
+  // Fetch profile + roles together
   // --------------------------------------------------------------------------
-  const fetchProfile = useCallback(async (userId: string): Promise<Profile | null> => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single();
+  const loadUserData = useCallback(async (userId: string) => {
+    const [freshProfile, freshRoles] = await Promise.all([
+      fetchCurrentProfile(userId),
+      fetchCurrentRoles(userId),
+    ]);
 
-    if (error) {
-      console.error('[AuthContext] Failed to fetch profile:', error.message);
-      return null;
-    }
-    return data as Profile;
+    return { profile: freshProfile, roles: freshRoles };
   }, []);
 
   // --------------------------------------------------------------------------
-  // Refresh profile manually (used after profile updates)
+  // Refresh profile (public method)
   // --------------------------------------------------------------------------
   const refreshProfile = useCallback(async () => {
     if (!user) return;
-    const freshProfile = await fetchProfile(user.id);
+    const { profile: freshProfile } = await loadUserData(user.id);
     setProfile(freshProfile);
-  }, [user, fetchProfile]);
+  }, [user, loadUserData]);
+
+  // --------------------------------------------------------------------------
+  // Refresh roles (public method)
+  // --------------------------------------------------------------------------
+  const refreshRoles = useCallback(async () => {
+    if (!user) return;
+    const freshRoles = await fetchCurrentRoles(user.id);
+    setRoles(freshRoles);
+  }, [user]);
 
   // --------------------------------------------------------------------------
   // Sign out
@@ -70,15 +86,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     await supabase.auth.signOut();
     setUser(null);
     setProfile(null);
+    setRoles([]);
   }, []);
 
   // --------------------------------------------------------------------------
-  // Initialize + subscribe to auth state changes
+  // Init + subscribe to auth state changes
   // --------------------------------------------------------------------------
   useEffect(() => {
     let isMounted = true;
 
-    // Bootstrap: check current session on mount
     const initAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -87,11 +103,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
         if (session?.user) {
           setUser(session.user);
-          const p = await fetchProfile(session.user.id);
-          if (isMounted) setProfile(p);
+          const { profile: p, roles: r } = await loadUserData(session.user.id);
+          if (isMounted) {
+            setProfile(p);
+            setRoles(r);
+          }
         } else {
           setUser(null);
           setProfile(null);
+          setRoles([]);
         }
       } catch (err) {
         console.error('[AuthContext] initAuth error:', err);
@@ -102,7 +122,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     initAuth();
 
-    // Subscribe to subsequent auth changes
+    // Subscribe to subsequent changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (!isMounted) return;
@@ -110,13 +130,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (event === 'SIGNED_OUT' || !session?.user) {
           setUser(null);
           setProfile(null);
+          setRoles([]);
           return;
         }
 
-        if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
+        if (
+          event === 'SIGNED_IN' ||
+          event === 'TOKEN_REFRESHED' ||
+          event === 'USER_UPDATED'
+        ) {
           setUser(session.user);
-          const p = await fetchProfile(session.user.id);
-          if (isMounted) setProfile(p);
+          const { profile: p, roles: r } = await loadUserData(session.user.id);
+          if (isMounted) {
+            setProfile(p);
+            setRoles(r);
+          }
         }
       }
     );
@@ -125,13 +153,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       isMounted = false;
       subscription.unsubscribe();
     };
-  }, [fetchProfile]);
+  }, [loadUserData]);
 
   // --------------------------------------------------------------------------
   // Derived values
   // --------------------------------------------------------------------------
-  const role: UserRole | null = useMemo(() => profile?.role ?? null, [profile]);
+  const accountType: AccountType | null = useMemo(
+    () => profile?.account_type ?? null,
+    [profile]
+  );
+
+  const tier: AccountTier | null = useMemo(
+    () => profile?.tier ?? null,
+    [profile]
+  );
+
   const isAuthenticated = useMemo(() => !!user && !!profile, [user, profile]);
+  const isVerified = useMemo(() => tier === 'verified', [tier]);
+
+  const isAdmin = useMemo(() => accountType === 'admin', [accountType]);
+  const isRecruiter = useMemo(() => accountType === 'recruiter', [accountType]);
+  const isMember = useMemo(() => accountType === 'member', [accountType]);
+
+  const isStudent = useMemo(() => roles.includes('student'), [roles]);
+  const isAlumni = useMemo(() => roles.includes('alumni'), [roles]);
 
   // --------------------------------------------------------------------------
   // Context value
@@ -140,13 +185,39 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     () => ({
       user,
       profile,
-      role,
+      accountType,
+      tier,
+      roles,
       isAuthenticated,
+      isVerified,
+      isAdmin,
+      isRecruiter,
+      isMember,
+      isStudent,
+      isAlumni,
       isLoading,
       signOut,
       refreshProfile,
+      refreshRoles,
     }),
-    [user, profile, role, isAuthenticated, isLoading, signOut, refreshProfile]
+    [
+      user,
+      profile,
+      accountType,
+      tier,
+      roles,
+      isAuthenticated,
+      isVerified,
+      isAdmin,
+      isRecruiter,
+      isMember,
+      isStudent,
+      isAlumni,
+      isLoading,
+      signOut,
+      refreshProfile,
+      refreshRoles,
+    ]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -156,7 +227,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 // Hook
 // ============================================================================
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = (): AuthContextValue => {
   const ctx = useContext(AuthContext);
   if (!ctx) {

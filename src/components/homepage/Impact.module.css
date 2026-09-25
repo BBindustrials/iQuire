@@ -1,146 +1,408 @@
 @import '../../styles/theme.css';
 
+/* ============================================================================
+   Impact Section
+   ============================================================================ */
+
 .impact {
-  padding: 5rem 0;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-  color: #FFFFFF;
-  width: 100%;
+  position: relative;
+  padding: 0rem 0 8rem;
+  background: linear-gradient(180deg, #0f172a 0%, #1a2942 100%);
+  overflow: hidden;
+  color: #ffffff;
 }
+
+/* Background gradient blobs */
+.bgBlobOne,
+.bgBlobTwo {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bgBlobOne {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #F9A825 0%, transparent 70%);
+  opacity: 0.15;
+  top: -160px;
+  right: -140px;
+}
+
+.bgBlobTwo {
+  width: 460px;
+  height: 460px;
+  background: radial-gradient(circle, #1565C0 0%, transparent 70%);
+  opacity: 0.18;
+  bottom: -100px;
+  left: -140px;
+}
+
+/* ----------------------------------------------------------------------------
+   Header
+   ---------------------------------------------------------------------------- */
 
 .header {
   text-align: center;
-  margin-bottom: 3rem;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0 1.5rem;
+  max-width: 720px;
+  margin: 0 auto 4rem;
+  position: relative;
+  z-index: 1;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  background-color: #F9A825;
+  color: #1A1A2E;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(249, 168, 37, 0.35);
+  margin-bottom: 1.25rem;
 }
 
 .title {
-  font-size: clamp(2rem, 4vw, 3.5rem);
-  font-weight: 700;
-  color: #FFFFFF;
-  margin-bottom: 1.5rem;
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(2rem, 3.6vw, 3rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+  margin: 0 0 1rem 0;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.title .highlight-gold {
-  color: #FFB300;
+.highlight {
+  color: #F9A825;
+  text-shadow: 0 2px 12px rgba(249, 168, 37, 0.5);
 }
 
-.description {
-  font-size: 1.125rem;
-  color: #FFFFFF; /* Pure white */
-  max-width: 700px;
-  margin: 0 auto 1.5rem;
+.subtitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.05rem;
   line-height: 1.7;
-  opacity: 1; /* Full opacity */
-}
-
-.reach {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-}
-
-.reachBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 0.5rem 1.25rem;
-  border-radius: 50px;
-  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
   font-weight: 500;
-  color: #FFFFFF; /* Pure white */
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin: 0;
 }
+
+/* ----------------------------------------------------------------------------
+   Metrics grid
+   ---------------------------------------------------------------------------- */
 
 .metricsGrid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 2rem;
-  margin: 3rem 0;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0 1.5rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+  position: relative;
+  z-index: 1;
 }
 
 .metricCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+  gap: 0.75rem;
+  padding: 2rem 1.5rem;
   background: rgba(255, 255, 255, 0.05);
-  padding: 2rem 1rem;
-  border-radius: var(--radius-lg);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.metricCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, currentColor, transparent);
+  opacity: 0.7;
 }
 
 .metricCard:hover {
-  transform: translateY(-4px);
-  background: rgba(255, 255, 255, 0.1);
-  border-color: #FFB300;
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(249, 168, 37, 0.4);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.4);
 }
+
+.accent-blue::before { color: #3b82f6; }
+.accent-green::before { color: #10b981; }
+.accent-gold::before { color: #F9A825; }
+.accent-purple::before { color: #a855f7; }
 
 .metricIcon {
-  font-size: 2.5rem;
-  margin-bottom: 0.75rem;
-  display: block;
-}
-
-.metricValue {
   font-size: 2.25rem;
-  font-weight: 800;
-  color: #FFB300;
+  line-height: 1;
   margin-bottom: 0.25rem;
 }
 
-.metricLabel {
-  font-size: 0.95rem;
-  color: #FFFFFF; /* Pure white */
-  opacity: 1; /* Full opacity */
+.metricValue {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 2.75rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: #F9A825;
+  text-shadow: 0 4px 12px rgba(249, 168, 37, 0.4);
 }
 
-.ctaWrapper {
+.metricLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.005em;
+}
+
+.metricDesc {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+  max-width: 240px;
+}
+
+/* ----------------------------------------------------------------------------
+   Employers strip
+   ---------------------------------------------------------------------------- */
+
+.employersHeader {
   text-align: center;
-  max-width: 1200px;
+  margin-bottom: 2.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.employersTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.015em;
+}
+
+.employersSubtitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  max-width: 560px;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 1.5rem;
+  line-height: 1.6;
 }
 
-.ctaWrapper .button {
-  background-color: transparent !important;
-  color: #FFB300 !important;
-  border: 2px solid #FFB300 !important;
-  box-shadow: none !important;
+.employersGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 4rem;
+  position: relative;
+  z-index: 1;
 }
 
-.ctaWrapper .button:hover {
-  background-color: #FFB300 !important;
-  color: #000000 !important;
+.employerCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  transition: all 0.25s ease;
+}
+
+.employerCard:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(249, 168, 37, 0.3);
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(255, 179, 0, 0.3) !important;
 }
 
-/* Responsive */
+.employerLogo {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.logo-blue { background: linear-gradient(135deg, #3b82f6, #1e40af); }
+.logo-green { background: linear-gradient(135deg, #10b981, #047857); }
+.logo-gold { background: linear-gradient(135deg, #F9A825, #B45309); }
+.logo-purple { background: linear-gradient(135deg, #a855f7, #6d28d9); }
+.logo-gray { background: linear-gradient(135deg, #64748b, #334155); }
+
+.employerName {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------------------------
+   CTA
+   ---------------------------------------------------------------------------- */
+
+.ctaWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+.secondaryLink {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #F9A825;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.secondaryLink:hover {
+  color: #ffffff;
+  gap: 0.5rem;
+}
+
+/* ============================================================================
+   DEMARCATION — inverted to work on dark background
+   ============================================================================ */
+
+
+.demarcationBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  line-height: 0;
+  z-index: 3;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.demarcationBottom .demarcationWave {
+  width: 100%;
+  height: 120px;
+  display: block;
+  filter: drop-shadow(0 -6px 16px rgba(0, 0, 0, 0.4))
+    drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.demarcationLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto 1.5rem;
+  padding: 0 1rem;
+  position: relative;
+  z-index: 5;
+}
+
+.demarcationLine {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #F9A825, #F9A825);
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(249, 168, 37, 0.3);
+}
+
+.demarcationLine:last-child {
+  background: linear-gradient(to left, transparent, #F9A825, #F9A825);
+}
+
+.demarcationDot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: #F9A825;
+  box-shadow: 0 0 0 6px rgba(249, 168, 37, 0.35),
+    0 0 0 12px rgba(249, 168, 37, 0.15),
+    0 4px 12px rgba(0, 0, 0, 0.5);
+  position: relative;
+  z-index: 6;
+  flex-shrink: 0;
+}
+
+.demarcationDot::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background-color: rgba(249, 168, 37, 0.4);
+  animation: pulseDot 2.5s ease-out infinite;
+  z-index: -1;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* ============================================================================
+   Responsive
+   ============================================================================ */
+
 @media (max-width: 1024px) {
   .metricsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .employersGrid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   .impact {
-    padding: 3rem 0;
+    padding: 5rem 0 6rem;
+  }
+
+  .header {
+    margin-bottom: 3rem;
   }
 
   .metricsGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    padding: 0 1rem;
+    margin-bottom: 3rem;
   }
 
   .metricCard {
@@ -148,52 +410,48 @@
   }
 
   .metricValue {
+    font-size: 2rem;
+  }
+
+  .metricIcon {
     font-size: 1.75rem;
   }
 
-  .reach {
-    gap: 1rem;
+  .employersGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 3rem;
   }
 
-  .reachBadge {
-    font-size: 0.875rem;
-    padding: 0.4rem 1rem;
+  .employerCard {
+    padding: 0.75rem 0.85rem;
   }
 
-  .header {
-    padding: 0 1rem;
+  .employerName {
+    font-size: 0.78rem;
   }
 
   .ctaWrapper {
-    padding: 0 1rem;
+    flex-direction: column;
+    gap: 1rem;
   }
+
+  .demarcationBottom .demarcationWave { height: 90px; }
+  .demarcationLabel { margin-bottom: 1rem; gap: 0.85rem; }
 }
 
 @media (max-width: 480px) {
   .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .employersGrid {
     grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-    padding: 0 0.5rem;
   }
 
-  .metricCard {
-    padding: 1rem;
-  }
+  .metricValue { font-size: 1.85rem; }
 
-  .metricIcon {
-    font-size: 2rem;
-  }
-
-  .metricValue {
-    font-size: 1.5rem;
-  }
-
-  .metricLabel {
-    font-size: 0.8rem;
-  }
-
-  .description {
-    font-size: 1rem;
-    padding: 0 0.5rem;
-  }
+  .demarcationBottom .demarcationWave { height: 70px; }
+  .demarcationDot { width: 12px; height: 12px; }
+  .demarcationLine { height: 1.5px; }
 }

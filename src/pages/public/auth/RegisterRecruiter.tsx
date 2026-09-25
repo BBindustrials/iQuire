@@ -1,26 +1,34 @@
+// ============================================================================
+// iQuire — Public Recruiter Registration (Phase 7A.6)
+// ============================================================================
+// Self-service recruiter account creation.
+// Creates a guest-tier recruiter. Admin verifies for full talent access.
+// ============================================================================
+
 import React, { useState, useMemo, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthLayout, AuthFooter, AuthPageTitle } from '../../../components/layout/AuthLayout';
+import { useNavigate, Link } from 'react-router-dom';
+import {
+  AuthLayout,
+  AuthPageTitle,
+} from '../../../components/layout/AuthLayout';
 import { FormSection } from '../../../components/common/FormSection';
 import { Input } from '../../../components/common/Input';
 import { SelectInput } from '../../../components/common/SelectInput';
 import { PasswordInput } from '../../../components/common/PasswordInput';
 import { Checkbox } from '../../../components/common/Checkbox';
-import styles from './SignupForm.module.css';
+import styles from './Register.module.css';
 
-import signupStudentImg from '../../../assets/images/auth/signup-student.jpg';
+import registerRecruiterImg from '../../../assets/images/auth/signup-recruiter.png';
 
-import {
-  type StudentSignupData,
-  type FormErrors,
-  GENDER_OPTIONS,
+import type {
+  RegisterRecruiterData,
+  FormErrors,
 } from '../../../types/auth.types';
 
 import {
-  getStateOptions,
-  getLgaOptions,
-  COUNTRY_OPTIONS,
-} from '../../../utils/nigerianStates';
+  INDUSTRY_OPTIONS,
+  COMPANY_SIZE_OPTIONS,
+} from '../../../types/auth.types';
 
 import {
   isValidEmail,
@@ -29,25 +37,25 @@ import {
   getPasswordStrength,
   normalizeString,
 } from '../../../utils/validation';
-import { signupStudent } from '../../../services/auth.service';
+
+import { registerRecruiter } from '../../../services/auth.service';
 
 // ============================================================================
 // Initial Form State
 // ============================================================================
 
-const initialFormData: StudentSignupData = {
-  userType: 'student',
+const initialFormData: RegisterRecruiterData = {
   firstName: '',
-  middleName: '',
   lastName: '',
-  gender: '',
+  position: '',
+  companyName: '',
+  industry: '',
+  companyWebsite: '',
+  companySize: '',
+  workEmail: '',
   phone: '',
-  email: '',
   password: '',
   confirmPassword: '',
-  country: 'NG',
-  state: '',
-  lga: '',
   agreeToTerms: false,
   marketingOptIn: false,
 };
@@ -56,27 +64,22 @@ const initialFormData: StudentSignupData = {
 // Component
 // ============================================================================
 
-export const StudentSignup: React.FC = () => {
+export const RegisterRecruiter: React.FC = () => {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState<StudentSignupData>(initialFormData);
+  const [formData, setFormData] = useState<RegisterRecruiterData>(initialFormData);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
-  // Derive LGA options based on selected state
-  const lgaOptions = useMemo(() => getLgaOptions(formData.state), [formData.state]);
-
-  // Derive password strength
   const passwordStrength = useMemo(
     () => (formData.password ? getPasswordStrength(formData.password) : null),
     [formData.password]
   );
 
-  // ----------------------------------------------------------------------------
+  // --------------------------------------------------------------------------
   // Handlers
-  // ----------------------------------------------------------------------------
-
+  // --------------------------------------------------------------------------
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -86,11 +89,8 @@ export const StudentSignup: React.FC = () => {
     setFormData((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
-      // Reset LGA when state changes
-      ...(name === 'state' ? { lga: '' } : {}),
     }));
 
-    // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors((prev) => {
         const next = { ...prev };
@@ -100,41 +100,51 @@ export const StudentSignup: React.FC = () => {
     }
   };
 
-  // ----------------------------------------------------------------------------
+  // --------------------------------------------------------------------------
   // Validation
-  // ----------------------------------------------------------------------------
-
+  // --------------------------------------------------------------------------
   const validateForm = (): FormErrors => {
     const newErrors: FormErrors = {};
 
-    // Personal details
     if (!normalizeString(formData.firstName)) {
       newErrors.firstName = 'First name is required';
     }
     if (!normalizeString(formData.lastName)) {
       newErrors.lastName = 'Last name is required';
     }
-    if (!formData.gender) {
-      newErrors.gender = 'Please select your gender';
+    if (!normalizeString(formData.position)) {
+      newErrors.position = 'Position is required';
     }
 
-    // Contact
+    if (!normalizeString(formData.companyName)) {
+      newErrors.companyName = 'Company name is required';
+    }
+    if (!formData.industry) {
+      newErrors.industry = 'Please select your industry';
+    }
+    if (
+      formData.companyWebsite &&
+      !/^https?:\/\/.+\..+/.test(formData.companyWebsite.trim())
+    ) {
+      newErrors.companyWebsite = 'Enter a valid URL (e.g., https://company.com)';
+    }
+
+    if (!formData.workEmail.trim()) {
+      newErrors.workEmail = 'Work email is required';
+    } else if (!isValidEmail(formData.workEmail)) {
+      newErrors.workEmail = 'Enter a valid email address';
+    }
     if (!formData.phone.trim()) {
       newErrors.phone = 'Phone number is required';
     } else if (!isValidNigerianPhone(formData.phone)) {
       newErrors.phone = 'Enter a valid 11-digit Nigerian phone number';
     }
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!isValidEmail(formData.email)) {
-      newErrors.email = 'Enter a valid email address';
-    }
 
-    // Account
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (!isValidPassword(formData.password)) {
-      newErrors.password = 'Password must be at least 8 characters with letters and numbers';
+      newErrors.password =
+        'Password must be at least 8 characters with letters and numbers';
     }
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Please retype your password';
@@ -142,18 +152,6 @@ export const StudentSignup: React.FC = () => {
       newErrors.confirmPassword = 'Passwords do not match';
     }
 
-    // Location
-    if (!formData.country) {
-      newErrors.country = 'Country is required';
-    }
-    if (!formData.state) {
-      newErrors.state = 'Please select your state';
-    }
-    if (!formData.lga) {
-      newErrors.lga = 'Please select your LGA';
-    }
-
-    // Terms
     if (!formData.agreeToTerms) {
       newErrors.agreeToTerms = 'You must agree to the Terms and Conditions';
     }
@@ -161,13 +159,13 @@ export const StudentSignup: React.FC = () => {
     return newErrors;
   };
 
-  // ----------------------------------------------------------------------------
+  // --------------------------------------------------------------------------
   // Submit
-  // ----------------------------------------------------------------------------
+  // --------------------------------------------------------------------------
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const validationErrors = validateForm();
-  
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       const firstErrorKey = Object.keys(validationErrors)[0];
@@ -175,82 +173,98 @@ export const StudentSignup: React.FC = () => {
       el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
-  
+
     setIsSubmitting(true);
     setErrors({});
-  
-    const result = await signupStudent(formData);
-  
+
+    const result = await registerRecruiter(formData);
+
     setIsSubmitting(false);
-  
+
     if (!result.success) {
       setErrors({ submit: result.message });
       return;
     }
-  
+
     setSubmitSuccess(true);
   };
 
-  // ----------------------------------------------------------------------------
+  // --------------------------------------------------------------------------
   // Success State
-  // ----------------------------------------------------------------------------
-
+  // --------------------------------------------------------------------------
   if (submitSuccess) {
     return (
-      <AuthLayout image={signupStudentImg} imageAlt="Student signup success">
+      <AuthLayout image={registerRecruiterImg} imageAlt="Recruiter registration successful">
         <div className={styles.successBox}>
           <div className={styles.successIcon}>
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
               <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
-              <path d="M8 12L11 15L16 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M8 12L11 15L16 9"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </div>
-          <h2 className={styles.successTitle}>Account Created!</h2>
+          <h2 className={styles.successTitle}>Welcome to IQuire, {formData.firstName}!</h2>
           <p className={styles.successText}>
-            Welcome to IQuire, <strong>{formData.firstName}</strong>. <br />  We've sent a verification link to {' '}
-            <strong>{formData.email}</strong>  <br />  Please check your inbox and click the link to activate your account.
+            We've received your registration for <strong>{formData.companyName}</strong>.
+            <br />
+            A verification link has been sent to <strong>{formData.workEmail}</strong>.
+            <br />
+            Our team will review your organisation details and activate your full
+            recruiter access within 24–48 hours.
           </p>
+
+          <div className={styles.nextSteps}>
+            <h3 className={styles.nextStepsTitle}>What happens next?</h3>
+            <ol className={styles.nextStepsList}>
+              <li>Verify your work email</li>
+              <li>Our team reviews your organisation</li>
+              <li>You receive full access to the talent directory</li>
+              <li>Start discovering IQuire-trained talent</li>
+            </ol>
+          </div>
+
           <button
             type="button"
             className={styles.successButton}
-            onClick={() => navigate('/login/student')}
+            onClick={() => navigate('/login/recruiter')}
           >
-            Go to Login
+            Go to Recruiter Login
           </button>
+
           <p className={styles.successFooter}>
-            Didn't receive the email?{' '}
-            <button
-              type="button"
-              className={styles.successResend}
-              onClick={() => console.log('TODO: resend verification email')}
-            >
-              Resend
-            </button>
+            Questions?{' '}
+            <Link to="/contact" className={styles.footerLink}>
+              Contact our team
+            </Link>
           </p>
         </div>
       </AuthLayout>
     );
   }
 
-  // ----------------------------------------------------------------------------
-  // Main Form Render
-  // ----------------------------------------------------------------------------
-
+  // --------------------------------------------------------------------------
+  // Main Form
+  // --------------------------------------------------------------------------
   return (
     <AuthLayout
-      image={signupStudentImg}
-      imageAlt="African student signing up for IQuire"
+      image={registerRecruiterImg}
+      imageAlt="Join IQuire as a recruiter"
     >
       <AuthPageTitle
-        title="Signup"
-        subtitle="Create your IQuire account to start building your career."
+        title="Register as a Recruiter"
+        subtitle="Get access to work-ready, verified IQuire talent."
       />
 
       <form onSubmit={handleSubmit} noValidate>
         {/* ================================================================ */}
         {/* PERSONAL DETAILS                                                  */}
         {/* ================================================================ */}
-        <FormSection title="Personal details">
+        <FormSection title="Your details">
           <div className={styles.twoCol}>
             <Input
               label="First name"
@@ -263,17 +277,6 @@ export const StudentSignup: React.FC = () => {
               error={errors.firstName}
             />
             <Input
-              label="Middle name"
-              name="middleName"
-              value={formData.middleName}
-              onChange={handleChange}
-              placeholder="Enter middle name"
-              autoComplete="additional-name"
-              error={errors.middleName}
-            />
-          </div>
-          <div className={styles.twoCol}>
-            <Input
               label="Last name"
               name="lastName"
               value={formData.lastName}
@@ -283,15 +286,67 @@ export const StudentSignup: React.FC = () => {
               autoComplete="family-name"
               error={errors.lastName}
             />
-            <SelectInput
-              label="Gender"
-              name="gender"
-              value={formData.gender}
+          </div>
+          <div className={styles.twoCol}>
+            <Input
+              label="Position / Role"
+              name="position"
+              value={formData.position}
               onChange={handleChange}
               required
-              options={GENDER_OPTIONS}
-              placeholder="Select"
-              error={errors.gender}
+              placeholder="e.g., HR Manager, Talent Lead"
+              autoComplete="organization-title"
+              error={errors.position}
+            />
+          </div>
+        </FormSection>
+
+        {/* ================================================================ */}
+        {/* COMPANY DETAILS                                                   */}
+        {/* ================================================================ */}
+        <FormSection title="Company details">
+          <div className={styles.twoCol}>
+            <Input
+              label="Company name"
+              name="companyName"
+              value={formData.companyName}
+              onChange={handleChange}
+              required
+              placeholder="Enter company name"
+              autoComplete="organization"
+              error={errors.companyName}
+            />
+            <SelectInput
+              label="Industry"
+              name="industry"
+              value={formData.industry}
+              onChange={handleChange}
+              required
+              options={INDUSTRY_OPTIONS}
+              placeholder="Select industry"
+              error={errors.industry}
+            />
+          </div>
+          <div className={styles.twoCol}>
+            <Input
+              label="Company website"
+              name="companyWebsite"
+              type="url"
+              value={formData.companyWebsite}
+              onChange={handleChange}
+              placeholder="https://company.com"
+              helperText="Optional, but helps us verify your organisation faster."
+              autoComplete="url"
+              error={errors.companyWebsite}
+            />
+            <SelectInput
+              label="Company size"
+              name="companySize"
+              value={formData.companySize}
+              onChange={handleChange}
+              options={COMPANY_SIZE_OPTIONS}
+              placeholder="Select company size"
+              error={errors.companySize}
             />
           </div>
         </FormSection>
@@ -302,6 +357,18 @@ export const StudentSignup: React.FC = () => {
         <FormSection title="Contact">
           <div className={styles.twoCol}>
             <Input
+              label="Work email"
+              name="workEmail"
+              type="email"
+              value={formData.workEmail}
+              onChange={handleChange}
+              required
+              placeholder="you@company.com"
+              helperText="Use your official company email for faster verification."
+              autoComplete="email"
+              error={errors.workEmail}
+            />
+            <Input
               label="Phone number"
               name="phone"
               type="tel"
@@ -309,20 +376,9 @@ export const StudentSignup: React.FC = () => {
               onChange={handleChange}
               required
               placeholder="08012345678"
-              helperText="Enter an 11-digit Nigerian mobile number starting with 0, for example 08012345678."
+              helperText="11-digit Nigerian number."
               autoComplete="tel"
               error={errors.phone}
-            />
-            <Input
-              label="Email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              placeholder="you@example.com"
-              autoComplete="email"
-              error={errors.email}
             />
           </div>
         </FormSection>
@@ -341,10 +397,10 @@ export const StudentSignup: React.FC = () => {
               placeholder="Create a password"
               autoComplete="new-password"
               error={errors.password}
-              helperText="Minimum 8 characters with letters and numbers."
+              helperText="Min 8 characters, letters and numbers."
             />
             <PasswordInput
-              label="Retype Password"
+              label="Confirm Password"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
@@ -355,7 +411,6 @@ export const StudentSignup: React.FC = () => {
             />
           </div>
 
-          {/* Password strength indicator */}
           {passwordStrength && (
             <div className={styles.strengthWrapper}>
               <div className={styles.strengthBars}>
@@ -363,59 +418,24 @@ export const StudentSignup: React.FC = () => {
                   <span
                     key={i}
                     className={`${styles.strengthBar} ${
-                      i <= passwordStrength.score ? styles[`strength-${passwordStrength.level}`] : ''
+                      i <= passwordStrength.score
+                        ? styles[`strength-${passwordStrength.level}`]
+                        : ''
                     }`}
                   />
                 ))}
               </div>
-              <span className={`${styles.strengthLabel} ${styles[`strength-label-${passwordStrength.level}`]}`}>
+              <span
+                className={`${styles.strengthLabel} ${
+                  styles[`strength-label-${passwordStrength.level}`]
+                }`}
+              >
                 {passwordStrength.level === 'weak' && 'Weak password'}
                 {passwordStrength.level === 'medium' && 'Medium strength'}
                 {passwordStrength.level === 'strong' && 'Strong password'}
               </span>
             </div>
           )}
-        </FormSection>
-
-        {/* ================================================================ */}
-        {/* LOCATION                                                          */}
-        {/* ================================================================ */}
-        <FormSection title="Location">
-          <div className={styles.twoCol}>
-            <SelectInput
-              label="Country of residence"
-              name="country"
-              value={formData.country}
-              onChange={handleChange}
-              required
-              options={COUNTRY_OPTIONS}
-              placeholder="Select country"
-              error={errors.country}
-            />
-            <SelectInput
-              label="State of residence"
-              name="state"
-              value={formData.state}
-              onChange={handleChange}
-              required
-              options={getStateOptions()}
-              placeholder="Select state"
-              error={errors.state}
-            />
-          </div>
-          <div className={styles.twoCol}>
-            <SelectInput
-              label="LGA"
-              name="lga"
-              value={formData.lga}
-              onChange={handleChange}
-              required
-              options={lgaOptions}
-              placeholder={formData.state ? 'Select LGA' : 'Select state first'}
-              disabled={!formData.state}
-              error={errors.lga}
-            />
-          </div>
         </FormSection>
 
         {/* ================================================================ */}
@@ -430,13 +450,13 @@ export const StudentSignup: React.FC = () => {
             label={
               <>
                 I agree to the{' '}
-                <a href="/terms" target="_blank" rel="noopener noreferrer">
+                <Link to="/terms" target="_blank">
                   Terms and Conditions
-                </a>{' '}
+                </Link>{' '}
                 and{' '}
-                <a href="/privacy" target="_blank" rel="noopener noreferrer">
+                <Link to="/privacy" target="_blank">
                   Privacy Policy
-                </a>
+                </Link>
                 .
               </>
             }
@@ -445,26 +465,40 @@ export const StudentSignup: React.FC = () => {
             name="marketingOptIn"
             checked={formData.marketingOptIn}
             onChange={handleChange}
-            label="Yes, send me updates about new courses, learning opportunities, scholarships, and important announcements from the platform."
+            label="Send me hiring insights, talent updates, and IQuire events."
           />
         </div>
 
         {/* ================================================================ */}
         {/* SUBMIT                                                            */}
         {/* ================================================================ */}
+        {errors.submit && (
+          <div className={styles.submitError} role="alert">
+            {errors.submit}
+          </div>
+        )}
+
         <button
           type="submit"
           className={styles.submitButton}
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Creating account...' : 'Signup'}
+          {isSubmitting ? 'Creating recruiter account...' : 'Create Recruiter Account'}
         </button>
 
-        <AuthFooter
-          text="Already have an account?"
-          linkText="Login"
-          linkTo="/login/student"
-        />
+        <p className={styles.footer}>
+          Already have a recruiter account?{' '}
+          <Link to="/login/recruiter" className={styles.footerLink}>
+            Login
+          </Link>
+        </p>
+
+        <p className={styles.recruiterFooter}>
+          Not hiring?{' '}
+          <Link to="/register" className={styles.footerLink}>
+            Register as a Member →
+          </Link>
+        </p>
       </form>
     </AuthLayout>
   );

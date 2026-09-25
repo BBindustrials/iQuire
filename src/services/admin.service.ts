@@ -7,7 +7,7 @@
 // ============================================================================
 
 import { supabase } from '../integrations/supabase/client';
-import type { UserRole } from '../types/auth.types';
+
 
 // ============================================================================
 // Types
@@ -29,7 +29,7 @@ export interface RecentUser {
   first_name: string;
   last_name: string;
   email: string;
-  role: UserRole;
+  role: string;
   verification_status: 'unverified' | 'pending' | 'verified' | 'rejected';
   created_at: string;
 }
@@ -57,7 +57,7 @@ export const getDashboardStats = async (): Promise<{
     if (error) return { data: null, error: error.message };
 
     const rows = (data ?? []) as Array<{
-      role: UserRole;
+      role: string;
       verification_status: RecentUser['verification_status'];
       created_at: string;
     }>;

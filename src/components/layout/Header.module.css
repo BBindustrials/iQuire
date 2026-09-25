@@ -1,77 +1,55 @@
 @import '../../styles/theme.css';
 
+/* ============================================================================
+   Header — Public site navigation
+   ============================================================================ */
+
 .header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  background-color: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow: var(--shadow-sm);
-  height: 70px;
+  background-color: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  height: 72px;
   display: flex;
   align-items: center;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
-              opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform, opacity;
+  transition: transform 0.3s ease;
 }
 
-/* Visible state - header is shown */
-.header.visible {
+.visible {
   transform: translateY(0);
-  opacity: 1;
-  pointer-events: auto;
 }
 
-/* Hidden state - header is hidden by default */
-.header.hidden {
+.hidden {
   transform: translateY(-100%);
-  opacity: 0;
-  pointer-events: none;
 }
 
-/* Show on hover when hidden */
-.header.hidden:hover,
-.header.hidden:focus-within {
-  transform: translateY(0);
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* Touch device support */
-@media (hover: none) {
-  .header.hidden {
-    transform: translateY(0);
-    opacity: 0.1;
-    pointer-events: auto;
-    background-color: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(2px);
-  }
-  
-  .header.hidden:active,
-  .header.hidden:focus-within {
-    opacity: 1;
-    background-color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-  }
-}
-
-.nav {
+/* Full-width inner container — logo far left, login far right */
+.headerInner {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 2.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 2.5rem;
   height: 100%;
-  width: 100%;
 }
 
-/* Logo - Extreme Left */
+/* ----------------------------------------------------------------------------
+   Logo — far left, breathing room
+   ---------------------------------------------------------------------------- */
+
 .logo {
   display: flex;
   align-items: center;
   text-decoration: none;
   flex-shrink: 0;
-  margin-right: 2rem;
+  margin-right: 1rem;
 }
 
 .logoImage {
@@ -80,11 +58,14 @@
   display: block;
 }
 
-/* Navigation - Centered */
+/* ----------------------------------------------------------------------------
+   Navigation
+   ---------------------------------------------------------------------------- */
+
 .navList {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1.75rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -93,16 +74,19 @@
 }
 
 .navList li a {
-  color: var(--color-text-secondary);
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
   font-weight: 500;
-  font-size: 0.95rem;
-  transition: color var(--transition-fast);
+  color: #1A1A2E;
+  text-decoration: none;
+  padding: 0.4rem 0;
   position: relative;
+  transition: color 0.2s ease;
   white-space: nowrap;
 }
 
 .navList li a:hover {
-  color: #2E7D32;
+  color: #1565C0;
 }
 
 .navList li a::after {
@@ -112,63 +96,258 @@
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #2E7D32;
-  transition: width var(--transition-base);
+  background-color: #1565C0;
+  transition: width 0.2s ease;
 }
 
 .navList li a:hover::after {
   width: 100%;
 }
 
-/* Actions - Extreme Right */
+/* ----------------------------------------------------------------------------
+   Actions — far right
+   ---------------------------------------------------------------------------- */
+
 .navActions {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   flex-shrink: 0;
-  margin-left: 2rem;
+  margin-left: 1rem;
 }
 
-/* Login Button - Gold Outline */
+/* ----------------------------------------------------------------------------
+   Login dropdown
+   ---------------------------------------------------------------------------- */
+
+.loginWrapper {
+  position: relative;
+}
+
 .loginButton {
-  background-color: transparent !important;
-  color: #FFB300 !important;
-  border: 2px solid #FFB300 !important;
-  padding: 0.4rem 1.2rem !important;
-  border-radius: 50px !important;
-  font-size: 0.85rem !important;
-  font-weight: 600 !important;
-  transition: all 0.3s ease !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.1rem;
+  background-color: transparent;
+  border: 1.5px solid #E5E7EB;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1A1A2E;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .loginButton:hover {
-  background-color: #FFB300 !important;
-  color: #000000 !important;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(255, 179, 0, 0.3) !important;
+  border-color: #F9A825;
+  color: #F57F17;
+  background-color: #fffbf0;
 }
 
-/* Get Started Button - Green Fill */
-.getStartedButton {
-  background-color: #2E7D32 !important;
-  color: #FFFFFF !important;
-  border: 2px solid #2E7D32 !important;
-  padding: 0.4rem 1.2rem !important;
-  border-radius: 50px !important;
-  font-size: 0.85rem !important;
-  font-weight: 600 !important;
-  transition: all 0.3s ease !important;
-  box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3) !important;
+.loginButton svg {
+  transition: transform 0.2s ease;
 }
 
-.getStartedButton:hover {
-  background-color: #1B5E20 !important;
-  border-color: #1B5E20 !important;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(46, 125, 50, 0.4) !important;
+.loginButton[aria-expanded='true'] svg {
+  transform: rotate(180deg);
 }
 
-/* Mobile Toggle */
+/* ----------------------------------------------------------------------------
+   Create Account button
+   ---------------------------------------------------------------------------- */
+
+.createAccountButton {
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------------------------
+   User menu (logged in state)
+   ---------------------------------------------------------------------------- */
+
+.userMenu {
+  position: relative;
+}
+
+.userButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem 0.35rem 0.35rem;
+  background-color: transparent;
+  border: 1.5px solid #E5E7EB;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #1A1A2E;
+}
+
+.userButton:hover {
+  border-color: #1565C0;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+
+/* ----------------------------------------------------------------------------
+   Shared dropdown styling
+   ---------------------------------------------------------------------------- */
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 0.65rem);
+  right: 0;
+  min-width: 280px;
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  padding: 0.5rem;
+  z-index: 100;
+  animation: dropdownIn 0.15s ease;
+}
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdownHeader {
+  padding: 0.7rem 0.85rem 0.55rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.dropdownName {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #1A1A2E;
+}
+
+.dropdownEmail {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdownDivider {
+  height: 1px;
+  background-color: #E5E7EB;
+  margin: 0.35rem 0;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  background-color: transparent;
+  border: none;
+  color: #1A1A2E;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.dropdownItem:hover {
+  background-color: #f8fafc;
+  color: #1565C0;
+}
+
+/* Login dropdown — grouped items */
+.dropdownGroup {
+  padding: 0.25rem 0;
+}
+
+.dropdownGroupLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.5rem 0.85rem 0.35rem;
+}
+
+.dropdownIcon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  width: 28px;
+  text-align: center;
+}
+
+.dropdownItem strong {
+  display: block;
+  font-weight: 700;
+  color: #1A1A2E;
+  font-size: 0.875rem;
+  margin-bottom: 0.1rem;
+}
+
+.dropdownItem:hover strong {
+  color: #1565C0;
+}
+
+.dropdownHint {
+  display: block;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.dropdownFooter {
+  padding: 0.7rem 0.85rem 0.5rem;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.78rem;
+  color: #64748b;
+  text-align: center;
+}
+
+.dropdownFooterLink {
+  color: #F9A825;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.dropdownFooterLink:hover {
+  text-decoration: underline;
+}
+
+/* ----------------------------------------------------------------------------
+   Mobile toggle
+   ---------------------------------------------------------------------------- */
+
 .mobileToggle {
   display: none;
   flex-direction: column;
@@ -188,11 +367,11 @@
 .hamburger::after {
   content: '';
   display: block;
-  width: 24px;
+  width: 22px;
   height: 2px;
-  background-color: var(--color-text-primary);
+  background-color: #1A1A2E;
   border-radius: 2px;
-  transition: all var(--transition-fast);
+  transition: all 0.2s ease;
   position: absolute;
 }
 
@@ -202,11 +381,11 @@
 }
 
 .hamburger::before {
-  top: -8px;
+  top: -7px;
 }
 
 .hamburger::after {
-  bottom: -8px;
+  bottom: -7px;
 }
 
 .mobileToggle[aria-expanded='true'] .hamburger {
@@ -223,39 +402,57 @@
   bottom: 0;
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
-  .navList {
-    gap: 1.2rem;
+/* ============================================================================
+   Responsive
+   ============================================================================ */
+
+@media (max-width: 1200px) {
+  .headerInner {
+    padding: 0 1.75rem;
+    gap: 1.5rem;
   }
-  
+
+  .navList {
+    gap: 1.25rem;
+  }
+
   .navList li a {
     font-size: 0.85rem;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+  .navList li a {
+    font-size: 0.82rem;
+  }
+
+  .navList {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 900px) {
   .mobileToggle {
     display: flex;
   }
 
   .navList {
     position: fixed;
-    top: 70px;
+    top: 72px;
     left: 0;
     right: 0;
     flex-direction: column;
-    background-color: var(--color-white);
-    padding: 2rem;
-    gap: 1.5rem;
-    box-shadow: var(--shadow-lg);
+    background-color: #FFFFFF;
+    padding: 1.5rem 1.5rem 2rem;
+    gap: 0.5rem;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
     transform: translateY(-120%);
-    transition: transform var(--transition-base);
-    align-items: center;
+    transition: transform 0.3s ease;
+    align-items: stretch;
     text-align: center;
-    max-height: calc(100vh - 70px);
+    max-height: calc(100vh - 72px);
     overflow-y: auto;
-    flex: none;
+    flex: initial;
     justify-content: flex-start;
   }
 
@@ -264,41 +461,48 @@
   }
 
   .navList li a {
-    font-size: 1.125rem;
+    font-size: 1rem;
     display: block;
-    padding: 0.5rem 0;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #F3F4F6;
   }
 
-  .navActions {
-    display: none;
-  }
-
-  /* Show actions in mobile menu */
-  .navList.open .navActions {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-top: 0.5rem;
-    margin-left: 0;
-    width: 100%;
-  }
-
-  .navList.open .navActions .button {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .logoImage {
-    height: 35px;
-  }
-
-  .logo {
-    margin-right: 0;
+  .navList li:last-child a {
+    border-bottom: none;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
+  .headerInner {
+    padding: 0 1rem;
+    gap: 0.75rem;
+  }
+
   .logoImage {
-    height: 30px;
+    height: 34px;
+  }
+
+  .createAccountButton {
+    display: none;
+  }
+
+  .loginButton {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.8rem;
+  }
+
+  .avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 0.65rem;
+  }
+
+  .userButton {
+    padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+  }
+
+  .dropdown {
+    min-width: 260px;
+    right: -0.5rem;
   }
 }
