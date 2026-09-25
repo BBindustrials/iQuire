@@ -224,12 +224,12 @@ export const createPost = async (
 
     const { data, error } = await supabase
       .from('blog_posts')
-      .insert(payload)
+      .insert(payload as never)
       .select()
       .single();
 
     if (error) return { success: false, error: error.message };
-    return { success: true, data: data as BlogPost };
+    return { success: true, data: data as unknown as BlogPost };
   } catch (err) {
     return { success: false, error: String(err) };
   }
@@ -250,13 +250,13 @@ export const updatePost = async (
 
     const { data, error } = await supabase
       .from('blog_posts')
-      .update(payload)
+      .update(payload as never)
       .eq('id', id)
       .select()
       .single();
 
     if (error) return { success: false, error: error.message };
-    return { success: true, data: data as BlogPost };
+    return { success: true, data: data as unknown as BlogPost };
   } catch (err) {
     return { success: false, error: String(err) };
   }
@@ -267,18 +267,20 @@ export const deletePost = async (
 ): Promise<{ success: boolean; error?: string }> => {
   try {
     // Fetch image first for cleanup
-    const { data: existing } = await supabase
+    const existing = (await supabase
       .from('blog_posts')
       .select('featured_image_url')
       .eq('id', id)
-      .maybeSingle();
+      .maybeSingle()) as unknown as {
+      data: { featured_image_url: string | null } | null;
+    };
 
     const { error } = await supabase.from('blog_posts').delete().eq('id', id);
     if (error) return { success: false, error: error.message };
 
     // Best-effort image cleanup
-    if (existing?.featured_image_url) {
-      const path = extractPathFromUrl(existing.featured_image_url);
+    if (existing?.data?.featured_image_url) {
+      const path = extractPathFromUrl(existing.data.featured_image_url);
       if (path) {
         await supabase.storage.from('blog-images').remove([path]);
       }

@@ -212,7 +212,7 @@ export const getStateOptions = () => {
 export const getLgaOptions = (stateCode: string) => {
   const state = NIGERIAN_STATES.find((s) => s.code === stateCode);
   if (!state) return [];
-  return state.lgas.map((lga) => ({
+  return state.lgas.map((lga: string) => ({
     label: lga,
     value: lga,
   }));

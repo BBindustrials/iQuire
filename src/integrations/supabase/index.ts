@@ -10,11 +10,15 @@ export type {
   TablesInsert,
   TablesUpdate,
   Json,
-  AccountTypeEnum,
-  AccountTierEnum,
-  UserRoleTypeEnum,
-  EnrollmentStatusEnum,
 } from './types';
+
+// Re-export enum types from the Database schema
+import type { Database } from './types';
+
+export type AccountTypeEnum = Database['public']['Enums']['account_type'];
+export type AccountTierEnum = Database['public']['Enums']['account_tier'];
+export type UserRoleTypeEnum = Database['public']['Enums']['user_role_type'];
+export type EnrollmentStatusEnum = Database['public']['Enums']['enrollment_status'];
 
 // Storage helpers
 export {

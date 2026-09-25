@@ -31,6 +31,20 @@ export type VerificationStatus = 'unverified' | 'pending' | 'verified' | 'reject
 export type AccountStatus = 'active' | 'suspended' | 'deleted';
 
 // ============================================================================
+// Nigerian Geography
+// ============================================================================
+
+/** A Nigerian state with its Local Government Areas. */
+export interface NigerianState {
+  /** 2-letter state code, e.g. 'LA' for Lagos, 'FC' for FCT */
+  code: string;
+  /** Full state name, e.g. 'Lagos', 'FCT - Abuja' */
+  name: string;
+  /** Local Government Areas within the state */
+  lgas: string[];
+}
+
+// ============================================================================
 // Profile (matches public.profiles table — updated)
 // ============================================================================
 

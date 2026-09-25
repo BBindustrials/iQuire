@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 // ============================================================================
 // iQuire — Admin: Blog Editor (Phase 10E.4)
 // ============================================================================
@@ -16,7 +16,6 @@ import {
   uploadBlogImage,
   slugify,
   calculateReadTime,
-  type BlogPostWithCategory,
   type BlogCategory,
   type BlogStatus,
 } from '../../services/blog.service';
