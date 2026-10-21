@@ -1,0 +1,918 @@
+@import '../../styles/theme.css';
+
+/* ============================================================================
+   Public Hire From Us Page
+   ============================================================================ */
+
+.page {
+  background-color: #ffffff;
+}
+
+/* ----------------------------------------------------------------------------
+   HERO
+   ---------------------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  padding: 5.5rem 0 5rem;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  overflow: hidden;
+}
+
+.heroBlobOne,
+.heroBlobTwo {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.heroBlobOne {
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, #1565C0 0%, transparent 70%);
+  opacity: 0.13;
+  top: -200px;
+  right: -140px;
+}
+
+.heroBlobTwo {
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, #F9A825 0%, transparent 70%);
+  opacity: 0.11;
+  bottom: -160px;
+  left: -140px;
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 5rem;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: flex-start;
+  padding: 0.4rem 1rem;
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.heroBadgeDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  animation: heroPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes heroPulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+  50% { box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.08); }
+}
+
+.heroTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(2.25rem, 4.5vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: #0f172a;
+  margin: 0;
+}
+
+.heroHighlight {
+  background: linear-gradient(135deg, #1565C0 0%, #7C3AED 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.heroSubtitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.08rem;
+  line-height: 1.7;
+  color: #334155;
+  margin: 0;
+  max-width: 560px;
+}
+
+.heroCtas {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.heroSecondary {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1565C0;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.heroSecondary:hover {
+  color: #0D47A1;
+}
+
+.heroTrust {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.heroTrustItem {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.heroTrustDot {
+  color: #cbd5e1;
+}
+
+/* Hero visual */
+.heroVisual {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.statsCard {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-shadow: 0 24px 48px -20px rgba(15, 23, 42, 0.35);
+}
+
+.statRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.statBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.statNumber {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #F9A825;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.statLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.miniProfile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.15rem 1.25rem;
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 12px 28px -12px rgba(15, 23, 42, 0.12);
+}
+
+.miniAvatar {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.miniInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.miniName {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.miniRole {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.miniSkills {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.15rem;
+  flex-wrap: wrap;
+}
+
+.miniSkill {
+  padding: 0.15rem 0.55rem;
+  background-color: #eff6ff;
+  color: #1565C0;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+/* ----------------------------------------------------------------------------
+   Generic section
+   ---------------------------------------------------------------------------- */
+
+.section {
+  padding: 5rem 0;
+  background-color: #ffffff;
+}
+
+.sectionAlt {
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.sectionHeader {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 3.5rem;
+}
+
+.sectionBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  background-color: #F9A825;
+  color: #1A1A2E;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(249, 168, 37, 0.25);
+  margin-bottom: 1.25rem;
+}
+
+.sectionTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(1.75rem, 3.4vw, 2.65rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: #0f172a;
+  margin: 0 0 1rem;
+}
+
+.sectionSubtitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ----------------------------------------------------------------------------
+   Value cards
+   ---------------------------------------------------------------------------- */
+
+.valuesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.valueCard {
+  padding: 1.75rem 1.6rem;
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 18px;
+  transition: all 0.25s ease;
+}
+
+.valueCard:hover {
+  transform: translateY(-4px);
+  border-color: #1565C0;
+  box-shadow: 0 20px 40px -16px rgba(21, 101, 192, 0.15);
+}
+
+.valueIcon {
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+
+.valueTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.55rem;
+  letter-spacing: -0.01em;
+}
+
+.valueDesc {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ----------------------------------------------------------------------------
+   Steps
+   ---------------------------------------------------------------------------- */
+
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.stepCard {
+  padding: 1.75rem 1.5rem;
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 18px;
+  transition: all 0.25s ease;
+}
+
+.stepCard:hover {
+  transform: translateY(-4px);
+  border-color: #F9A825;
+  box-shadow: 0 20px 40px -16px rgba(249, 168, 37, 0.2);
+}
+
+.stepNumber {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #e0f2fe;
+  line-height: 1;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.03em;
+}
+
+.stepTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.stepDesc {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ----------------------------------------------------------------------------
+   Preview talent
+   ---------------------------------------------------------------------------- */
+
+.previewCtaRow {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+.previewCta {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.75rem;
+  background-color: #f1f5f9;
+  color: #0f172a;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.previewCta:hover {
+  background-color: #1565C0;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -8px rgba(21, 101, 192, 0.4);
+}
+
+.previewGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.previewCard {
+  padding: 1.85rem 1.6rem;
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.45rem;
+  transition: all 0.25s ease;
+}
+
+.previewCard:hover {
+  transform: translateY(-4px);
+  border-color: #1565C0;
+  box-shadow: 0 20px 40px -16px rgba(21, 101, 192, 0.18);
+}
+
+.previewAvatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.5rem;
+}
+
+.previewName {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.previewRole {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1565C0;
+}
+
+.previewProgramme {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.previewSkills {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.65rem;
+}
+
+.previewSkill {
+  padding: 0.2rem 0.65rem;
+  background-color: #f1f5f9;
+  color: #475569;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+/* ----------------------------------------------------------------------------
+   Verification promise
+   ---------------------------------------------------------------------------- */
+
+.promiseSection {
+  padding: 3rem 0 5rem;
+  background-color: #ffffff;
+}
+
+.promiseCard {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem 2.5rem;
+  background: linear-gradient(135deg, #0f172a 0%, #1a2942 100%);
+  border-radius: 24px;
+  text-align: center;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.promiseCard::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(249, 168, 37, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.promiseIcon {
+  font-size: 2.5rem;
+  line-height: 1;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.promiseTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(1.5rem, 2.8vw, 2.15rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 1rem;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  position: relative;
+  z-index: 1;
+}
+
+.promiseText {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0 0 2rem;
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.promiseStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  max-width: 620px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.promiseStat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1.25rem 1rem;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.promiseStat strong {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #F9A825;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.promiseStat span {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ----------------------------------------------------------------------------
+   FAQ
+   ---------------------------------------------------------------------------- */
+
+.faqList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faqItem {
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.faqItem[open] {
+  border-color: #1565C0;
+  box-shadow: 0 12px 24px -12px rgba(21, 101, 192, 0.12);
+}
+
+.faqQuestion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.15rem 1.35rem;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.faqQuestion::-webkit-details-marker {
+  display: none;
+}
+
+.faqIcon {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background-color: #eff6ff;
+  color: #1565C0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  font-weight: 700;
+  transition: all 0.25s ease;
+}
+
+.faqItem[open] .faqIcon {
+  transform: rotate(45deg);
+  background-color: #1565C0;
+  color: #ffffff;
+}
+
+.faqAnswer {
+  padding: 0 1.35rem 1.35rem;
+}
+
+.faqAnswer p {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: #475569;
+  margin: 0;
+}
+
+/* ----------------------------------------------------------------------------
+   Final CTA
+   ---------------------------------------------------------------------------- */
+
+.finalCta {
+  position: relative;
+  padding: 5rem 0 6rem;
+  background: linear-gradient(135deg, #0f172a 0%, #1a2942 100%);
+  overflow: hidden;
+}
+
+.finalCtaBlob {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #1565C0 0%, transparent 70%);
+  opacity: 0.2;
+  filter: blur(120px);
+  top: -180px;
+  right: -140px;
+  pointer-events: none;
+}
+
+.finalCtaInner {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.finalCtaTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.finalCtaSubtitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  line-height: 1.7;
+}
+
+.finalCtaButtons {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.finalCtaSecondary {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #F9A825;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.finalCtaSecondary:hover {
+  color: #ffffff;
+  gap: 0.5rem;
+}
+
+/* ============================================================================
+   Responsive
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+  .heroGrid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .valuesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .stepsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .previewGrid {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 4rem 0 3rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1rem;
+  }
+
+  .heroCtas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .heroTrust {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .heroTrustDot {
+    display: none;
+  }
+
+  .section {
+    padding: 3.5rem 0;
+  }
+
+  .stepsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .promiseCard {
+    padding: 2.25rem 1.5rem;
+  }
+
+  .promiseStats {
+    grid-template-columns: 1fr;
+  }
+
+  .finalCtaButtons {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 1.85rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+
+  .faqQuestion {
+    font-size: 0.88rem;
+    padding: 1rem;
+  }
+
+  .faqAnswer {
+    padding: 0 1rem 1rem;
+  }
+
+  .statNumber {
+    font-size: 1.5rem;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Preview avatar — image support
+   ---------------------------------------------------------------------------- */
+
+   .previewAvatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 15%;  /* ← add this */
+    border-radius: inherit;
+  }
+
+/* ----------------------------------------------------------------------------
+   Preview skeleton (loading state)
+   ---------------------------------------------------------------------------- */
+
+.previewSkeleton {
+  height: 260px;
+  background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+  background-size: 200% 100%;
+  border-radius: 18px;
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

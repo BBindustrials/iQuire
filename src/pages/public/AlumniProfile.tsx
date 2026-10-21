@@ -513,7 +513,7 @@ export const AlumniProfile: React.FC = () => {
               Join thousands of learners building their careers with IQuire.
             </p>
             <div className={styles.finalCtaButtons}>
-              <Link to="/register" className={styles.finalCtaPrimary}>
+              <Link to="/courses" className={styles.finalCtaPrimary}>
                 Get Started Free
               </Link>
               <Link to="/alumni" className={styles.finalCtaSecondary}>

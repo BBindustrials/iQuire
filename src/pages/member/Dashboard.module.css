@@ -83,42 +83,6 @@
 }
 
 /* ----------------------------------------------------------------------------
-   Guest notice
-   ---------------------------------------------------------------------------- */
-
-.guestNotice {
-  display: flex;
-  gap: 1rem;
-  padding: 1.1rem 1.35rem;
-  background-color: #fffbf0;
-  border: 1px solid #FDE68A;
-  border-left: 4px solid #F9A825;
-  border-radius: 12px;
-}
-
-.guestIcon {
-  font-size: 1.5rem;
-  flex-shrink: 0;
-}
-
-.guestText strong {
-  display: block;
-  font-family: 'Satoshi', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #713f12;
-  margin-bottom: 0.25rem;
-}
-
-.guestText p {
-  font-family: 'Satoshi', sans-serif;
-  font-size: 0.875rem;
-  color: #78350f;
-  margin: 0;
-  line-height: 1.6;
-}
-
-/* ----------------------------------------------------------------------------
    Stats grid
    ---------------------------------------------------------------------------- */
 
@@ -408,7 +372,6 @@
 }
 
 .quickLink:hover {
-  background-color: #FFFFFF;
   border-color: #1565C0;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(21, 101, 192, 0.1);
@@ -431,19 +394,37 @@
    ============================================================================ */
 
 @media (max-width: 1280px) {
-  .statsGrid { grid-template-columns: repeat(2, 1fr); }
-  .quickLinks { grid-template-columns: repeat(3, 1fr); }
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .quickLinks {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 @media (max-width: 1024px) {
-  .twoCol { grid-template-columns: 1fr; }
+  .twoCol {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 640px) {
-  .welcomeBanner { padding: 1.5rem 1.25rem; }
-  .welcomeTitle { font-size: 1.25rem; }
-  .statsGrid { grid-template-columns: 1fr 1fr; }
-  .quickLinks { grid-template-columns: repeat(2, 1fr); }
-  .participantId { padding: 0.4rem 0.85rem; }
-  .participantIdValue { font-size: 0.8rem; }
+  .welcomeBanner {
+    padding: 1.5rem 1.25rem;
+  }
+  .welcomeTitle {
+    font-size: 1.25rem;
+  }
+  .statsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .quickLinks {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .participantId {
+    padding: 0.4rem 0.85rem;
+  }
+  .participantIdValue {
+    font-size: 0.8rem;
+  }
 }

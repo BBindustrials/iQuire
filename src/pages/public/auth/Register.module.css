@@ -170,14 +170,14 @@
 }
 
 .recruiterFooter {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 0.85rem;
-    color: #667085;
-    text-align: center;
-    margin: 0.75rem 0 0 0;
-    padding-top: 0.75rem;
-    border-top: 1px solid #E5E7EB;
-  }
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  color: #667085;
+  text-align: center;
+  margin: 0.75rem 0 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid #E5E7EB;
+}
 
 /* ----------------------------------------------------------------------------
    Success state
@@ -330,10 +330,3 @@
     font-size: 0.9rem;
   }
 }
-.recruiterFooter {
-    font-family: 'Satoshi', sans-serif;
-    font-size: 0.85rem;
-    color: #667085;
-    text-align: center;
-    margin: 0.75rem 0 0 0;
-  }

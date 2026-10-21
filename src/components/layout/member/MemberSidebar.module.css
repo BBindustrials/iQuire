@@ -1,7 +1,7 @@
 @import '../../../styles/theme.css';
 
 /* ============================================================================
-   Member Sidebar — Light, welcoming (contrast to admin's dark theme)
+   Member Sidebar
    ============================================================================ */
 
 .sidebar {
@@ -135,35 +135,6 @@
   font-size: 0.72rem;
   color: #64748b;
   font-weight: 500;
-}
-
-/* ----------------------------------------------------------------------------
-   Tier warning
-   ---------------------------------------------------------------------------- */
-
-.tierWarning {
-  display: flex;
-  gap: 0.6rem;
-  align-items: flex-start;
-  margin: 0.75rem 1rem;
-  padding: 0.75rem 0.85rem;
-  background-color: #fffbf0;
-  border-left: 3px solid #F9A825;
-  border-radius: 6px;
-  font-family: 'Satoshi', sans-serif;
-  font-size: 0.72rem;
-  color: #713f12;
-  line-height: 1.5;
-}
-
-.tierWarningIcon {
-  font-size: 0.9rem;
-  flex-shrink: 0;
-}
-
-.tierWarning strong {
-  font-weight: 700;
-  color: #713f12;
 }
 
 /* ----------------------------------------------------------------------------

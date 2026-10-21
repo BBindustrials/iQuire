@@ -1,27 +1,32 @@
 // ============================================================================
-// iQuire — Impact Section (Phase 7C.11)
+// iQuire — Impact Section (Phase 14.5 — DB-driven)
 // ============================================================================
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../common/Button';
 import { ScrollReveal } from '../common/ScrollReveal';
+import {
+  fetchPublishedImpactMetrics,
+  type ImpactMetric,
+} from '../../services/impact.service';
+import type { ImpactAccent } from '../../types/content.types';
 import styles from './Impact.module.css';
 
 // ============================================================================
-// Metrics
+// Fallback metrics (used only if the DB returns nothing)
 // ============================================================================
 
-interface Metric {
+interface FallbackMetric {
   id: string;
   value: string;
   label: string;
   description: string;
   emoji: string;
-  accent: 'blue' | 'green' | 'gold' | 'purple';
+  accent: ImpactAccent;
 }
 
-const METRICS: Metric[] = [
+const FALLBACK_METRICS: FallbackMetric[] = [
   {
     id: 'trained',
     value: '1,000+',
@@ -73,7 +78,7 @@ const METRICS: Metric[] = [
 ];
 
 // ============================================================================
-// Partner / employer logos
+// Employers strip (still hardcoded — not in scope for 14.5)
 // ============================================================================
 
 interface Employer {
@@ -95,10 +100,73 @@ const EMPLOYERS: Employer[] = [
 ];
 
 // ============================================================================
+// Normalized metric shape for rendering
+// ============================================================================
+
+interface DisplayMetric {
+  id: string;
+  emoji: string;
+  value: string;
+  label: string;
+  description: string;
+  accent: ImpactAccent;
+}
+
+const toDisplayMetric = (m: ImpactMetric): DisplayMetric => ({
+  id: m.id,
+  emoji: m.emoji,
+  value: m.value,
+  label: m.label,
+  description: m.description ?? '',
+  accent: m.accent,
+});
+
+const fallbackToDisplay = (m: FallbackMetric): DisplayMetric => ({
+  id: m.id,
+  emoji: m.emoji,
+  value: m.value,
+  label: m.label,
+  description: m.description,
+  accent: m.accent,
+});
+
+// ============================================================================
 // Component
 // ============================================================================
 
 export const Impact: React.FC = () => {
+  const [metrics, setMetrics] = useState<DisplayMetric[]>(
+    FALLBACK_METRICS.map(fallbackToDisplay)
+  );
+  const [isLoading, setIsLoading] = useState(true);
+
+  // --------------------------------------------------------------------------
+  // Load from DB (fallback to hardcoded if empty)
+  // --------------------------------------------------------------------------
+  useEffect(() => {
+    let isMounted = true;
+
+    const load = async () => {
+      const res = await fetchPublishedImpactMetrics();
+      if (!isMounted) return;
+
+      if (res.success && res.data && res.data.length > 0) {
+        setMetrics(res.data.map(toDisplayMetric));
+      }
+      // else: keep the fallback already in state
+
+      setIsLoading(false);
+    };
+
+    load();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // --------------------------------------------------------------------------
+  // Render
+  // --------------------------------------------------------------------------
   return (
     <section className={styles.impact}>
       {/* Background blobs */}
@@ -122,29 +190,37 @@ export const Impact: React.FC = () => {
         </ScrollReveal>
 
         {/* ================================================================
-            METRICS GRID
+            METRICS GRID — auto-adapts to any count
             ================================================================ */}
-        <ScrollReveal animation="up" stagger className={styles.metricsGrid}>
-          {METRICS.map((metric) => (
-            <div
-              key={metric.id}
-              className={`${styles.metricCard} ${styles[`accent-${metric.accent}`]}`}
-            >
-              <div className={styles.metricIcon}>{metric.emoji}</div>
-              <div className={styles.metricValue}>{metric.value}</div>
-              <div className={styles.metricLabel}>{metric.label}</div>
-              <p className={styles.metricDesc}>{metric.description}</p>
-            </div>
-          ))}
-        </ScrollReveal>
+        {isLoading ? (
+          <div className={styles.metricsGrid}>
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className={styles.skeletonCard} />
+            ))}
+          </div>
+        ) : (
+          <ScrollReveal animation="up" stagger className={styles.metricsGrid}>
+            {metrics.map((metric) => (
+              <div
+                key={metric.id}
+                className={`${styles.metricCard} ${styles[`accent-${metric.accent}`]}`}
+              >
+                <div className={styles.metricIcon}>{metric.emoji}</div>
+                <div className={styles.metricValue}>{metric.value}</div>
+                <div className={styles.metricLabel}>{metric.label}</div>
+                {metric.description && (
+                  <p className={styles.metricDesc}>{metric.description}</p>
+                )}
+              </div>
+            ))}
+          </ScrollReveal>
+        )}
 
         {/* ================================================================
             EMPLOYERS STRIP
             ================================================================ */}
         <ScrollReveal animation="up" delay={1} className={styles.employersHeader}>
-          <h3 className={styles.employersTitle}>
-            Where our alumni work
-          </h3>
+          <h3 className={styles.employersTitle}>Where our alumni work</h3>
           <p className={styles.employersSubtitle}>
             IQuire-trained professionals have gone on to join a growing list of
             employers across industries.
@@ -177,12 +253,9 @@ export const Impact: React.FC = () => {
         </ScrollReveal>
       </div>
 
-
-
       {/* BOTTOM demarcation */}
       <div className={styles.demarcationBottom} aria-hidden="true">
-        <div className={styles.demarcationLabel}>
-        </div>
+        <div className={styles.demarcationLabel}></div>
         <svg
           className={styles.demarcationWave}
           viewBox="0 0 1440 120"

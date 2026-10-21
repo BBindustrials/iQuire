@@ -1,8 +1,10 @@
 // ============================================================================
-// iQuire — Public Recruiter Registration (Phase 7A.6)
+// iQuire — Recruiter Registration (Phase 12C.3b)
 // ============================================================================
-// Self-service recruiter account creation.
-// Creates a guest-tier recruiter. Admin verifies for full talent access.
+// Public recruiter signup. After account creation, sends:
+//   1. Admin notification email (FormSubmit)
+//   2. Recruiter confirmation email (FormSubmit → admin inbox)
+// Both emails are non-blocking — signup succeeds even if emails fail.
 // ============================================================================
 
 import React, { useState, useMemo, type FormEvent } from 'react';
@@ -20,10 +22,7 @@ import styles from './Register.module.css';
 
 import registerRecruiterImg from '../../../assets/images/auth/signup-recruiter.png';
 
-import type {
-  RegisterRecruiterData,
-  FormErrors,
-} from '../../../types/auth.types';
+import type { FormErrors } from '../../../types/auth.types';
 
 import {
   INDUSTRY_OPTIONS,
@@ -38,13 +37,34 @@ import {
   normalizeString,
 } from '../../../utils/validation';
 
-import { registerRecruiter } from '../../../services/auth.service';
+import { supabase } from '../../../integrations/supabase/client';
+
+import {
+  notifyAdminNewRecruiter,
+  sendRecruiterSignupConfirmation,
+} from '../../../services/email.service';
 
 // ============================================================================
-// Initial Form State
+// Form state
 // ============================================================================
 
-const initialFormData: RegisterRecruiterData = {
+interface RecruiterFormData {
+  firstName: string;
+  lastName: string;
+  position: string;
+  companyName: string;
+  industry: string;
+  companyWebsite: string;
+  companySize: string;
+  workEmail: string;
+  phone: string;
+  password: string;
+  confirmPassword: string;
+  agreeToTerms: boolean;
+  marketingOptIn: boolean;
+}
+
+const initialFormData: RecruiterFormData = {
   firstName: '',
   lastName: '',
   position: '',
@@ -67,7 +87,7 @@ const initialFormData: RegisterRecruiterData = {
 export const RegisterRecruiter: React.FC = () => {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState<RegisterRecruiterData>(initialFormData);
+  const [formData, setFormData] = useState<RecruiterFormData>(initialFormData);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -177,16 +197,79 @@ export const RegisterRecruiter: React.FC = () => {
     setIsSubmitting(true);
     setErrors({});
 
-    const result = await registerRecruiter(formData);
+    try {
+      // ------------------------------------------------------------------
+      // 1. Create account
+      // ------------------------------------------------------------------
+      const { error } = await supabase.auth.signUp({
+        email: formData.workEmail.trim().toLowerCase(),
+        password: formData.password,
+        options: {
+          data: {
+            account_type: 'recruiter',
+            tier: 'guest',
+            role: 'recruiter',
+            first_name: formData.firstName.trim(),
+            last_name: formData.lastName.trim(),
+            position: formData.position.trim(),
+            company_name: formData.companyName.trim(),
+            industry: formData.industry,
+            company_website: formData.companyWebsite?.trim() || '',
+            company_size: formData.companySize || '',
+            phone: formData.phone.trim(),
+            marketing_opt_in: formData.marketingOptIn,
+          },
+        },
+      });
 
-    setIsSubmitting(false);
+      setIsSubmitting(false);
 
-    if (!result.success) {
-      setErrors({ submit: result.message });
-      return;
+      if (error) {
+        const msg = error.message.toLowerCase();
+        if (msg.includes('already registered') || msg.includes('already exists')) {
+          setErrors({
+            submit:
+              'An account with this email already exists. Please login instead.',
+          });
+        } else {
+          setErrors({ submit: error.message });
+        }
+        return;
+      }
+
+      // ------------------------------------------------------------------
+      // 2. Send emails (non-blocking)
+      // ------------------------------------------------------------------
+      // These run in parallel. Failures are logged but don't affect the
+      // signup success — the user still sees the success screen.
+      Promise.all([
+        notifyAdminNewRecruiter({
+          fullName: `${formData.firstName.trim()} ${formData.lastName.trim()}`.trim(),
+          email: formData.workEmail.trim().toLowerCase(),
+          position: formData.position.trim(),
+          companyName: formData.companyName.trim(),
+          industry: formData.industry,
+          companyWebsite: formData.companyWebsite?.trim() || undefined,
+          companySize: formData.companySize || undefined,
+        }),
+        sendRecruiterSignupConfirmation({
+          email: formData.workEmail.trim().toLowerCase(),
+          firstName: formData.firstName.trim(),
+          companyName: formData.companyName.trim(),
+        }),
+      ]).catch((err) => {
+        // Non-blocking — log but don't fail
+        console.error('[RegisterRecruiter] Email send failed:', err);
+      });
+
+      // ------------------------------------------------------------------
+      // 3. Show success screen
+      // ------------------------------------------------------------------
+      setSubmitSuccess(true);
+    } catch (err) {
+      setIsSubmitting(false);
+      setErrors({ submit: String(err) });
     }
-
-    setSubmitSuccess(true);
   };
 
   // --------------------------------------------------------------------------
@@ -194,7 +277,10 @@ export const RegisterRecruiter: React.FC = () => {
   // --------------------------------------------------------------------------
   if (submitSuccess) {
     return (
-      <AuthLayout image={registerRecruiterImg} imageAlt="Recruiter registration successful">
+      <AuthLayout
+        image={registerRecruiterImg}
+        imageAlt="Recruiter registration successful"
+      >
         <div className={styles.successBox}>
           <div className={styles.successIcon}>
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
@@ -208,22 +294,31 @@ export const RegisterRecruiter: React.FC = () => {
               />
             </svg>
           </div>
-          <h2 className={styles.successTitle}>Welcome to IQuire, {formData.firstName}!</h2>
+          <h2 className={styles.successTitle}>
+            Welcome to IQuire, {formData.firstName}!
+          </h2>
           <p className={styles.successText}>
-            We've received your registration for <strong>{formData.companyName}</strong>.
+            We&apos;ve received your registration for{' '}
+            <strong>{formData.companyName}</strong>.
             <br />
-            A verification link has been sent to <strong>{formData.workEmail}</strong>.
+            Our team will review your organisation details and verify your
+            account within 24–48 hours.
             <br />
-            Our team will review your organisation details and activate your full
-            recruiter access within 24–48 hours.
+            You&apos;ll be able to check your verification status anytime from
+            your recruiter dashboard.
           </p>
 
           <div className={styles.nextSteps}>
             <h3 className={styles.nextStepsTitle}>What happens next?</h3>
             <ol className={styles.nextStepsList}>
-              <li>Verify your work email</li>
-              <li>Our team reviews your organisation</li>
-              <li>You receive full access to the talent directory</li>
+              <li>Our team reviews your organisation details</li>
+              <li>
+                Log in anytime to check your verification status
+              </li>
+              <li>
+                Once verified, you&apos;ll get full access to the talent
+                directory
+              </li>
               <li>Start discovering IQuire-trained talent</li>
             </ol>
           </div>
@@ -261,9 +356,7 @@ export const RegisterRecruiter: React.FC = () => {
       />
 
       <form onSubmit={handleSubmit} noValidate>
-        {/* ================================================================ */}
-        {/* PERSONAL DETAILS                                                  */}
-        {/* ================================================================ */}
+        {/* PERSONAL DETAILS */}
         <FormSection title="Your details">
           <div className={styles.twoCol}>
             <Input
@@ -301,9 +394,7 @@ export const RegisterRecruiter: React.FC = () => {
           </div>
         </FormSection>
 
-        {/* ================================================================ */}
-        {/* COMPANY DETAILS                                                   */}
-        {/* ================================================================ */}
+        {/* COMPANY DETAILS */}
         <FormSection title="Company details">
           <div className={styles.twoCol}>
             <Input
@@ -351,9 +442,7 @@ export const RegisterRecruiter: React.FC = () => {
           </div>
         </FormSection>
 
-        {/* ================================================================ */}
-        {/* CONTACT                                                           */}
-        {/* ================================================================ */}
+        {/* CONTACT */}
         <FormSection title="Contact">
           <div className={styles.twoCol}>
             <Input
@@ -383,9 +472,7 @@ export const RegisterRecruiter: React.FC = () => {
           </div>
         </FormSection>
 
-        {/* ================================================================ */}
-        {/* ACCOUNT                                                           */}
-        {/* ================================================================ */}
+        {/* ACCOUNT */}
         <FormSection title="Account">
           <div className={styles.twoCol}>
             <PasswordInput
@@ -438,9 +525,7 @@ export const RegisterRecruiter: React.FC = () => {
           )}
         </FormSection>
 
-        {/* ================================================================ */}
-        {/* TERMS                                                             */}
-        {/* ================================================================ */}
+        {/* TERMS */}
         <div className={styles.termsWrapper}>
           <Checkbox
             name="agreeToTerms"
@@ -469,9 +554,7 @@ export const RegisterRecruiter: React.FC = () => {
           />
         </div>
 
-        {/* ================================================================ */}
-        {/* SUBMIT                                                            */}
-        {/* ================================================================ */}
+        {/* SUBMIT */}
         {errors.submit && (
           <div className={styles.submitError} role="alert">
             {errors.submit}
@@ -483,7 +566,9 @@ export const RegisterRecruiter: React.FC = () => {
           className={styles.submitButton}
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Creating recruiter account...' : 'Create Recruiter Account'}
+          {isSubmitting
+            ? 'Creating recruiter account...'
+            : 'Create Recruiter Account'}
         </button>
 
         <p className={styles.footer}>
@@ -495,8 +580,8 @@ export const RegisterRecruiter: React.FC = () => {
 
         <p className={styles.recruiterFooter}>
           Not hiring?{' '}
-          <Link to="/register" className={styles.footerLink}>
-            Register as a Member →
+          <Link to="/courses" className={styles.footerLink}>
+            Explore our courses →
           </Link>
         </p>
       </form>

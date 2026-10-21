@@ -27,7 +27,7 @@
   transform: translateY(-100%);
 }
 
-/* Full-width inner container — logo far left, login far right */
+/* Full-width inner container — logo far left, actions far right */
 .headerInner {
   width: 100%;
   max-width: 1600px;
@@ -41,7 +41,7 @@
 }
 
 /* ----------------------------------------------------------------------------
-   Logo — far left, breathing room
+   Logo
    ---------------------------------------------------------------------------- */
 
 .logo {
@@ -86,7 +86,7 @@
 }
 
 .navList li a:hover {
-  color: #1565C0;
+  color: #2E7D32;
 }
 
 .navList li a::after {
@@ -96,7 +96,7 @@
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #1565C0;
+  background-color: #2E7D32;
   transition: width 0.2s ease;
 }
 
@@ -117,7 +117,7 @@
 }
 
 /* ----------------------------------------------------------------------------
-   Login dropdown
+   Login button (green primary)
    ---------------------------------------------------------------------------- */
 
 .loginWrapper {
@@ -127,23 +127,30 @@
 .loginButton {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.55rem 1.1rem;
-  background-color: transparent;
-  border: 1.5px solid #E5E7EB;
+  gap: 0.45rem;
+  padding: 0.6rem 1.35rem;
+  background-color: #2E7D32;
+  color: #FFFFFF;
+  border: 1.5px solid #2E7D32;
   border-radius: 50px;
   font-family: 'Satoshi', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #1A1A2E;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: 0 6px 16px rgba(46, 125, 50, 0.25);
 }
 
 .loginButton:hover {
-  border-color: #F9A825;
-  color: #F57F17;
-  background-color: #fffbf0;
+  background-color: #1B5E20;
+  border-color: #1B5E20;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(46, 125, 50, 0.35);
+}
+
+.loginButton:active {
+  transform: translateY(0);
 }
 
 .loginButton svg {
@@ -152,14 +159,6 @@
 
 .loginButton[aria-expanded='true'] svg {
   transform: rotate(180deg);
-}
-
-/* ----------------------------------------------------------------------------
-   Create Account button
-   ---------------------------------------------------------------------------- */
-
-.createAccountButton {
-  white-space: nowrap;
 }
 
 /* ----------------------------------------------------------------------------
@@ -184,14 +183,14 @@
 }
 
 .userButton:hover {
-  border-color: #1565C0;
+  border-color: #2E7D32;
 }
 
 .avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
+  background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
   color: #FFFFFF;
   display: flex;
   align-items: center;
@@ -204,7 +203,7 @@
 }
 
 /* ----------------------------------------------------------------------------
-   Shared dropdown styling
+   Shared dropdown
    ---------------------------------------------------------------------------- */
 
 .dropdown {
@@ -281,8 +280,8 @@
 }
 
 .dropdownItem:hover {
-  background-color: #f8fafc;
-  color: #1565C0;
+  background-color: #f0fdf4;
+  color: #2E7D32;
 }
 
 /* Login dropdown — grouped items */
@@ -316,7 +315,7 @@
 }
 
 .dropdownItem:hover strong {
-  color: #1565C0;
+  color: #2E7D32;
 }
 
 .dropdownHint {
@@ -482,13 +481,9 @@
     height: 34px;
   }
 
-  .createAccountButton {
-    display: none;
-  }
-
   .loginButton {
-    padding: 0.45rem 0.9rem;
-    font-size: 0.8rem;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.82rem;
   }
 
   .avatar {

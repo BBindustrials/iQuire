@@ -494,6 +494,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: 50% 5%;  /* ← anchors crop at face level for portraits */
   display: block;
 }
 

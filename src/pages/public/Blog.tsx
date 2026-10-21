@@ -1,5 +1,8 @@
 // ============================================================================
-// iQuire — Public Blog Listing (Phase 10E.5)
+// iQuire — Public Blog Listing (Phase 14.13.7)
+// ============================================================================
+// Featured post + grid cards now show the resolved author (linked profile
+// or manual fields).
 // ============================================================================
 
 import React, { useEffect, useMemo, useState } from 'react';
@@ -9,8 +12,10 @@ import {
   fetchPublishedPosts,
   fetchCategories,
   formatBlogDate,
+  resolvePostAuthor,
   type BlogPostWithCategory,
   type BlogCategory,
+  type ResolvedAuthor,
 } from '../../services/blog.service';
 import styles from './Blog.module.css';
 
@@ -76,17 +81,14 @@ export const Blog: React.FC = () => {
   const filteredPosts = useMemo(() => {
     let list = [...posts];
 
-    // Exclude featured post from the grid
     if (featuredPost) {
       list = list.filter((p) => p.id !== featuredPost.id);
     }
 
-    // Category filter
     if (activeCategory !== 'all') {
       list = list.filter((p) => p.category_id === activeCategory);
     }
 
-    // Search
     if (search.trim()) {
       const q = search.toLowerCase().trim();
       list = list.filter(
@@ -103,7 +105,6 @@ export const Blog: React.FC = () => {
 
   const hasActiveFilters = search.trim() !== '' || activeCategory !== 'all';
 
-  // Is the featured post currently visible in the layout?
   const isFeaturedVisible =
     !!featuredPost && activeCategory === 'all' && !search.trim();
 
@@ -117,9 +118,7 @@ export const Blog: React.FC = () => {
   // --------------------------------------------------------------------------
   return (
     <div className={styles.blogPage}>
-      {/* ================================================================
-          HERO
-          ================================================================ */}
+      {/* HERO */}
       <section className={styles.hero}>
         <div className={styles.heroBgBlobOne} aria-hidden="true" />
         <div className={styles.heroBgBlobTwo} aria-hidden="true" />
@@ -141,9 +140,7 @@ export const Blog: React.FC = () => {
         </div>
       </section>
 
-      {/* ================================================================
-          MAIN CONTENT
-          ================================================================ */}
+      {/* MAIN CONTENT */}
       <section className={styles.contentSection}>
         <div className="container">
           {isLoading ? (
@@ -230,7 +227,6 @@ export const Blog: React.FC = () => {
                 hasActiveFilters ? (
                   <EmptyState type="no-match" onClear={clearFilters} />
                 ) : isFeaturedVisible ? (
-                  // Featured post is already showing — grid emptiness is expected.
                   null
                 ) : (
                   <EmptyState type="no-posts" />
@@ -268,9 +264,7 @@ export const Blog: React.FC = () => {
         </div>
       </section>
 
-      {/* ================================================================
-          FINAL CTA
-          ================================================================ */}
+      {/* FINAL CTA */}
       <section className={styles.ctaSection}>
         <div className="container">
           <ScrollReveal animation="up" className={styles.ctaInner}>
@@ -281,8 +275,8 @@ export const Blog: React.FC = () => {
               Create a free account and start building your career with IQuire.
             </p>
             <div className={styles.ctaButtons}>
-              <Link to="/register" className={styles.ctaPrimary}>
-                Get Started Free
+              <Link to="/courses" className={styles.ctaPrimary}>
+                Explore Courses
               </Link>
               <Link to="/courses" className={styles.ctaSecondary}>
                 Explore Courses →
@@ -299,137 +293,168 @@ export const Blog: React.FC = () => {
 // Sub-components
 // ============================================================================
 
+// ----------------------------------------------------------------------------
+// Author chip — reusable across featured + grid cards
+// ----------------------------------------------------------------------------
+
+interface AuthorChipProps {
+  author: ResolvedAuthor;
+  size?: 'sm' | 'md';
+}
+
+const AuthorChip: React.FC<AuthorChipProps> = ({ author, size = 'sm' }) => {
+  const initials = author.name
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+
+  return (
+    <div
+      className={`${styles.authorChip} ${
+        size === 'md' ? styles.authorChipMd : ''
+      }`}
+    >
+      <div
+        className={`${styles.authorChipAvatar} ${
+          size === 'md' ? styles.authorChipAvatarMd : ''
+        }`}
+      >
+        {author.avatarUrl ? (
+          <img src={author.avatarUrl} alt={author.name} loading="lazy" />
+        ) : (
+          <span>{initials}</span>
+        )}
+      </div>
+      <div className={styles.authorChipInfo}>
+        <span className={styles.authorChipName}>{author.name}</span>
+        {author.role && size === 'md' && (
+          <span className={styles.authorChipRole}>{author.role}</span>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ----------------------------------------------------------------------------
+// Featured post card
+// ----------------------------------------------------------------------------
+
 interface FeaturedPostCardProps {
   post: BlogPostWithCategory;
 }
 
-const FeaturedPostCard: React.FC<FeaturedPostCardProps> = ({ post }) => (
-  <Link to={`/blog/${post.slug}`} className={styles.featuredCard}>
-    <div className={styles.featuredImage}>
-      {post.featured_image_url ? (
-        <img src={post.featured_image_url} alt={post.title} loading="eager" />
-      ) : (
-        <div className={styles.featuredImagePlaceholder}>📝</div>
-      )}
-      <span className={styles.featuredBadge}>Featured</span>
-    </div>
+const FeaturedPostCard: React.FC<FeaturedPostCardProps> = ({ post }) => {
+  const author = resolvePostAuthor(post);
 
-    <div className={styles.featuredContent}>
-      <div className={styles.featuredMeta}>
-        {post.category && (
-          <span className={styles.featuredCategory}>{post.category.name}</span>
+  return (
+    <Link to={`/blog/${post.slug}`} className={styles.featuredCard}>
+      <div className={styles.featuredImage}>
+        {post.featured_image_url ? (
+          <img src={post.featured_image_url} alt={post.title} loading="eager" />
+        ) : (
+          <div className={styles.featuredImagePlaceholder}>📝</div>
         )}
-        {post.published_at && (
-          <span className={styles.featuredDate}>
-            {formatBlogDate(post.published_at)}
+        <span className={styles.featuredBadge}>Featured</span>
+      </div>
+
+      <div className={styles.featuredContent}>
+        <div className={styles.featuredMeta}>
+          {post.category && (
+            <span className={styles.featuredCategory}>
+              {post.category.name}
+            </span>
+          )}
+          {post.published_at && (
+            <span className={styles.featuredDate}>
+              {formatBlogDate(post.published_at)}
+            </span>
+          )}
+        </div>
+
+        <h2 className={styles.featuredTitle}>{post.title}</h2>
+
+        {post.excerpt && (
+          <p className={styles.featuredExcerpt}>{post.excerpt}</p>
+        )}
+
+        <div className={styles.featuredFooter}>
+          <AuthorChip author={author} size="md" />
+
+          <span className={styles.featuredReadMore}>
+            Read article
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M5 12H19M19 12L12 5M19 12L12 19"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </span>
-        )}
+        </div>
       </div>
+    </Link>
+  );
+};
 
-      <h2 className={styles.featuredTitle}>{post.title}</h2>
-
-      {post.excerpt && (
-        <p className={styles.featuredExcerpt}>{post.excerpt}</p>
-      )}
-
-      <div className={styles.featuredFooter}>
-        {post.author_name && (
-          <div className={styles.featuredAuthor}>
-            <div className={styles.featuredAuthorAvatar}>
-              {post.author_avatar_url ? (
-                <img src={post.author_avatar_url} alt={post.author_name} />
-              ) : (
-                <span>
-                  {post.author_name
-                    .split(' ')
-                    .map((n) => n[0])
-                    .join('')
-                    .slice(0, 2)
-                    .toUpperCase()}
-                </span>
-              )}
-            </div>
-            <div className={styles.featuredAuthorInfo}>
-              <span className={styles.featuredAuthorName}>
-                {post.author_name}
-              </span>
-              {post.author_role && (
-                <span className={styles.featuredAuthorRole}>
-                  {post.author_role}
-                </span>
-              )}
-            </div>
-          </div>
-        )}
-
-        <span className={styles.featuredReadMore}>
-          Read article
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M5 12H19M19 12L12 5M19 12L12 19"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </span>
-      </div>
-    </div>
-  </Link>
-);
+// ----------------------------------------------------------------------------
+// Grid card
+// ----------------------------------------------------------------------------
 
 interface BlogCardProps {
   post: BlogPostWithCategory;
 }
 
-const BlogCard: React.FC<BlogCardProps> = ({ post }) => (
-  <Link to={`/blog/${post.slug}`} className={styles.card}>
-    <div className={styles.cardImage}>
-      {post.featured_image_url ? (
-        <img src={post.featured_image_url} alt={post.title} loading="lazy" />
-      ) : (
-        <div className={styles.cardImagePlaceholder}>📝</div>
-      )}
-    </div>
+const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
+  const author = resolvePostAuthor(post);
 
-    <div className={styles.cardBody}>
-      <div className={styles.cardMeta}>
-        {post.category && (
-          <span className={styles.cardCategory}>{post.category.name}</span>
-        )}
-        {post.published_at && (
-          <span className={styles.cardDate}>
-            {formatBlogDate(post.published_at)}
-          </span>
+  return (
+    <Link to={`/blog/${post.slug}`} className={styles.card}>
+      <div className={styles.cardImage}>
+        {post.featured_image_url ? (
+          <img src={post.featured_image_url} alt={post.title} loading="lazy" />
+        ) : (
+          <div className={styles.cardImagePlaceholder}>📝</div>
         )}
       </div>
 
-      <h3 className={styles.cardTitle}>{post.title}</h3>
+      <div className={styles.cardBody}>
+        <div className={styles.cardMeta}>
+          {post.category && (
+            <span className={styles.cardCategory}>{post.category.name}</span>
+          )}
+          {post.published_at && (
+            <span className={styles.cardDate}>
+              {formatBlogDate(post.published_at)}
+            </span>
+          )}
+        </div>
 
-      {post.excerpt && <p className={styles.cardExcerpt}>{post.excerpt}</p>}
+        <h3 className={styles.cardTitle}>{post.title}</h3>
 
-      <div className={styles.cardFooter}>
-        {post.read_time_minutes && (
-          <span className={styles.cardReadTime}>
-            ⏱ {post.read_time_minutes} min
+        {post.excerpt && <p className={styles.cardExcerpt}>{post.excerpt}</p>}
+
+        <div className={styles.cardFooter}>
+          <AuthorChip author={author} />
+          <span className={styles.cardArrow}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M5 12H19M19 12L12 5M19 12L12 19"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </span>
-        )}
-        <span className={styles.cardArrow}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M5 12H19M19 12L12 5M19 12L12 19"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </span>
+        </div>
       </div>
-    </div>
-  </Link>
-);
+    </Link>
+  );
+};
 
 // ----------------------------------------------------------------------------
 // Loading / error / empty states
@@ -437,15 +462,12 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => (
 
 const LoadingSkeleton: React.FC = () => (
   <>
-    {/* Featured skeleton */}
     <div className={styles.skeletonFeatured} />
-    {/* Pills skeleton */}
     <div className={styles.skeletonPills}>
       {[...Array(4)].map((_, i) => (
         <div key={i} className={styles.skeletonPill} />
       ))}
     </div>
-    {/* Grid skeleton */}
     <div className={styles.grid}>
       {[...Array(4)].map((_, i) => (
         <div key={i} className={styles.skeletonCard} />

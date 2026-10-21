@@ -1,0 +1,769 @@
+@import '../../styles/theme.css';
+
+/* ============================================================================
+   Public Jobs Page
+   ============================================================================ */
+
+.page {
+  background-color: #ffffff;
+}
+
+/* ----------------------------------------------------------------------------
+   HERO
+   ---------------------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  padding: 5rem 0 4rem;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  overflow: hidden;
+}
+
+.heroBlobOne,
+.heroBlobTwo {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.heroBlobOne {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #1565C0 0%, transparent 70%);
+  opacity: 0.12;
+  top: -180px;
+  right: -140px;
+}
+
+.heroBlobTwo {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #7C3AED 0%, transparent 70%);
+  opacity: 0.1;
+  bottom: -120px;
+  left: -140px;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  background-color: #F9A825;
+  color: #1A1A2E;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(249, 168, 37, 0.25);
+  margin-bottom: 1.5rem;
+}
+
+.heroTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: #0f172a;
+  margin: 0 0 1.25rem;
+}
+
+.heroHighlight {
+  background: linear-gradient(135deg, #1565C0 0%, #7C3AED 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.heroSubtitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #334155;
+  font-weight: 500;
+  margin: 0 auto;
+  max-width: 680px;
+}
+
+/* ----------------------------------------------------------------------------
+   Content section
+   ---------------------------------------------------------------------------- */
+
+.contentSection {
+  padding: 2rem 0 5rem;
+  background-color: #ffffff;
+}
+
+/* Filters bar */
+.filtersWrapper {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f8fafc;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 14px;
+  margin-bottom: 2rem;
+}
+
+.searchBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchBox svg {
+  position: absolute;
+  left: 1rem;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.88rem;
+  color: #0f172a;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.searchInput::placeholder {
+  color: #94a3b8;
+}
+
+.searchInput:focus {
+  border-color: #1565C0;
+  box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.1);
+}
+
+.filterSelect {
+  padding: 0.75rem 1rem;
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0f172a;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.filterSelect:focus {
+  border-color: #1565C0;
+  box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.1);
+}
+
+/* Result count */
+.resultRow {
+  margin-bottom: 1.5rem;
+}
+
+.resultCount {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.resultCount strong {
+  color: #0f172a;
+  font-weight: 800;
+}
+
+.clearLink {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #1565C0;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.clearLink:hover {
+  color: #0D47A1;
+}
+
+/* ----------------------------------------------------------------------------
+   Grid + cards
+   ---------------------------------------------------------------------------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.75rem;
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 18px;
+  transition: all 0.25s ease;
+  overflow: hidden;
+}
+
+.card:hover {
+  border-color: #1565C0;
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -16px rgba(21, 101, 192, 0.18);
+}
+
+.cardFeatured {
+  border-color: #F9A825;
+  background: linear-gradient(180deg, #fffbf0 0%, #ffffff 100%);
+}
+
+.cardFeatured:hover {
+  border-color: #F9A825;
+  box-shadow: 0 20px 40px -16px rgba(249, 168, 37, 0.25);
+}
+
+.featuredBadge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.3rem 0.75rem;
+  background-color: #F9A825;
+  color: #1A1A2E;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 50px;
+  box-shadow: 0 4px 12px rgba(249, 168, 37, 0.4);
+}
+
+/* Card header */
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-right: 5.5rem; /* Space for featured badge */
+}
+
+.companyLogo {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  overflow: hidden;
+}
+
+.companyLogo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cardHeaderText {
+  flex: 1;
+  min-width: 0;
+}
+
+.cardTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.35rem;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.cardCompany {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.cardCompanyDot {
+  color: #cbd5e1;
+}
+
+/* Tags */
+.tagsRow {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.7rem;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.tagWorkMode {
+  background-color: #eff6ff;
+  color: #1565C0;
+}
+
+.tagType {
+  background-color: #f3e8ff;
+  color: #7C3AED;
+}
+
+.tagLevel {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+/* Description */
+.cardDescription {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: #475569;
+  margin: 0;
+}
+
+/* Salary */
+.salaryRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+}
+
+.salaryIcon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.salaryText {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #166534;
+}
+
+/* Skills */
+.skillsRow {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.skillTag {
+  padding: 0.2rem 0.6rem;
+  background-color: #f1f5f9;
+  color: #475569;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.skillMore {
+  padding: 0.2rem 0.6rem;
+  background-color: #eff6ff;
+  color: #1565C0;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+/* Course link */
+.courseLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  align-self: flex-start;
+  padding: 0.5rem 0.85rem;
+  background-color: #eff6ff;
+  color: #1565C0;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.courseLink:hover {
+  background-color: #1565C0;
+  color: #ffffff;
+}
+
+/* Card footer */
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid #f1f5f9;
+  margin-top: auto;
+  flex-wrap: wrap;
+}
+
+.deadlineBadge {
+  display: inline-block;
+  padding: 0.3rem 0.75rem;
+  border-radius: 50px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.deadline-neutral {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.deadline-soon {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.deadline-urgent {
+  background-color: #fee2e2;
+  color: #991b1b;
+  animation: badgePulse 2s ease-in-out infinite;
+}
+
+.deadline-closed {
+  background-color: #e2e8f0;
+  color: #64748b;
+}
+
+@keyframes badgePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(198, 40, 40, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(198, 40, 40, 0); }
+}
+
+.applyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.65rem 1.35rem;
+  background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+  color: #ffffff;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 16px -6px rgba(46, 125, 50, 0.4);
+  white-space: nowrap;
+}
+
+.applyBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -8px rgba(46, 125, 50, 0.5);
+  filter: brightness(1.05);
+}
+
+.applyBtnDisabled {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.65rem 1.35rem;
+  background-color: #f1f5f9;
+  color: #94a3b8;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-radius: 50px;
+  border: 1.5px solid #e5e7eb;
+  cursor: not-allowed;
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------------------------
+   States
+   ---------------------------------------------------------------------------- */
+
+.skeletonCard {
+  height: 320px;
+  background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+  background-size: 200% 100%;
+  border-radius: 18px;
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.errorBox,
+.emptyBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 4rem 1rem;
+  gap: 0.85rem;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.errorIcon,
+.emptyIcon {
+  font-size: 3.5rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.errorTitle,
+.emptyTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.015em;
+}
+
+.errorText,
+.emptyText {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  color: #64748b;
+  line-height: 1.7;
+  margin: 0 0 0.5rem;
+}
+
+.emptyCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.75rem 1.75rem;
+  background-color: #1565C0;
+  color: #ffffff;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 50px;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 20px -8px rgba(21, 101, 192, 0.4);
+}
+
+.emptyCta:hover {
+  background-color: #0D47A1;
+  transform: translateY(-2px);
+}
+
+/* ----------------------------------------------------------------------------
+   Final CTA
+   ---------------------------------------------------------------------------- */
+
+.finalCta {
+  position: relative;
+  padding: 5rem 0 6rem;
+  background: linear-gradient(135deg, #0f172a 0%, #1a2942 100%);
+  overflow: hidden;
+}
+
+.finalCtaBlob {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #1565C0 0%, transparent 70%);
+  opacity: 0.2;
+  filter: blur(120px);
+  top: -180px;
+  right: -140px;
+  pointer-events: none;
+}
+
+.finalCtaInner {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.finalCtaTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.finalCtaSubtitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  line-height: 1.7;
+}
+
+.finalCtaButtons {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.finalCtaSecondary {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #F9A825;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.finalCtaSecondary:hover {
+  color: #ffffff;
+  gap: 0.5rem;
+}
+
+/* ============================================================================
+   Responsive
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+  .filtersWrapper {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .searchBox {
+    grid-column: 1 / -1;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 4rem 0 3rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1rem;
+  }
+
+  .contentSection {
+    padding: 1.75rem 0 3.5rem;
+  }
+
+  .filtersWrapper {
+    grid-template-columns: 1fr;
+    padding: 0.75rem;
+  }
+
+  .card {
+    padding: 1.35rem;
+  }
+
+  .cardHeader {
+    padding-right: 0;
+  }
+
+  .featuredBadge {
+    position: static;
+    align-self: flex-start;
+    margin-bottom: 0.5rem;
+  }
+
+  .cardFooter {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .applyBtn,
+  .applyBtnDisabled {
+    justify-content: center;
+  }
+
+  .finalCtaButtons {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 1.85rem;
+  }
+
+  .cardTitle {
+    font-size: 1rem;
+  }
+
+  .companyLogo {
+    width: 44px;
+    height: 44px;
+    font-size: 0.8rem;
+  }
+}

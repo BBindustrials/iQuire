@@ -271,7 +271,7 @@ export const Opportunities: React.FC = () => {
           <Button variant="primary" color="green" size="lg" href="/jobs">
             Explore Opportunities
           </Button>
-          <Link to="/register" className={styles.secondaryLink}>
+          <Link to="/courses" className={styles.secondaryLink}>
             Build Your Profile →
           </Link>
         </ScrollReveal>

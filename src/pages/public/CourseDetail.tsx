@@ -1,9 +1,12 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 // ============================================================================
-// iQuire — Course Detail Page (Phase 10D.7)
+// iQuire — Course Detail Page (Phase 11A.4)
 // ============================================================================
 // Reads course + next cohort + previous cohorts from Supabase.
-// Handles loading, error, not-found, and empty-cohort states.
+// Handles 3 states:
+//   1. Cohort open + URL set  → external registration
+//   2. Cohort exists but no URL, OR no cohort → Contact Us
+//   3. Registration closed → Contact Us
 // ============================================================================
 
 import React, { useEffect, useState } from 'react';
@@ -12,6 +15,7 @@ import { ScrollReveal } from '../../components/common/ScrollReveal';
 import {
   fetchCourseBySlug,
   formatCourseDate,
+  isRegistrationOpen,
   type CourseWithRelations,
 } from '../../services/courses.service';
 import styles from './CourseDetail.module.css';
@@ -50,7 +54,6 @@ export const CourseDetail: React.FC = () => {
       if (!isMounted) return;
 
       if (!result.success || !result.data) {
-        // Distinguish "not found" from other errors
         const msg = result.error ?? '';
         if (msg.toLowerCase().includes('not found')) {
           setNotFound(true);
@@ -131,6 +134,9 @@ export const CourseDetail: React.FC = () => {
   const previousCohorts = course.previous_cohorts;
   const accentClass = styles[`accent-${course.accent ?? 'blue'}`];
 
+  const canRegister = isRegistrationOpen(nextCohort);
+  const registrationUrl = canRegister ? nextCohort!.registration_url! : null;
+
   // --------------------------------------------------------------------------
   // Render
   // --------------------------------------------------------------------------
@@ -210,25 +216,39 @@ export const CourseDetail: React.FC = () => {
                 )}
               </div>
 
-              {/* Hero CTAs */}
-              {nextCohort ? (
+              {/* Hero CTAs — 2 states */}
+              {canRegister && registrationUrl ? (
                 <div className={styles.heroCtas}>
-                  <Link to={`/apply/${course.slug}`} className={styles.ctaPrimary}>
+                  <a
+                    href={registrationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.ctaPrimary}
+                  >
                     Apply for This Cohort
-                  </Link>
+                  </a>
                   <a href="#cohort" className={styles.ctaSecondary}>
                     View Cohort Details →
                   </a>
                 </div>
               ) : (
                 <div className={styles.heroCtas}>
-                  <Link
-                    to={`/register-interest/${course.slug}`}
-                    className={styles.ctaPrimary}
-                  >
-                    Register Your Interest
+                  <Link to="/contact" className={styles.ctaPrimary}>
+                    Contact Us
                   </Link>
+                  {nextCohort && (
+                    <a href="#cohort" className={styles.ctaSecondary}>
+                      View Cohort Details →
+                    </a>
+                  )}
                 </div>
+              )}
+
+              {!canRegister && (
+                <p className={styles.registrationHint}>
+                  Registration isn't open right now. Contact us to be notified
+                  when the next cohort opens.
+                </p>
               )}
             </ScrollReveal>
 
@@ -244,7 +264,6 @@ export const CourseDetail: React.FC = () => {
                 </div>
               )}
 
-              {/* Next Cohort Preview Card */}
               {nextCohort && (
                 <div className={styles.cohortPreviewCard} id="cohort">
                   <div className={styles.cohortPreviewHeader}>
@@ -438,7 +457,6 @@ export const CourseDetail: React.FC = () => {
         <section className={styles.section}>
           <div className="container">
             <div className={styles.twoColGrid}>
-              {/* Who it's for */}
               {course.who_its_for.length > 0 && (
                 <ScrollReveal animation="left" className={styles.infoBlock}>
                   <span className={styles.sectionBadge}>Who It's For</span>
@@ -461,7 +479,6 @@ export const CourseDetail: React.FC = () => {
                 </ScrollReveal>
               )}
 
-              {/* Career value */}
               {(course.skills_professional.length > 0 ||
                 course.skills_digital.length > 0 ||
                 course.skills_career.length > 0) && (
@@ -668,22 +685,30 @@ export const CourseDetail: React.FC = () => {
                   )}
               </div>
 
-              <Link to={`/apply/${course.slug}`} className={styles.cohortCardCta}>
-                Apply for This Cohort
-              </Link>
+              {canRegister && registrationUrl ? (
+                <a
+                  href={registrationUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.cohortCardCta}
+                >
+                  Apply for This Cohort
+                </a>
+              ) : (
+                <Link to="/contact" className={styles.cohortCardCta}>
+                  Contact Us
+                </Link>
+              )}
             </ScrollReveal>
           ) : (
             <ScrollReveal animation="up" className={styles.noCohortBox}>
               <div className={styles.noCohortIcon}>📅</div>
               <p className={styles.noCohortText}>
-                No upcoming cohort is currently available. Register your
-                interest and we'll notify you when the next cohort opens.
+                No upcoming cohort is currently available. Contact us to be
+                notified when the next cohort opens.
               </p>
-              <Link
-                to={`/register-interest/${course.slug}`}
-                className={styles.noCohortCta}
-              >
-                Register Your Interest
+              <Link to="/contact" className={styles.noCohortCta}>
+                Contact Us
               </Link>
             </ScrollReveal>
           )}
@@ -771,9 +796,20 @@ export const CourseDetail: React.FC = () => {
                 </div>
               )}
 
-              <Link to={`/apply/${course.slug}`} className={styles.pricingCta}>
-                Apply Now
-              </Link>
+              {canRegister && registrationUrl ? (
+                <a
+                  href={registrationUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.pricingCta}
+                >
+                  Apply Now
+                </a>
+              ) : (
+                <Link to="/contact" className={styles.pricingCta}>
+                  Contact Us
+                </Link>
+              )}
             </ScrollReveal>
           </div>
         </section>
@@ -826,24 +862,23 @@ export const CourseDetail: React.FC = () => {
                 </p>
               )}
               <div className={styles.finalCtaButtons}>
-                {nextCohort ? (
+                {canRegister && registrationUrl ? (
                   <>
-                    <Link
-                      to={`/apply/${course.slug}`}
+                    <a
+                      href={registrationUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className={styles.finalCtaPrimary}
                     >
                       Apply for the Course
-                    </Link>
+                    </a>
                     <a href="#upcoming-cohort" className={styles.finalCtaSecondary}>
                       View Upcoming Cohorts →
                     </a>
                   </>
                 ) : (
-                  <Link
-                    to={`/register-interest/${course.slug}`}
-                    className={styles.finalCtaPrimary}
-                  >
-                    Register Your Interest
+                  <Link to="/contact" className={styles.finalCtaPrimary}>
+                    Contact Us
                   </Link>
                 )}
               </div>

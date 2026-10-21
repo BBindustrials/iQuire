@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // ============================================================================
-// iQuire — Admin: Course Edit/Create Form (Phase 10D.5)
+// iQuire — Admin: Course Edit/Create Form (Phase 11A.3)
 // ============================================================================
 
 import React, { useEffect, useState } from 'react';
@@ -179,7 +179,7 @@ export const AdminCourseForm: React.FC = () => {
   };
 
   // --------------------------------------------------------------------------
-  // Loading
+  // Loading / error
   // --------------------------------------------------------------------------
   if (isLoading) {
     return (
@@ -457,7 +457,7 @@ export const AdminCourseForm: React.FC = () => {
                 onChange={(next: any[]) =>
                   updateField(
                     'challenges',
-                    next.map((line) => {
+                    next.map((line: string) => {
                       const [title, ...rest] = line.split('|');
                       return {
                         title: title.trim(),
@@ -480,7 +480,7 @@ export const AdminCourseForm: React.FC = () => {
                 onChange={(next: any[]) =>
                   updateField(
                     'what_you_learn',
-                    next.map((line: { split: (arg0: string) => [any, any, ...any[]]; }) => {
+                    next.map((line: string) => {
                       const [number, title, ...rest] = line.split('|');
                       return {
                         number: number.trim(),
@@ -502,7 +502,7 @@ export const AdminCourseForm: React.FC = () => {
                 onChange={(next: any[]) =>
                   updateField(
                     'week_journey',
-                    next.map((line: { split: (arg0: string) => [any, ...any[]]; }) => {
+                    next.map((line: string) => {
                       const [week, ...rest] = line.split('|');
                       return { week: week.trim(), title: rest.join('|').trim() };
                     })
@@ -667,7 +667,7 @@ export const AdminCourseForm: React.FC = () => {
               onChange={(next: any[]) =>
                 updateField(
                   'curriculum',
-                  next.map((line: { split: (arg0: string) => [any, any, ...any[]]; }) => {
+                  next.map((line: string) => {
                     const [number, title, ...rest] = line.split('|');
                     return {
                       number: number.trim(),
@@ -718,7 +718,7 @@ export const AdminCourseForm: React.FC = () => {
               onChange={(next: any[]) =>
                 updateField(
                   'faqs',
-                  next.map((line: { split: (arg0: string) => [any, ...any[]]; }, i: number) => {
+                  next.map((line: string, i: number) => {
                     const [question, ...rest] = line.split('|');
                     return {
                       id: `f${i + 1}`,
@@ -774,6 +774,7 @@ const EMPTY_COHORT_FORM: Partial<Cohort> = {
   spots_left: null,
   status: 'open',
   is_next: true,
+  registration_url: '',
 };
 
 const CohortTab: React.FC<CohortTabProps> = ({
@@ -788,8 +789,6 @@ const CohortTab: React.FC<CohortTabProps> = ({
   );
   const [isSaving, setIsSaving] = useState(false);
 
-  // Sync the form when the *identity* of the next cohort changes.
-  // Keyed on nextCohort?.id so editing fields doesn't wipe the form.
   useEffect(() => {
     setForm(nextCohort ?? EMPTY_COHORT_FORM);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -873,9 +872,9 @@ const CohortTab: React.FC<CohortTabProps> = ({
             onChange={(e) => setField('status', e.target.value as CohortStatus)}
             className={styles.select}
           >
-            <option value="open">Open — accepting applications</option>
-            <option value="closed">Closed</option>
-            <option value="completed">Completed</option>
+            <option value="open">Open — Apply button active</option>
+            <option value="closed">Closed — show "unavailable" message</option>
+            <option value="completed">Completed — past cohort</option>
           </select>
         </div>
       </div>
@@ -909,6 +908,18 @@ const CohortTab: React.FC<CohortTabProps> = ({
           placeholder="Virtual"
         />
       </div>
+
+      <Input
+        label="Registration URL (Google Form, etc.)"
+        value={form.registration_url ?? ''}
+        onChange={(e) => setField('registration_url', e.target.value)}
+        placeholder="https://forms.gle/your-form-id"
+        helperText={
+          form.status === 'open'
+            ? 'When set, the public "Apply for This Cohort" button opens this URL. Leave blank to show the interest form instead.'
+            : 'This URL will only be used when the cohort status is set to "Open".'
+        }
+      />
 
       <div className={styles.threeCol}>
         <Input

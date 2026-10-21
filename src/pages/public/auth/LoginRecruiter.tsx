@@ -1,8 +1,8 @@
 // ============================================================================
-// iQuire — Recruiter Login (Phase 7A.8)
+// iQuire — Recruiter Login (Phase 11A.2)
 // ============================================================================
 // Login page for recruiters / hiring organisations.
-// Uses work email + password.
+// Access is reserved for verified recruiters.
 // ============================================================================
 
 import React, { useState, type FormEvent } from 'react';
@@ -117,7 +117,6 @@ export const LoginRecruiter: React.FC = () => {
       return;
     }
 
-    // Success
     navigate(from, { replace: true });
   };
 
@@ -158,7 +157,7 @@ export const LoginRecruiter: React.FC = () => {
 
       <AuthPageTitle
         title="Recruiter Login"
-        subtitle="Discover verified, work-ready African talent."
+        subtitle="Access is reserved for verified recruiters."
       />
 
       <form onSubmit={handleSubmit} noValidate>
@@ -223,16 +222,16 @@ export const LoginRecruiter: React.FC = () => {
         </button>
 
         <p className={styles.footer}>
-          New to IQuire?{' '}
-          <Link to="/register/recruiter" className={styles.footerLink}>
-            Register as a Recruiter
+          Want to hire IQuire talent?{' '}
+          <Link to="/hire-from-us" className={styles.footerLink}>
+            Learn more →
           </Link>
         </p>
 
         <p className={styles.memberFooter}>
           Not a recruiter?{' '}
           <Link to="/login" className={styles.footerLink}>
-            Member Login →
+            Student / Alumni Login →
           </Link>
         </p>
 

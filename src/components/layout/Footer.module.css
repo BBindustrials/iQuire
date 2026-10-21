@@ -281,3 +281,42 @@
     height: 40px;
   }
 }
+
+/* ----------------------------------------------------------------------------
+   Address block (brand column)
+   ---------------------------------------------------------------------------- */
+
+.address {
+  font-style: normal;
+  margin: 1rem 0 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.addressLine {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.5;
+}
+
+.addressIcon {
+  flex-shrink: 0;
+  color: #F9A825;
+  margin-top: 1px;
+}
+
+@media (max-width: 768px) {
+  .address {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+  }
+
+  .addressLine {
+    font-size: 0.82rem;
+  }
+}

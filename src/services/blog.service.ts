@@ -1,7 +1,8 @@
 // ============================================================================
-// iQuire — Blog Service (Phase 10E.2)
+// iQuire — Blog Service (Phase 14.13.5)
 // ============================================================================
 // CRUD for blog posts + categories, image upload with 500 KB compression.
+// Now supports linked author profiles (via author_profile_id).
 // ============================================================================
 
 import { supabase } from '../integrations/supabase/client';
@@ -22,6 +23,15 @@ export interface BlogCategory {
   updated_at: string;
 }
 
+export interface LinkedAuthorProfile {
+  id: string;
+  first_name: string | null;
+  last_name: string | null;
+  email: string;
+  avatar_url: string | null;
+  bio_title: string | null;
+}
+
 export interface BlogPost {
   id: string;
   title: string;
@@ -34,6 +44,7 @@ export interface BlogPost {
   author_name: string | null;
   author_role: string | null;
   author_avatar_url: string | null;
+  author_profile_id: string | null;
   status: BlogStatus;
   featured: boolean;
   published_at: string | null;
@@ -45,6 +56,7 @@ export interface BlogPost {
 
 export interface BlogPostWithCategory extends BlogPost {
   category: BlogCategory | null;
+  author_profile?: LinkedAuthorProfile | null;
 }
 
 export interface BlogPostInput {
@@ -58,6 +70,7 @@ export interface BlogPostInput {
   author_name?: string | null;
   author_role?: string | null;
   author_avatar_url?: string | null;
+  author_profile_id?: string | null;
   status?: BlogStatus;
   featured?: boolean;
   published_at?: string | null;
@@ -70,6 +83,15 @@ interface ServiceResponse<T> {
   data?: T;
   error?: string;
 }
+
+// Shared select with author join
+const POST_SELECT = `
+  *,
+  category:blog_categories(*),
+  author_profile:profiles!blog_posts_author_profile_id_fkey(
+    id, first_name, last_name, email, avatar_url, bio_title
+  )
+`;
 
 // ============================================================================
 // CATEGORIES
@@ -101,10 +123,7 @@ export const fetchPublishedPosts = async (): Promise<
   try {
     const { data, error } = await supabase
       .from('blog_posts')
-      .select(`
-        *,
-        category:blog_categories(*)
-      `)
+      .select(POST_SELECT)
       .eq('status', 'published')
       .order('published_at', { ascending: false });
 
@@ -123,10 +142,7 @@ export const fetchPostBySlug = async (
   try {
     const { data, error } = await supabase
       .from('blog_posts')
-      .select(`
-        *,
-        category:blog_categories(*)
-      `)
+      .select(POST_SELECT)
       .eq('slug', slug)
       .eq('status', 'published')
       .maybeSingle();
@@ -148,10 +164,7 @@ export const fetchRelatedPosts = async (
   try {
     let query = supabase
       .from('blog_posts')
-      .select(`
-        *,
-        category:blog_categories(*)
-      `)
+      .select(POST_SELECT)
       .eq('status', 'published')
       .neq('id', excludePostId)
       .limit(limit);
@@ -161,7 +174,10 @@ export const fetchRelatedPosts = async (
     const { data, error } = await query;
 
     if (error) return { success: false, error: error.message };
-    return { success: true, data: (data as unknown as BlogPostWithCategory[]) ?? [] };
+    return {
+      success: true,
+      data: (data as unknown as BlogPostWithCategory[]) ?? [],
+    };
   } catch (err) {
     return { success: false, error: String(err) };
   }
@@ -177,14 +193,14 @@ export const fetchAllPosts = async (): Promise<
   try {
     const { data, error } = await supabase
       .from('blog_posts')
-      .select(`
-        *,
-        category:blog_categories(*)
-      `)
+      .select(POST_SELECT)
       .order('created_at', { ascending: false });
 
     if (error) return { success: false, error: error.message };
-    return { success: true, data: (data as unknown as BlogPostWithCategory[]) ?? [] };
+    return {
+      success: true,
+      data: (data as unknown as BlogPostWithCategory[]) ?? [],
+    };
   } catch (err) {
     return { success: false, error: String(err) };
   }
@@ -196,10 +212,7 @@ export const fetchPostById = async (
   try {
     const { data, error } = await supabase
       .from('blog_posts')
-      .select(`
-        *,
-        category:blog_categories(*)
-      `)
+      .select(POST_SELECT)
       .eq('id', id)
       .maybeSingle();
 
@@ -216,7 +229,6 @@ export const createPost = async (
   input: BlogPostInput
 ): Promise<ServiceResponse<BlogPost>> => {
   try {
-    // If publishing without a published_at, set now
     const payload: BlogPostInput = { ...input };
     if (payload.status === 'published' && !payload.published_at) {
       payload.published_at = new Date().toISOString();
@@ -242,9 +254,7 @@ export const updatePost = async (
   try {
     const payload: Partial<BlogPostInput> = { ...input };
 
-    // Auto-set published_at when transitioning to published
     if (payload.status === 'published' && !payload.published_at) {
-      // Only set if currently not published (checked by caller or always safe)
       payload.published_at = new Date().toISOString();
     }
 
@@ -266,7 +276,6 @@ export const deletePost = async (
   id: string
 ): Promise<{ success: boolean; error?: string }> => {
   try {
-    // Fetch image first for cleanup
     const existing = (await supabase
       .from('blog_posts')
       .select('featured_image_url')
@@ -278,7 +287,6 @@ export const deletePost = async (
     const { error } = await supabase.from('blog_posts').delete().eq('id', id);
     if (error) return { success: false, error: error.message };
 
-    // Best-effort image cleanup
     if (existing?.data?.featured_image_url) {
       const path = extractPathFromUrl(existing.data.featured_image_url);
       if (path) {
@@ -302,13 +310,9 @@ interface UploadResult {
   error?: string;
 }
 
-/**
- * Compress an image to fit under 500 KB using canvas.
- * Progressively reduces quality and resolution.
- */
 const compressImage = (
   file: File,
-  maxSizeBytes = 500 * 1024 // 500 KB
+  maxSizeBytes = 500 * 1024
 ): Promise<Blob> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -320,7 +324,6 @@ const compressImage = (
         const ctx = canvas.getContext('2d');
         if (!ctx) return reject(new Error('Canvas not supported'));
 
-        // Constrain max dimensions to 1600px on the longest side
         let { width, height } = img;
         const MAX_DIMENSION = 1600;
         if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
@@ -337,7 +340,6 @@ const compressImage = (
         canvas.height = height;
         ctx.drawImage(img, 0, 0, width, height);
 
-        // Progressive quality reduction
         let quality = 0.85;
         const attemptCompression = () => {
           canvas.toBlob(
@@ -375,7 +377,6 @@ export const uploadBlogImage = async (file: File): Promise<UploadResult> => {
       };
     }
 
-    // Compress to ≤ 500 KB
     const compressedBlob = await compressImage(file, 500 * 1024);
 
     const filename = `blog-${Date.now()}-${Math.random()
@@ -417,7 +418,7 @@ export const slugify = (text: string): string =>
 export const calculateReadTime = (content: string): number => {
   if (!content) return 0;
   const words = content.trim().split(/\s+/).length;
-  return Math.max(1, Math.ceil(words / 200)); // 200 words per minute
+  return Math.max(1, Math.ceil(words / 200));
 };
 
 export const formatBlogDate = (iso: string | null): string => {
@@ -436,4 +437,41 @@ const extractPathFromUrl = (url: string): string | null => {
   const idx = url.indexOf(marker);
   if (idx === -1) return null;
   return url.slice(idx + marker.length);
+};
+
+// ============================================================================
+// HELPERS — Resolve author display info (linked vs manual)
+// ============================================================================
+
+export interface ResolvedAuthor {
+  name: string;
+  role: string | null;
+  avatarUrl: string | null;
+  profileId: string | null;
+}
+
+/**
+ * Given a blog post, returns the effective author display info.
+ * Priority: linked profile > manual fields.
+ */
+export const resolvePostAuthor = (
+  post: BlogPostWithCategory
+): ResolvedAuthor => {
+  if (post.author_profile_id && post.author_profile) {
+    const p = post.author_profile;
+    const fullName = `${p.first_name ?? ''} ${p.last_name ?? ''}`.trim();
+    return {
+      name: fullName || post.author_name || 'IQuire Team',
+      role: p.bio_title ?? post.author_role ?? null,
+      avatarUrl: p.avatar_url ?? post.author_avatar_url ?? null,
+      profileId: p.id,
+    };
+  }
+
+  return {
+    name: post.author_name ?? 'IQuire Team',
+    role: post.author_role ?? null,
+    avatarUrl: post.author_avatar_url ?? null,
+    profileId: null,
+  };
 };

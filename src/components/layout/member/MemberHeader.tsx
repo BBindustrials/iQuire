@@ -3,12 +3,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import styles from './MemberHeader.module.css';
 
+// ============================================================================
+// Component
+// ============================================================================
+
 interface MemberHeaderProps {
   onMenuToggle: () => void;
 }
 
 export const MemberHeader: React.FC<MemberHeaderProps> = ({ onMenuToggle }) => {
-  const { profile, signOut } = useAuth();
+  const { profile, roles, signOut } = useAuth();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -25,11 +29,21 @@ export const MemberHeader: React.FC<MemberHeaderProps> = ({ onMenuToggle }) => {
 
   const displayName = profile
     ? `${profile.first_name} ${profile.last_name}`.trim()
-    : 'Member';
+    : '';
 
   const initials = profile
     ? `${profile.first_name?.[0] ?? ''}${profile.last_name?.[0] ?? ''}`.toUpperCase()
-    : 'M';
+    : 'U';
+
+  // Contextual role label
+  const roleLabel = (() => {
+    const isStudent = roles.includes('student');
+    const isAlumni = roles.includes('alumni');
+
+    if (isStudent && isAlumni) return 'Student · Alumni';
+    if (isAlumni) return 'Alumni';
+    return 'Student';
+  })();
 
   const handleSignOut = async () => {
     setMenuOpen(false);
@@ -72,9 +86,7 @@ export const MemberHeader: React.FC<MemberHeaderProps> = ({ onMenuToggle }) => {
             <span className={styles.avatar}>{initials}</span>
             <span className={styles.userMeta}>
               <span className={styles.userName}>{displayName}</span>
-              {profile?.participant_id && (
-                <span className={styles.userId}>{profile.participant_id}</span>
-              )}
+              <span className={styles.userRole}>{roleLabel}</span>
             </span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
               <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -86,9 +98,9 @@ export const MemberHeader: React.FC<MemberHeaderProps> = ({ onMenuToggle }) => {
               <div className={styles.dropdownHeader}>
                 <span className={styles.dropdownName}>{displayName}</span>
                 <span className={styles.dropdownEmail}>{profile?.email}</span>
-                {profile?.participant_id && (
+                {profile?.iq_id && (
                   <span className={styles.dropdownId}>
-                    IQuire ID: <strong>{profile.participant_id}</strong>
+                    IQuire ID: <strong>{profile.iq_id}</strong>
                   </span>
                 )}
               </div>
@@ -98,10 +110,6 @@ export const MemberHeader: React.FC<MemberHeaderProps> = ({ onMenuToggle }) => {
                 className={styles.dropdownItem}
                 onClick={() => setMenuOpen(false)}
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2" />
-                  <path d="M4 21C4 17 7.5 14 12 14C16.5 14 20 17 20 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg>
                 My Profile
               </Link>
               <Link
@@ -109,17 +117,9 @@ export const MemberHeader: React.FC<MemberHeaderProps> = ({ onMenuToggle }) => {
                 className={styles.dropdownItem}
                 onClick={() => setMenuOpen(false)}
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" />
-                </svg>
                 Settings
               </Link>
               <button onClick={handleSignOut} className={styles.dropdownItem} role="menuitem">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <path d="M9 21H5C3.9 21 3 20.1 3 19V5C3 3.9 3.9 3 5 3H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                  <path d="M16 17L21 12L16 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M21 12H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg>
                 Sign Out
               </button>
             </div>

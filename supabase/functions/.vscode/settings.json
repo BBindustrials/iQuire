@@ -1,0 +1,5 @@
+{
+    "deno.enable": true,
+    "deno.unstable": [],
+    "js/ts.tsdk.path": "node_modules/typescript/lib"
+  }

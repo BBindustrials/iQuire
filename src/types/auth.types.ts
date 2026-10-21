@@ -1,97 +1,60 @@
 // ============================================================================
-// iQuire Auth Types — Phase 7A.2
+// iQuire Auth Types — Phase 11A.2
 // ============================================================================
 
 // ============================================================================
-// Core Enums (mirror Supabase enums)
+// Core Enums
 // ============================================================================
 
-/** Top-level account kind — determines login portal + dashboard */
 export type AccountType = 'member' | 'recruiter' | 'admin';
-
-/** Access tier — guest can use limited features; verified has full access */
 export type AccountTier = 'guest' | 'verified';
-
-/** Additive roles — a user can have multiple simultaneously */
 export type UserRole = 'student' | 'alumni' | 'recruiter' | 'admin';
-
-/** Legacy enum (kept for backward compatibility in DB) */
 export type LegacyUserRole = 'student' | 'nysc' | 'recruiter' | 'admin';
-
-/** Gender */
 export type Gender = 'male' | 'female' | 'other' | 'prefer-not-to-say';
-
-/** Enrollment status */
 export type EnrollmentStatus = 'applied' | 'active' | 'completed' | 'dropped';
-
-/** Verification status (legacy — kept for compatibility) */
 export type VerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected';
-
-/** Account status */
 export type AccountStatus = 'active' | 'suspended' | 'deleted';
 
 // ============================================================================
 // Nigerian Geography
 // ============================================================================
 
-/** A Nigerian state with its Local Government Areas. */
 export interface NigerianState {
-  /** 2-letter state code, e.g. 'LA' for Lagos, 'FC' for FCT */
   code: string;
-  /** Full state name, e.g. 'Lagos', 'FCT - Abuja' */
   name: string;
-  /** Local Government Areas within the state */
   lgas: string[];
 }
 
 // ============================================================================
-// Profile (matches public.profiles table — updated)
+// Profile
 // ============================================================================
 
 export interface Profile {
   id: string;
-
-  // Top-level account classification
   account_type: AccountType;
   tier: AccountTier;
-
-  // Legacy role field (kept for backward compat with old code)
   role: LegacyUserRole;
-
-  // Public identifier
   participant_id: string;
-
-  // Personal
   first_name: string;
   middle_name: string | null;
   last_name: string;
   gender: Gender | null;
-
-  // Contact
   email: string;
   phone: string | null;
-
-  // Location
   country: string | null;
   state: string | null;
   lga: string | null;
-
-  // Media
   avatar_url: string | null;
-
-  // Progress & status
   profile_completion: number;
   verification_status: VerificationStatus;
   account_status: AccountStatus;
   marketing_opt_in: boolean;
-
-  // Timestamps
   created_at: string;
   updated_at: string;
 }
 
 // ============================================================================
-// User Roles (additive) — matches public.user_roles table
+// User Roles (additive)
 // ============================================================================
 
 export interface UserRoleRecord {
@@ -107,7 +70,7 @@ export interface UserRoleRecord {
 }
 
 // ============================================================================
-// Courses — matches public.courses table
+// Courses
 // ============================================================================
 
 export interface Course {
@@ -122,7 +85,7 @@ export interface Course {
 }
 
 // ============================================================================
-// Cohorts — matches public.cohorts table
+// Cohorts
 // ============================================================================
 
 export interface Cohort {
@@ -138,7 +101,7 @@ export interface Cohort {
 }
 
 // ============================================================================
-// Enrollments — matches public.enrollments table
+// Enrollments
 // ============================================================================
 
 export interface Enrollment {
@@ -161,18 +124,11 @@ export interface Enrollment {
 // ============================================================================
 
 export interface AuthContextValue {
-  // Supabase user
   user: import('@supabase/supabase-js').User | null;
-
-  // Full profile
   profile: Profile | null;
-
-  // Derived shortcuts
   accountType: AccountType | null;
   tier: AccountTier | null;
   roles: UserRole[];
-
-  // Convenience flags
   isAuthenticated: boolean;
   isVerified: boolean;
   isAdmin: boolean;
@@ -180,80 +136,27 @@ export interface AuthContextValue {
   isMember: boolean;
   isStudent: boolean;
   isAlumni: boolean;
-
-  // State
   isLoading: boolean;
-
-  // Methods
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
   refreshRoles: () => Promise<void>;
 }
 
 // ============================================================================
-// Form Data — Register (Member)
-// ============================================================================
-
-export interface RegisterMemberData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  password: string;
-  confirmPassword: string;
-  country: string;
-  state: string;
-  lga: string;
-  agreeToTerms: boolean;
-  marketingOptIn: boolean;
-  // Optional
-  desiredCourseId?: string; // if they want to register for a course
-  wantsAiCounselor?: boolean; // if they want AI access
-}
-
-// ============================================================================
-// Form Data — Register (Recruiter)
-// ============================================================================
-
-export interface RegisterRecruiterData {
-  firstName: string;
-  lastName: string;
-  position: string;
-  companyName: string;
-  industry: string;
-  companyWebsite: string;
-  companySize: string;
-  workEmail: string;
-  phone: string;
-  password: string;
-  confirmPassword: string;
-  agreeToTerms: boolean;
-  marketingOptIn: boolean;
-}
-
-// ============================================================================
-// Form Data — Login (Member)
+// Login form data
 // ============================================================================
 
 export interface LoginMemberData {
-  identifier: string; // email OR participant_id
+  identifier: string;
   password: string;
   rememberMe?: boolean;
 }
-
-// ============================================================================
-// Form Data — Login (Recruiter)
-// ============================================================================
 
 export interface LoginRecruiterData {
-  email: string; // work email
+  email: string;
   password: string;
   rememberMe?: boolean;
 }
-
-// ============================================================================
-// Form Data — Admin Login
-// ============================================================================
 
 export interface LoginAdminData {
   email: string;
@@ -261,16 +164,12 @@ export interface LoginAdminData {
 }
 
 // ============================================================================
-// Form Errors
+// Form errors + responses
 // ============================================================================
 
 export interface FormErrors {
   [key: string]: string;
 }
-
-// ============================================================================
-// Service Responses
-// ============================================================================
 
 export interface AuthResponse {
   success: boolean;
@@ -278,11 +177,11 @@ export interface AuthResponse {
   userId?: string;
   requiresEmailVerification?: boolean;
   error?: string;
-  redirectTo?: string; // suggested redirect based on account type
+  redirectTo?: string;
 }
 
 // ============================================================================
-// Dropdown Options (unchanged)
+// Dropdown options
 // ============================================================================
 
 export interface SelectOption {
@@ -323,26 +222,4 @@ export const INDUSTRY_OPTIONS: SelectOption[] = [
   { label: 'Real Estate', value: 'real-estate' },
   { label: 'Logistics & Transportation', value: 'logistics' },
   { label: 'Other', value: 'other' },
-];
-
-// ============================================================================
-// Legacy dropdowns (kept for backward compatibility; remove later)
-// ============================================================================
-
-export const YEAR_OF_DEPLOYMENT_OPTIONS: SelectOption[] = [
-  { label: '2024', value: '2024' },
-  { label: '2025', value: '2025' },
-  { label: '2026', value: '2026' },
-  { label: '2027', value: '2027' },
-];
-
-export const COHORT_BATCH_OPTIONS: SelectOption[] = [
-  { label: 'Batch A', value: 'batch-a' },
-  { label: 'Batch B', value: 'batch-b' },
-  { label: 'Batch C', value: 'batch-c' },
-];
-
-export const COHORT_STREAM_OPTIONS: SelectOption[] = [
-  { label: 'Stream 1', value: 'stream-1' },
-  { label: 'Stream 2', value: 'stream-2' },
 ];

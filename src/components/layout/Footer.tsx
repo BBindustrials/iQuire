@@ -9,26 +9,26 @@ export const Footer: React.FC = () => {
   const footerLinks = {
     company: [
       { label: 'About Us', path: '/about' },
-      { label: 'Our Vision', path: '/about#vision' },
       { label: 'Our Impact', path: '/about#impact' },
+      { label: 'Alumni', path: '/alumni' },
       { label: 'Events', path: '/events' },
+      { label: 'Contact Us', path: '/contact' },
     ],
-    programs: [
-      { label: 'IEESP', path: '/programs#ieesp' },
-      { label: 'Tech360', path: '/programs#tech360' },
-      { label: 'AI Workshops', path: '/programs#ai-workshops' },
-      { label: 'CV Optimization', path: '/programs#cv-optimization' },
-      { label: 'Mentorship', path: '/programs#mentorship' },
+    courses: [
+      { label: 'All Courses', path: '/courses' },
+      { label: 'Apprenticeship Preparation', path: '/courses/apprenticeship-preparation' },
+      { label: 'Digital Work Readiness', path: '/courses/digital-work-readiness' },
+      { label: 'Tech 360', path: '/courses/tech-360' },
+      { label: 'AI for Everyone', path: '/courses/ai-for-everyone' },
     ],
     opportunities: [
       { label: 'Jobs', path: '/jobs' },
       { label: 'Internships', path: '/jobs?type=internship' },
-      { label: 'Recruit Talent', path: '/hire-talent' },
+      { label: 'Hire From Us', path: '/hire-from-us' },
     ],
     resources: [
       { label: 'Blog', path: '/blog' },
       { label: 'User Guide', path: '/about#user-guide' },
-      { label: 'FAQ', path: '/faq' },
     ],
   };
 
@@ -75,20 +75,47 @@ export const Footer: React.FC = () => {
     <footer className={styles.footer}>
       <div className="container">
         <div className={styles.footerGrid}>
-          {/* Brand with Logo */}
+          {/* Brand */}
           <div className={styles.brand}>
             <div className={styles.brandLogo}>
               <img src={logo} alt="IQuire Logo" className={styles.footerLogo} />
             </div>
-            <p className={styles.tagline}>
-              From Skills to Opportunity.
-            </p>
+            <p className={styles.tagline}>From Skills to Opportunity.</p>
             <p className={styles.description}>
               IQuire connects African talent development with real career opportunities.
             </p>
+
+            {/* Address */}
+            <address className={styles.address}>
+              <span className={styles.addressLine}>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className={styles.addressIcon}
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M12 21C16 17 20 13.5 20 9C20 4.58 16.42 1 12 1C7.58 1 4 4.58 4 9C4 13.5 8 17 12 21Z"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinejoin="round"
+                  />
+                  <circle
+                    cx="12"
+                    cy="9"
+                    r="3"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                </svg>
+                <span>London, UK · Lagos, Nigeria</span>
+              </span>
+            </address>
           </div>
 
-          {/* Company Links */}
+          {/* Company */}
           <div className={styles.linksGroup}>
             <h4>Company</h4>
             <ul>
@@ -100,11 +127,11 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Programs Links */}
+          {/* Courses */}
           <div className={styles.linksGroup}>
-            <h4>Programs</h4>
+            <h4>Courses</h4>
             <ul>
-              {footerLinks.programs.map((link) => (
+              {footerLinks.courses.map((link) => (
                 <li key={link.path}>
                   <Link to={link.path}>{link.label}</Link>
                 </li>
@@ -112,7 +139,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Opportunities Links */}
+          {/* Opportunities */}
           <div className={styles.linksGroup}>
             <h4>Opportunities</h4>
             <ul>
@@ -124,7 +151,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Resources Links */}
+          {/* Resources */}
           <div className={styles.linksGroup}>
             <h4>Resources</h4>
             <ul>

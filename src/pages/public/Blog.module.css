@@ -273,6 +273,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: 50% 15%;
 }
 
 .featuredAuthorInfo {
@@ -703,4 +704,99 @@
   margin: 0;
   letter-spacing: -0.02em;
   line-height: 1.2;
+}
+
+/* ============================================================================
+   Author chip (Phase 14.13.7)
+   ============================================================================ */
+
+.authorChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.authorChipInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.authorChipAvatar {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.authorChipAvatarMd {
+  width: 40px;
+  height: 40px;
+  font-size: 0.78rem;
+}
+
+.authorChipAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.authorChipName {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #0f172a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 180px;
+}
+
+.authorChipMd .authorChipName {
+  font-size: 0.88rem;
+  max-width: 220px;
+}
+
+.authorChipRole {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.72rem;
+  color: #64748b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 220px;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.featuredFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #f1f5f9;
+  flex-wrap: wrap;
 }

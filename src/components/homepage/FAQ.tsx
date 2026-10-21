@@ -1,85 +1,68 @@
 // ============================================================================
-// iQuire — FAQ Section (Rebuilt)
+// iQuire — Homepage FAQ Section (Phase 14.8 — polished)
+// ============================================================================
+// Reads FAQs from the faqs table where category = 'homepage'.
+// Renders nothing if there are no published FAQs in that category.
 // ============================================================================
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ScrollReveal } from '../common/ScrollReveal';
+import {
+  fetchPublishedFaqsByCategory,
+  type Faq,
+} from '../../services/faqs.service';
 import styles from './FAQ.module.css';
 
-interface FAQItem {
-  id: number;
-  category: string;
-  question: string;
-  answer: string;
-}
-
-const FAQS: FAQItem[] = [
-  {
-    id: 1,
-    category: 'General',
-    question: 'What is IQuire?',
-    answer:
-      'IQuire is a global employability and career development platform. We help graduates, young professionals, students, and career changers build the practical skills, professional identity, and career confidence needed to compete for meaningful opportunities.',
-  },
-  {
-    id: 2,
-    category: 'Courses',
-    question: 'What courses does IQuire offer?',
-    answer:
-      'We offer four flagship programs: Apprenticeship Preparation, Digital Work Readiness, Tech 360 (explore different tech paths), and AI for Everyone. Each is designed for a specific career stage.',
-  },
-  {
-    id: 3,
-    category: 'Job Seekers',
-    question: 'How can I find opportunities?',
-    answer:
-      'Verified IQuire members get access to a curated talent marketplace: internships, apprenticeships, entry-level roles, freelance work, volunteer positions, and graduate trainee programs — all filtered to match your profile.',
-  },
-  {
-    id: 4,
-    category: 'Recruiters',
-    question: 'How can I hire IQuire talent?',
-    answer:
-      'Recruiters can register to access our trained talent pool. Every candidate has completed work-readiness training — no resume padding, just verified, work-ready professionals.',
-  },
-  {
-    id: 5,
-    category: 'Eligibility',
-    question: 'Who can join IQuire?',
-    answer:
-      'Anyone with the ambition to build a career — students, graduates, job seekers, career changers, professionals upskilling, and national service members. Whether you\'re just starting or pivoting, there\'s a path for you.',
-  },
-  {
-    id: 6,
-    category: 'Payment',
-    question: 'Are IQuire programs free or paid?',
-    answer:
-      'We offer a mix. Foundational programs and AI workshops are affordably priced, and scholarship support is available for eligible participants in select courses.',
-  },
-  {
-    id: 7,
-    category: 'AI Counselor',
-    question: 'What is the AI Career Counselor?',
-    answer:
-      'It\'s your personal career guide. It helps you understand your career direction, identify skill gaps, build your CV, prepare for interviews, and match with opportunities — all in one intelligent companion.',
-  },
-  {
-    id: 8,
-    category: 'Verification',
-    question: 'How are candidates verified?',
-    answer:
-      'Verification involves program completion, skill assessments, and portfolio review. Only verified members appear in the talent directory — recruiters can trust every profile.',
-  },
-];
+// ============================================================================
+// Component
+// ============================================================================
 
 export const FAQ: React.FC = () => {
-  const [openId, setOpenId] = useState<number | null>(1);
+  const [faqs, setFaqs] = useState<Faq[]>([]);
+  const [openId, setOpenId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const toggleFAQ = (id: number) => {
-    setOpenId(openId === id ? null : id);
+  // --------------------------------------------------------------------------
+  // Load FAQs
+  // --------------------------------------------------------------------------
+  useEffect(() => {
+    let isMounted = true;
+
+    const load = async () => {
+      const res = await fetchPublishedFaqsByCategory('homepage');
+      if (!isMounted) return;
+
+      if (res.success && res.data) {
+        setFaqs(res.data);
+        // Auto-open the first FAQ
+        if (res.data.length > 0) {
+          setOpenId(res.data[0].id);
+        }
+      }
+      setIsLoading(false);
+    };
+
+    load();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const toggleFAQ = (id: string) => {
+    setOpenId((prev) => (prev === id ? null : id));
   };
 
+  // --------------------------------------------------------------------------
+  // Loading or empty → don't render the section
+  // --------------------------------------------------------------------------
+  if (isLoading || faqs.length === 0) {
+    return null;
+  }
+
+  // --------------------------------------------------------------------------
+  // Render
+  // --------------------------------------------------------------------------
   return (
     <section className={styles.faq}>
       {/* Background accents */}
@@ -103,26 +86,33 @@ export const FAQ: React.FC = () => {
         </ScrollReveal>
 
         {/* ================================================================
-            FAQ ACCORDION
+            FAQ ACCORDION (2-col grid on desktop)
             ================================================================ */}
         <ScrollReveal animation="up" stagger className={styles.faqGrid}>
-          {FAQS.map((faq) => {
+          {faqs.map((faq) => {
             const isOpen = openId === faq.id;
             return (
               <div
                 key={faq.id}
-                className={`${styles.faqCard} ${isOpen ? styles.faqCardOpen : ''}`}
+                className={`${styles.faqCard} ${
+                  isOpen ? styles.faqCardOpen : ''
+                }`}
               >
                 <button
                   className={styles.faqButton}
                   onClick={() => toggleFAQ(faq.id)}
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${faq.id}`}
+                  type="button"
                 >
-                  <span className={styles.faqCategory}>{faq.category}</span>
+                  <span className={styles.faqCategory}>
+                    {formatCategoryLabel(faq.category)}
+                  </span>
                   <span className={styles.faqQuestion}>{faq.question}</span>
                   <span
-                    className={`${styles.faqIcon} ${isOpen ? styles.faqIconOpen : ''}`}
+                    className={`${styles.faqIcon} ${
+                      isOpen ? styles.faqIconOpen : ''
+                    }`}
                     aria-hidden="true"
                   >
                     {isOpen ? '−' : '+'}
@@ -131,9 +121,13 @@ export const FAQ: React.FC = () => {
 
                 <div
                   id={`faq-answer-${faq.id}`}
-                  className={`${styles.faqAnswer} ${isOpen ? styles.faqAnswerOpen : ''}`}
+                  className={`${styles.faqAnswer} ${
+                    isOpen ? styles.faqAnswerOpen : ''
+                  }`}
                 >
-                  <p>{faq.answer}</p>
+                  {faq.answer.split('\n').map((para, i) => (
+                    <p key={i}>{para || <br />}</p>
+                  ))}
                 </div>
               </div>
             );
@@ -158,8 +152,7 @@ export const FAQ: React.FC = () => {
           BOTTOM demarcation
           ================================================================ */}
       <div className={styles.demarcationBottom} aria-hidden="true">
-        <div className={styles.demarcationLabel}>
-        </div>
+        <div className={styles.demarcationLabel}></div>
         <svg
           className={styles.demarcationWave}
           viewBox="0 0 1440 120"
@@ -181,4 +174,22 @@ export const FAQ: React.FC = () => {
       </div>
     </section>
   );
+};
+
+// ============================================================================
+// Helpers
+// ============================================================================
+
+/**
+ * Turn a category slug into a readable label.
+ * Currently all homepage FAQs use 'homepage' — but if admin adds
+ * sub-categories later (e.g., 'homepage-courses'), this keeps the
+ * display clean.
+ */
+const formatCategoryLabel = (category: string): string => {
+  if (category === 'homepage') return 'General';
+  return category
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
 };

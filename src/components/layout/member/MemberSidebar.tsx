@@ -1,10 +1,16 @@
+// ============================================================================
+// iQuire — Member Sidebar (Phase 12F.1)
+// ============================================================================
+// Replaces "Member" and "guest" language with contextual Student/Alumni labels.
+// ============================================================================
+
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import styles from './MemberSidebar.module.css';
 
 // ============================================================================
-// Navigation structure (from client User Flow Document)
+// Navigation structure
 // ============================================================================
 
 interface NavItem {
@@ -18,8 +24,6 @@ interface NavGroup {
   label: string;
   items: NavItem[];
 }
-
-// --- Icons ------------------------------------------------------------------
 
 const Icons = {
   overview: (
@@ -75,8 +79,6 @@ const Icons = {
     </svg>
   ),
 };
-
-// --- Nav structure ---------------------------------------------------------
 
 const NAV_GROUPS: NavGroup[] = [
   {
@@ -143,25 +145,25 @@ interface MemberSidebarProps {
 }
 
 export const MemberSidebar: React.FC<MemberSidebarProps> = ({ isOpen, onClose }) => {
-  const { profile, tier, roles } = useAuth();
+  const { profile, roles } = useAuth();
 
   const displayName = profile
     ? `${profile.first_name} ${profile.last_name}`.trim()
-    : 'Member';
+    : '';
 
   const initials = profile
     ? `${profile.first_name?.[0] ?? ''}${profile.last_name?.[0] ?? ''}`.toUpperCase()
-    : 'M';
+    : 'U';
 
-  // Role label
-  const roleLabel =
-    roles.includes('alumni') && roles.includes('student')
-      ? 'Student · Alumni'
-      : roles.includes('alumni')
-      ? 'Alumni'
-      : roles.includes('student')
-      ? 'Student'
-      : 'Member';
+  // Contextual role label — Student / Alumni / Student · Alumni
+  const roleLabel = (() => {
+    const isStudent = roles.includes('student');
+    const isAlumni = roles.includes('alumni');
+
+    if (isStudent && isAlumni) return 'Student · Alumni';
+    if (isAlumni) return 'Alumni';
+    return 'Student'; // default for members
+  })();
 
   return (
     <>
@@ -173,12 +175,12 @@ export const MemberSidebar: React.FC<MemberSidebarProps> = ({ isOpen, onClose })
         className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}
         aria-label="Member navigation"
       >
-        {/* Brand + user */}
+        {/* Brand */}
         <Link to="/" className={styles.brand}>
           <div className={styles.brandMark}>iQ</div>
           <div className={styles.brandText}>
             <span className={styles.brandName}>iQuire</span>
-            <span className={styles.brandRole}>Member</span>
+            <span className={styles.brandRole}>{roleLabel}</span>
           </div>
         </Link>
 
@@ -190,18 +192,6 @@ export const MemberSidebar: React.FC<MemberSidebarProps> = ({ isOpen, onClose })
             <span className={styles.userRole}>{roleLabel}</span>
           </div>
         </div>
-
-        {/* Tier warning (guest) */}
-        {tier === 'guest' && (
-          <div className={styles.tierWarning}>
-            <span className={styles.tierWarningIcon}>⏳</span>
-            <div>
-              <strong>Guest account</strong>
-              <br />
-              <span>Some features unlock after admin verification.</span>
-            </div>
-          </div>
-        )}
 
         {/* Navigation */}
         <nav className={styles.nav}>

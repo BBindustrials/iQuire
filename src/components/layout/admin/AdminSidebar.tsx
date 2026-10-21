@@ -1,16 +1,21 @@
-import React from 'react';
+// ============================================================================
+// iQuire — Admin Sidebar (Phase 12D.4)
+// ============================================================================
+
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './AdminSidebar.module.css';
+import { fetchUnreadMessageCount } from '../../../services/messages.service';
 
 // ============================================================================
-// Navigation Structure
+// Navigation Types
 // ============================================================================
 
 interface NavItem {
   label: string;
   path: string;
   icon: React.ReactNode;
-  badge?: string;
+  badge?: number;
 }
 
 interface NavGroup {
@@ -18,7 +23,9 @@ interface NavGroup {
   items: NavItem[];
 }
 
-// --- Icons (inline SVG, lightweight) ----------------------------------------
+// ============================================================================
+// Icons
+// ============================================================================
 
 const Icons = {
   overview: (
@@ -34,6 +41,22 @@ const Icons = {
       <path d="M4 4H20V20H4V4Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
       <path d="M4 9H20" stroke="currentColor" strokeWidth="2" />
       <path d="M9 4V20" stroke="currentColor" strokeWidth="2" />
+    </svg>
+  ),
+  messages: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M3 6C3 4.9 3.9 4 5 4H19C20.1 4 21 4.9 21 6V16C21 17.1 20.1 18 19 18H8L3 21V6Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M7 9H17M7 13H13"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   ),
   users: (
@@ -102,9 +125,11 @@ const Icons = {
   ),
 };
 
-// --- Navigation groups ------------------------------------------------------
+// ============================================================================
+// Build nav groups (called inside component so it can use unreadCount)
+// ============================================================================
 
-const NAV_GROUPS: NavGroup[] = [
+const buildNavGroups = (unreadCount: number): NavGroup[] => [
   {
     label: 'Main',
     items: [
@@ -114,31 +139,33 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: 'Content',
     items: [
-      { label: 'Homepage', path: '/admin/homepage', icon: Icons.content },
-      { label: 'About Us', path: '/admin/about', icon: Icons.content },
+      { label: 'Messages', path: '/admin/messages', icon: Icons.messages, badge: unreadCount > 0 ? unreadCount : undefined },
+      { label: 'About', path: '/admin/about', icon: Icons.content },
       { label: 'Programs', path: '/admin/programs', icon: Icons.content },
       { label: 'Blog', path: '/admin/blog', icon: Icons.content },
       { label: 'Events', path: '/admin/events', icon: Icons.content },
       { label: 'FAQs', path: '/admin/faqs', icon: Icons.content },
-      { label: 'Testimonials', path: '/admin/testimonials', icon: Icons.content },
+      { label: 'Scholarships', path: '/admin/scholarships', icon: Icons.content },
+      { label: 'Jobs', path: '/admin/jobs', icon: Icons.content },
+      { label: 'Impact', path: '/admin/impact', icon: Icons.content },
     ],
   },
   {
     label: 'Users',
     items: [
-      { label: 'Students', path: '/admin/users/students', icon: Icons.users },
-      { label: 'Recruiters', path: '/admin/users/recruiters', icon: Icons.users },
+      { label: 'Students', path: '/admin/students', icon: Icons.users },
+      { label: 'Recruiters', path: '/admin/recruiters', icon: Icons.users },
       { label: 'Admins', path: '/admin/users/admins', icon: Icons.users },
     ],
   },
   {
-    label: 'Learning',
-    items: [
-      { label: 'Courses', path: '/admin/courses', icon: Icons.learning },
-      { label: 'Enrollments', path: '/admin/enrollments', icon: Icons.learning },
-      { label: 'Certificates', path: '/admin/certificates', icon: Icons.learning },
-    ],
-  },
+      label: 'Learning',
+      items: [
+        { label: 'Enrollments', path: '/admin/enrollments', icon: Icons.users },
+        { label: 'Cohorts', path: '/admin/cohorts', icon: Icons.content },
+        { label: 'Certificates', path: '/admin/certificates', icon: Icons.content },
+      ],
+    },
   {
     label: 'Talent',
     items: [
@@ -204,6 +231,30 @@ interface AdminSidebarProps {
 // ============================================================================
 
 export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) => {
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  // --------------------------------------------------------------------------
+  // Fetch unread count on mount + every 60s
+  // --------------------------------------------------------------------------
+  useEffect(() => {
+    let isMounted = true;
+
+    const load = async () => {
+      const count = await fetchUnreadMessageCount();
+      if (isMounted) setUnreadCount(count);
+    };
+
+    load();
+    const interval = setInterval(load, 60000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  const navGroups = buildNavGroups(unreadCount);
+
   return (
     <>
       {/* Mobile overlay */}
@@ -230,7 +281,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
 
         {/* Navigation */}
         <nav className={styles.nav}>
-          {NAV_GROUPS.map((group) => (
+          {navGroups.map((group) => (
             <div key={group.label} className={styles.navGroup}>
               <div className={styles.navGroupLabel}>{group.label}</div>
               <ul className={styles.navList}>
@@ -246,7 +297,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
                     >
                       <span className={styles.navIcon}>{item.icon}</span>
                       <span className={styles.navLabel}>{item.label}</span>
-                      {item.badge && (
+                      {item.badge !== undefined && (
                         <span className={styles.navBadge}>{item.badge}</span>
                       )}
                     </NavLink>

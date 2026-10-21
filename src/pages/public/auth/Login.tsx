@@ -1,8 +1,8 @@
 // ============================================================================
-// iQuire — Unified Member Login (Phase 7A.7)
+// iQuire — Unified Member Login (Phase 11A.2)
 // ============================================================================
-// Single login page for members (students, alumni, AI-only users).
-// Accepts Email OR IQuire ID (e.g., swift-panda-8834).
+// Login page for IQuire students and alumni. Public Sign Up removed.
+// Access is reserved for IQuire participants.
 // ============================================================================
 
 import React, { useState, useMemo, type FormEvent } from 'react';
@@ -51,14 +51,12 @@ export const Login: React.FC = () => {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Where to redirect after login
   const from =
     (location.state as { from?: { pathname: string } })?.from?.pathname ||
     '/dashboard';
 
   const identifierType = useMemo(() => detectIdentifierType(identifier), [identifier]);
 
-  // Show helpful hint as the user types
   const identifierHint = useMemo(() => {
     if (identifierType === 'email') return 'Logging in with email';
     if (identifierType === 'participant_id') return 'Logging in with IQuire ID';
@@ -145,7 +143,6 @@ export const Login: React.FC = () => {
       return;
     }
 
-    // Success — redirect
     navigate(from, { replace: true });
   };
 
@@ -155,11 +152,11 @@ export const Login: React.FC = () => {
   return (
     <AuthLayout
       image={loginImg}
-      imageAlt="IQuire member login"
+      imageAlt="IQuire student login"
     >
       <AuthPageTitle
         title="Welcome back"
-        subtitle="Sign in with your email or IQuire ID to continue your journey."
+        subtitle="Sign in with your IQuire email or IQuire ID."
       />
 
       <form onSubmit={handleSubmit} noValidate>
@@ -241,12 +238,15 @@ export const Login: React.FC = () => {
           {isSubmitting ? 'Signing in...' : 'Sign In'}
         </button>
 
-        <p className={styles.footer}>
-          New to IQuire?{' '}
-          <Link to="/register" className={styles.footerLink}>
-            Create an account
-          </Link>
-        </p>
+        <div className={styles.reservedNotice}>
+          <strong>Access is reserved for IQuire students and alumni.</strong>
+          <p>
+            Interested in a course?{' '}
+            <Link to="/courses" className={styles.footerLink}>
+              Explore our courses →
+            </Link>
+          </p>
+        </div>
 
         <p className={styles.recruiterFooter}>
           Are you hiring?{' '}

@@ -187,3 +187,50 @@
     padding: 0.85rem 1.25rem;
   }
 }
+
+
+/* ----------------------------------------------------------------------------
+   Reserved-access notice (replaces signup prompt)
+   ---------------------------------------------------------------------------- */
+
+.reservedNotice {
+  padding: 1.25rem 1.35rem;
+  background-color: #f8fafc;
+  border: 1.5px solid #e5e7eb;
+  border-left: 4px solid #F9A825;
+  border-radius: 12px;
+  margin-top: 1.25rem;
+  text-align: left;
+}
+
+.reservedNotice strong {
+  display: block;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 0.4rem;
+  line-height: 1.4;
+}
+
+.reservedNotice p {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ----------------------------------------------------------------------------
+   Recruiter footer
+   ---------------------------------------------------------------------------- */
+
+.recruiterFooter {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  color: #667085;
+  text-align: center;
+  margin: 0.75rem 0 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid #E5E7EB;
+}

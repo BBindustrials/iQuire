@@ -100,7 +100,6 @@ export interface Course {
 // ============================================================================
 // Cohort
 // ============================================================================
-
 export interface Cohort {
   id: string;
   course_id: string;
@@ -114,10 +113,10 @@ export interface Cohort {
   spots_left: number | null;
   status: CohortStatus;
   is_next: boolean;
+  registration_url: string | null;  // ← NEW
   created_at: string;
   updated_at: string;
 }
-
 // ============================================================================
 // Previous Cohort
 // ============================================================================
@@ -194,6 +193,7 @@ export interface CohortInput {
   spots_left?: number | null;
   status?: CohortStatus;
   is_next?: boolean;
+  registration_url?: string | null;  // ← NEW
 }
 
 export interface PreviousCohortInput {

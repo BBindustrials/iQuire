@@ -425,6 +425,26 @@ export const deleteCohort = async (
     return { success: false, error: String(err) };
   }
 };
+// ============================================================================
+// HELPERS — Registration URL
+// ============================================================================
+
+/**
+ * Returns true if the cohort is open AND has a registration URL set.
+ * Used to decide whether "Apply" opens an external URL or shows interest form.
+ */
+export const isRegistrationOpen = (cohort: Cohort | null | undefined): boolean => {
+  if (!cohort) return false;
+  return cohort.status === 'open' && !!cohort.registration_url;
+};
+
+/**
+ * Returns the registration URL if valid, otherwise null.
+ */
+export const getRegistrationUrl = (cohort: Cohort | null | undefined): string | null => {
+  if (!isRegistrationOpen(cohort)) return null;
+  return cohort!.registration_url;
+};
 
 // ============================================================================
 // PREVIOUS COHORT CRUD

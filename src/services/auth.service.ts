@@ -1,14 +1,12 @@
 // ============================================================================
-// iQuire — Authentication Service (Phase 7A.3)
+// iQuire — Authentication Service (Phase 11A.2)
 // ============================================================================
-// Handles: register (member + recruiter), unified login, logout,
-// fetch current profile, fetch current roles.
+// Public registration removed. Only login + profile + roles fetch.
+// Account creation is admin-controlled (see admin.service.ts).
 // ============================================================================
 
 import { supabase } from '../integrations/supabase/client';
 import type {
-  RegisterMemberData,
-  RegisterRecruiterData,
   LoginMemberData,
   LoginRecruiterData,
   AuthResponse,
@@ -24,17 +22,11 @@ import type {
 const mapAuthError = (message: string): string => {
   const lower = message.toLowerCase();
 
-  if (lower.includes('user already registered') || lower.includes('already exists')) {
-    return 'An account with this email already exists. Please login instead.';
-  }
   if (lower.includes('invalid login credentials')) {
     return 'Incorrect email/ID or password. Please try again.';
   }
   if (lower.includes('email not confirmed')) {
     return 'Please verify your email before logging in. Check your inbox.';
-  }
-  if (lower.includes('password') && lower.includes('short')) {
-    return 'Password must be at least 8 characters.';
   }
   if (lower.includes('rate limit') || lower.includes('too many')) {
     return 'Too many attempts. Please wait a moment and try again.';
@@ -53,117 +45,14 @@ const mapAuthError = (message: string): string => {
 // Identify identifier type (email vs participant_id)
 // ============================================================================
 
-const isEmail = (value: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+const isEmail = (value: string): boolean =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 
 const looksLikeParticipantId = (value: string): boolean =>
   /^[a-z]+-[a-z]+-\d{4}$/i.test(value.trim());
 
 // ============================================================================
-// REGISTER — Member (self-service, guest tier)
-// ============================================================================
-
-export const registerMember = async (data: RegisterMemberData): Promise<AuthResponse> => {
-  try {
-    const { data: result, error } = await supabase.auth.signUp({
-      email: data.email.trim().toLowerCase(),
-      password: data.password,
-      options: {
-        data: {
-          account_type: 'member',
-          tier: 'guest',
-          first_name: data.firstName.trim(),
-          last_name: data.lastName.trim(),
-          phone: data.phone.trim(),
-          country: data.country,
-          state: data.state,
-          lga: data.lga,
-          marketing_opt_in: data.marketingOptIn,
-        },
-      },
-    });
-
-    if (error) {
-      return { success: false, message: mapAuthError(error.message), error: error.message };
-    }
-
-    const requiresEmailVerification = !result.session;
-
-    // Optional: if they picked a course, create enrollment
-    if (result.user && data.desiredCourseId) {
-      const { error: enrollError } = await supabase.from('enrollments').insert({
-        user_id: result.user.id,
-        course_id: data.desiredCourseId,
-        status: 'applied',
-      });
-
-      if (enrollError) {
-        console.warn('[registerMember] Enrollment insert failed:', enrollError.message);
-        // Non-blocking — account still created
-      }
-    }
-
-    return {
-      success: true,
-      message: requiresEmailVerification
-        ? 'Account created. Check your email to verify and continue.'
-        : 'Welcome to IQuire!',
-      userId: result.user?.id,
-      requiresEmailVerification,
-      redirectTo: '/dashboard',
-    };
-  } catch (err) {
-    return { success: false, message: mapAuthError(String(err)), error: String(err) };
-  }
-};
-
-// ============================================================================
-// REGISTER — Recruiter
-// ============================================================================
-
-export const registerRecruiter = async (data: RegisterRecruiterData): Promise<AuthResponse> => {
-  try {
-    const { data: result, error } = await supabase.auth.signUp({
-      email: data.workEmail.trim().toLowerCase(),
-      password: data.password,
-      options: {
-        data: {
-          account_type: 'recruiter',
-          tier: 'guest',
-          first_name: data.firstName.trim(),
-          last_name: data.lastName.trim(),
-          position: data.position.trim(),
-          company_name: data.companyName.trim(),
-          industry: data.industry,
-          company_website: data.companyWebsite?.trim() || '',
-          company_size: data.companySize || '',
-          phone: data.phone.trim(),
-          marketing_opt_in: data.marketingOptIn,
-        },
-      },
-    });
-
-    if (error) {
-      return { success: false, message: mapAuthError(error.message), error: error.message };
-    }
-
-    const requiresEmailVerification = !result.session;
-
-    return {
-      success: true,
-      message: requiresEmailVerification
-        ? 'Recruiter account created. Check your work email to verify.'
-        : 'Welcome to IQuire!',
-      userId: result.user?.id,
-      requiresEmailVerification,
-      redirectTo: '/recruiter/dashboard',
-    };
-  } catch (err) {
-    return { success: false, message: mapAuthError(String(err)), error: String(err) };
-  }
-};
-
-// ============================================================================
-// LOGIN — Member (email OR participant_id)
+// LOGIN — Student/Alumni (email OR participant_id)
 // ============================================================================
 
 export const loginMember = async (data: LoginMemberData): Promise<AuthResponse> => {
@@ -195,14 +84,13 @@ export const loginMember = async (data: LoginMemberData): Promise<AuthResponse> 
 
       email = profile.email;
     } else if (!isEmail(identifier)) {
-      // Doesn't look like email or participant ID
       return {
         success: false,
         message: 'Enter a valid email or IQuire ID (e.g., swift-panda-1234).',
       };
     }
 
-    // Sign in with the resolved email
+    // Sign in
     const { data: authData, error } = await supabase.auth.signInWithPassword({
       email: email.toLowerCase(),
       password: data.password,
@@ -212,10 +100,10 @@ export const loginMember = async (data: LoginMemberData): Promise<AuthResponse> 
       return { success: false, message: mapAuthError(error.message), error: error.message };
     }
 
-    // Confirm this is a member account (not recruiter)
+    // Confirm this is a member account (not recruiter/admin)
     const { data: profile } = await supabase
       .from('profiles')
-      .select('account_type, tier')
+      .select('account_type')
       .eq('id', authData.user.id)
       .single();
 
@@ -235,7 +123,6 @@ export const loginMember = async (data: LoginMemberData): Promise<AuthResponse> 
       };
     }
 
-    // Success
     return {
       success: true,
       message: 'Welcome back!',
@@ -262,7 +149,6 @@ export const loginRecruiter = async (data: LoginRecruiterData): Promise<AuthResp
       return { success: false, message: mapAuthError(error.message), error: error.message };
     }
 
-    // Verify recruiter account
     const { data: profile } = await supabase
       .from('profiles')
       .select('account_type')
@@ -292,7 +178,10 @@ export const loginRecruiter = async (data: LoginRecruiterData): Promise<AuthResp
 // LOGIN — Admin (email)
 // ============================================================================
 
-export const loginAdmin = async (email: string, password: string): Promise<AuthResponse> => {
+export const loginAdmin = async (
+  email: string,
+  password: string
+): Promise<AuthResponse> => {
   try {
     const { data: authData, error } = await supabase.auth.signInWithPassword({
       email: email.trim().toLowerCase(),
@@ -303,7 +192,6 @@ export const loginAdmin = async (email: string, password: string): Promise<AuthR
       return { success: false, message: mapAuthError(error.message), error: error.message };
     }
 
-    // Verify admin account
     const { data: profile } = await supabase
       .from('profiles')
       .select('account_type')
@@ -348,7 +236,7 @@ export const fetchCurrentProfile = async (userId: string): Promise<Profile | nul
 };
 
 // ============================================================================
-// FETCH — Current Roles (from user_roles)
+// FETCH — Current Roles
 // ============================================================================
 
 export const fetchCurrentRoles = async (userId: string): Promise<UserRole[]> => {
@@ -363,7 +251,6 @@ export const fetchCurrentRoles = async (userId: string): Promise<UserRole[]> => 
     return [];
   }
 
-  // Deduplicate (a user could have multiple student roles for different courses)
   const uniqueRoles = Array.from(new Set((data ?? []).map((r) => r.role)));
   return uniqueRoles as UserRole[];
 };
@@ -401,7 +288,7 @@ export const resendVerificationEmail = async (email: string): Promise<AuthRespon
 };
 
 // ============================================================================
-// FETCH — All published courses (used in register flow)
+// FETCH — Published Courses (public helper)
 // ============================================================================
 
 export const fetchPublishedCourses = async () => {
@@ -419,7 +306,7 @@ export const fetchPublishedCourses = async () => {
 };
 
 // ============================================================================
-// HELPERS (exported for use in AuthContext)
+// HELPERS
 // ============================================================================
 
 export const getAccountTypeRedirect = (accountType: AccountType | null): string => {

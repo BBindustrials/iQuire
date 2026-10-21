@@ -255,6 +255,7 @@
   object-fit: cover;
   display: block;
   transition: transform 0.5s ease;
+  object-position: 50% 15%;
 }
 
 .card:hover .cardPhoto img {

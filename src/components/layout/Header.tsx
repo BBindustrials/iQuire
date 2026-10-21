@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './Header.module.css';
-import { Button } from '../common/Button';
 import { useAuth } from '../../contexts/AuthContext';
 import logo from '../../assets/logo/iquire-logo.png';
 
@@ -21,9 +20,7 @@ export const Header: React.FC = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
 
-  // ==========================================================================
-  // Navigation items (per client spec)
-  // ==========================================================================
+  // Navigation items
   const navItems = [
     { label: 'About Us', path: '/about' },
     { label: 'Courses', path: '/courses' },
@@ -34,9 +31,7 @@ export const Header: React.FC = () => {
     { label: 'Blog', path: '/blog' },
   ];
 
-  // ==========================================================================
-  // Scroll-hide behavior (preserved)
-  // ==========================================================================
+  // Scroll-hide behavior
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -71,9 +66,7 @@ export const Header: React.FC = () => {
     }
   };
 
-  // ==========================================================================
   // Close dropdowns on outside click
-  // ==========================================================================
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (loginRef.current && !loginRef.current.contains(e.target as Node)) {
@@ -87,9 +80,6 @@ export const Header: React.FC = () => {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  // ==========================================================================
-  // Dashboard path for logged-in users
-  // ==========================================================================
   const dashboardPath =
     accountType === 'admin'
       ? '/admin/dashboard'
@@ -130,7 +120,7 @@ export const Header: React.FC = () => {
           ))}
         </ul>
 
-        {/* Actions — far right */}
+        {/* Actions — far right: Login only (or user menu when logged in) */}
         <div className={styles.navActions}>
           {isAuthenticated ? (
             /* -------- Logged in: user menu -------- */
@@ -180,83 +170,70 @@ export const Header: React.FC = () => {
               )}
             </div>
           ) : (
-            /* -------- Logged out: Login dropdown + Create Account -------- */
-            <>
-              <div className={styles.loginWrapper} ref={loginRef}>
-                <button
-                  className={styles.loginButton}
-                  onClick={() => setLoginOpen((v) => !v)}
-                  aria-haspopup="menu"
-                  aria-expanded={loginOpen}
-                >
-                  Login
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M6 9L12 15L18 9"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-
-                {loginOpen && (
-                  <div className={styles.dropdown} role="menu">
-                    <div className={styles.dropdownGroup}>
-                      <div className={styles.dropdownGroupLabel}>Sign in as</div>
-                      <Link
-                        to="/login"
-                        className={styles.dropdownItem}
-                        onClick={() => setLoginOpen(false)}
-                      >
-                        <span className={styles.dropdownIcon}>🎓</span>
-                        <span>
-                          <strong>Student / Member</strong>
-                          <span className={styles.dropdownHint}>
-                            Students, alumni, AI users
-                          </span>
-                        </span>
-                      </Link>
-                      <Link
-                        to="/login/recruiter"
-                        className={styles.dropdownItem}
-                        onClick={() => setLoginOpen(false)}
-                      >
-                        <span className={styles.dropdownIcon}>🏢</span>
-                        <span>
-                          <strong>Recruiter</strong>
-                          <span className={styles.dropdownHint}>
-                            Hiring organisations
-                          </span>
-                        </span>
-                      </Link>
-                    </div>
-                    <div className={styles.dropdownDivider} />
-                    <div className={styles.dropdownFooter}>
-                      New to IQuire?{' '}
-                      <Link
-                        to="/register"
-                        onClick={() => setLoginOpen(false)}
-                        className={styles.dropdownFooterLink}
-                      >
-                        Create an account
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <Button
-                variant="primary"
-                color="green"
-                size="sm"
-                href="/register"
-                className={styles.createAccountButton}
+            /* -------- Logged out: Login dropdown only -------- */
+            <div className={styles.loginWrapper} ref={loginRef}>
+              <button
+                className={styles.loginButton}
+                onClick={() => setLoginOpen((v) => !v)}
+                aria-haspopup="menu"
+                aria-expanded={loginOpen}
               >
-                Create Account
-              </Button>
-            </>
+                Login
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M6 9L12 15L18 9"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+
+              {loginOpen && (
+                <div className={styles.dropdown} role="menu">
+                  <div className={styles.dropdownGroup}>
+                    <div className={styles.dropdownGroupLabel}>Sign in as</div>
+                    <Link
+                      to="/login"
+                      className={styles.dropdownItem}
+                      onClick={() => setLoginOpen(false)}
+                    >
+                      <span className={styles.dropdownIcon}>🎓</span>
+                      <span>
+                        <strong>Student / Alumni</strong>
+                        <span className={styles.dropdownHint}>
+                          IQuire participants
+                        </span>
+                      </span>
+                    </Link>
+                    <Link
+                      to="/login/recruiter"
+                      className={styles.dropdownItem}
+                      onClick={() => setLoginOpen(false)}
+                    >
+                      <span className={styles.dropdownIcon}>🏢</span>
+                      <span>
+                        <strong>Recruiter</strong>
+                        <span className={styles.dropdownHint}>
+                          Hiring organisations
+                        </span>
+                      </span>
+                    </Link>
+                  </div>
+                  <div className={styles.dropdownDivider} />
+                  <div className={styles.dropdownFooter}>
+                    <Link
+                      to="/courses"
+                      onClick={() => setLoginOpen(false)}
+                      className={styles.dropdownFooterLink}
+                    >
+                      Explore Courses →
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
           )}
 
           {/* Mobile toggle */}

@@ -1,6 +1,8 @@
-
 // ============================================================================
-// iQuire — Admin: Blog Editor (Phase 10E.4)
+// iQuire — Admin: Blog Editor (Phase 14.13.5)
+// ============================================================================
+// Now uses RichTextEditor (Tiptap) for content and AuthorLinker for the
+// author section. Supports linking a blog post to a real IQuire profile.
 // ============================================================================
 
 import React, { useEffect, useState, type FormEvent } from 'react';
@@ -8,6 +10,11 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import { Input } from '../../components/common/Input';
 import { ImageUploader } from '../../components/common/ImageUploader';
 import { FormSection } from '../../components/common/FormSection';
+import { RichTextEditor } from '../../components/common/RichTextEditor';
+import {
+  AuthorLinker,
+  type AuthorLinkerValue,
+} from '../../components/common/AuthorLinker';
 import {
   fetchPostById,
   createPost,
@@ -29,17 +36,22 @@ interface FormData {
   title: string;
   slug: string;
   excerpt: string;
-  content: string;
+  content: string;             // HTML from Tiptap
   featured_image_url: string;
   category_id: string;
-  tags: string; // comma-separated
-  author_name: string;
-  author_role: string;
-  author_avatar_url: string;
+  tags: string;                // comma-separated
+  author: AuthorLinkerValue;
   status: BlogStatus;
   featured: boolean;
   display_order: number;
 }
+
+const emptyAuthor: AuthorLinkerValue = {
+  author_profile_id: null,
+  author_name: '',
+  author_role: '',
+  author_avatar_url: '',
+};
 
 const initialFormData: FormData = {
   title: '',
@@ -49,9 +61,7 @@ const initialFormData: FormData = {
   featured_image_url: '',
   category_id: '',
   tags: '',
-  author_name: '',
-  author_role: '',
-  author_avatar_url: '',
+  author: emptyAuthor,
   status: 'draft',
   featured: false,
   display_order: 0,
@@ -120,9 +130,12 @@ export const AdminBlogForm: React.FC = () => {
         featured_image_url: p.featured_image_url ?? '',
         category_id: p.category_id ?? '',
         tags: p.tags.join(', '),
-        author_name: p.author_name ?? '',
-        author_role: p.author_role ?? '',
-        author_avatar_url: p.author_avatar_url ?? '',
+        author: {
+          author_profile_id: p.author_profile_id ?? null,
+          author_name: p.author_name ?? '',
+          author_role: p.author_role ?? '',
+          author_avatar_url: p.author_avatar_url ?? '',
+        },
         status: p.status,
         featured: p.featured,
         display_order: p.display_order,
@@ -141,7 +154,9 @@ export const AdminBlogForm: React.FC = () => {
   // Handlers
   // --------------------------------------------------------------------------
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
@@ -163,8 +178,20 @@ export const AdminBlogForm: React.FC = () => {
     setFormData((prev) => ({ ...prev, featured_image_url: url }));
   };
 
-  // Auto-read-time preview
-  const autoReadTime = calculateReadTime(formData.content);
+  const handleContentChange = (html: string) => {
+    setFormData((prev) => ({ ...prev, content: html }));
+  };
+
+  const handleAuthorChange = (author: AuthorLinkerValue) => {
+    setFormData((prev) => ({ ...prev, author }));
+  };
+
+  // Calculate read time from plain-text version of HTML
+  const plainTextContent = formData.content
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const autoReadTime = calculateReadTime(plainTextContent);
 
   // --------------------------------------------------------------------------
   // Validation
@@ -173,6 +200,9 @@ export const AdminBlogForm: React.FC = () => {
     if (!formData.title.trim()) return 'Title is required';
     if (!formData.slug.trim()) return 'Slug is required (click Generate)';
     if (!formData.excerpt.trim()) return 'Excerpt is required';
+    if (!formData.content.trim() || formData.content === '<p></p>') {
+      return 'Content is required';
+    }
     return null;
   };
 
@@ -203,9 +233,10 @@ export const AdminBlogForm: React.FC = () => {
         .split(',')
         .map((t) => t.trim())
         .filter(Boolean),
-      author_name: formData.author_name.trim() || null,
-      author_role: formData.author_role.trim() || null,
-      author_avatar_url: formData.author_avatar_url || null,
+      author_profile_id: formData.author.author_profile_id,
+      author_name: formData.author.author_name.trim() || null,
+      author_role: formData.author.author_role.trim() || null,
+      author_avatar_url: formData.author.author_avatar_url || null,
       status: formData.status,
       featured: formData.featured,
       read_time_minutes: autoReadTime,
@@ -338,18 +369,21 @@ export const AdminBlogForm: React.FC = () => {
                 </span>
               </div>
 
+              {/* Rich text editor replaces the raw textarea */}
               <div className={styles.textareaWrapper}>
-                <label className={styles.textareaLabel}>Content</label>
-                <textarea
-                  name="content"
+                <label className={styles.textareaLabel}>
+                  Content <span className={styles.requiredMark}>*</span>
+                </label>
+                <RichTextEditor
                   value={formData.content}
-                  onChange={handleChange}
-                  rows={20}
-                  className={`${styles.textarea} ${styles.contentTextarea}`}
-                  placeholder="Write your post here. Supports plain text or Markdown."
+                  onChange={handleContentChange}
+                  placeholder="Write your article here…"
+                  onError={(msg) => setError(msg)}
+                  disabled={isSaving}
+                  minHeight={420}
                 />
                 <span className={styles.textareaHelper}>
-                  {autoReadTime} min read · {formData.content.trim().split(/\s+/).filter(Boolean).length} words
+                  {autoReadTime} min read · {plainTextContent.split(/\s+/).filter(Boolean).length} words
                 </span>
               </div>
             </FormSection>
@@ -400,7 +434,10 @@ export const AdminBlogForm: React.FC = () => {
                   />
                   <span>
                     <strong>Featured post</strong>
-                    <span>Highlighted on the blog landing page.</span>
+                    <span>
+                      Appears in the homepage Insights section and as the
+                      featured card on /blog.
+                    </span>
                   </span>
                 </label>
               </div>
@@ -466,29 +503,14 @@ export const AdminBlogForm: React.FC = () => {
             {/* Author */}
             <div className={styles.sideCard}>
               <h3 className={styles.sideCardTitle}>Author</h3>
+              <p className={styles.sideCardHint}>
+                Link to an IQuire profile (student, alumni, admin) — or enter
+                details manually.
+              </p>
 
-              <Input
-                label="Name"
-                name="author_name"
-                value={formData.author_name}
-                onChange={handleChange}
-                placeholder="Angel Oparajohnson"
-              />
-
-              <Input
-                label="Role"
-                name="author_role"
-                value={formData.author_role}
-                onChange={handleChange}
-                placeholder="Founder, IQuire"
-              />
-
-              <Input
-                label="Avatar URL"
-                name="author_avatar_url"
-                value={formData.author_avatar_url}
-                onChange={handleChange}
-                placeholder="https://…"
+              <AuthorLinker
+                value={formData.author}
+                onChange={handleAuthorChange}
               />
             </div>
           </aside>

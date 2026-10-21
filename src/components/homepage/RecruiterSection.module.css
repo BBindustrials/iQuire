@@ -663,3 +663,31 @@
   .demarcationDot { width: 12px; height: 12px; }
   .demarcationLine { height: 1.5px; }
 }
+/* ----------------------------------------------------------------------------
+   Avatar image support (when candidate has a photo)
+   ---------------------------------------------------------------------------- */
+
+   .candidateAvatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 15%;  /* ← add this */
+    border-radius: inherit;
+  }
+/* ----------------------------------------------------------------------------
+   Loading skeleton
+   ---------------------------------------------------------------------------- */
+
+.candidateSkeleton {
+  width: 100%;
+  min-height: 400px;
+  background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+  background-size: 200% 100%;
+  border-radius: 20px;
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

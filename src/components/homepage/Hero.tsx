@@ -47,7 +47,7 @@ const SLIDES: HeroSlide[] = [
     headlineHighlight: 'Now what?',
     subheadline:
       'Turn your education into a real career. Learn practical skills, prepare for apprenticeships and internships, and become work-ready — wherever you are in the world.',
-    ctaPrimary: { label: 'Start Learning Free', to: '/register' },
+    ctaPrimary: { label: 'Explore Courses', to: '/courses' },
     ctaSecondary: { label: 'Explore Courses', to: '/courses' },
     image: hero1,
     imageAlt: 'Diverse young graduates celebrating with diplomas and laptops',
@@ -61,7 +61,7 @@ const SLIDES: HeroSlide[] = [
     headlineHighlight: 'Now grow it.',
     subheadline:
       "Sharpen your skills, transition into new fields, and unlock opportunities for advancement — whether you're in tech, healthcare, engineering, or something else entirely.",
-    ctaPrimary: { label: 'Upskill Now', to: '/register' },
+    ctaPrimary: { label: 'Explore Courses', to: '/courses' },
     ctaSecondary: { label: 'See Courses', to: '/courses' },
     image: hero2,
     imageAlt: 'Young professionals across engineering, healthcare, and technology',
@@ -90,7 +90,7 @@ const SLIDES: HeroSlide[] = [
     subheadline:
       'Get career direction, identify skill gaps, build your CV, match with opportunities, and prepare for interviews — all with one intelligent companion.',
     ctaPrimary: { label: 'Meet Your AI Counselor', to: '/ai-career-counselor' },
-    ctaSecondary: { label: 'Try It Free', to: '/register' },
+    ctaSecondary: { label: 'Explore Courses', to: '/courses' },
     image: hero4,
     imageAlt: 'Young professional using an AI career assistant on a tablet',
     imageSide: 'right',

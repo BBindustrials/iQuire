@@ -109,7 +109,7 @@ export const Courses: React.FC = () => {
                 Our course catalogue is being prepared. Check back soon, or
                 create an account to be notified.
               </p>
-              <Link to="/register" className={styles.emptyCta}>
+              <Link to="/contact" className={styles.emptyCta}>
                 Create Free Account →
               </Link>
             </div>
@@ -164,7 +164,7 @@ export const Courses: React.FC = () => {
               explore everything IQuire offers.
             </p>
             <div className={styles.ctaButtons}>
-              <Link to="/register" className={styles.ctaPrimary}>
+              <Link to="/courses" className={styles.ctaPrimary}>
                 Get Started Free
               </Link>
               <Link to="/ai-career-counselor" className={styles.ctaSecondary}>

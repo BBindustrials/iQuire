@@ -240,7 +240,7 @@ export const HowItWorks: React.FC = () => {
             CTA
             ================================================================ */}
         <ScrollReveal animation="up" delay={3} className={styles.ctaWrapper}>
-          <Button variant="primary" color="green" size="lg" href="/register">
+        <Button variant="primary" color="green" size="lg" href="/courses">
             Start Your Journey
           </Button>
           <Link to="/courses" className={styles.secondaryLink}>
