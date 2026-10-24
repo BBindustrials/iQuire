@@ -219,7 +219,7 @@ export const Testimonials: React.FC = () => {
             CTA
             ================================================================ */}
         <ScrollReveal animation="zoom" delay={1} className={styles.ctaWrapper}>
-          <Button variant="primary" color="green" size="lg" href="/alumni">
+          <Button variant="primary" color="gradient" size="lg" href="/alumni">
             Meet More of Our Alumni
           </Button>
           <Link to="/hire-from-us" className={styles.secondaryLink}>

@@ -14,6 +14,18 @@ import type { ImpactAccent } from '../../types/content.types';
 import styles from './Impact.module.css';
 
 // ============================================================================
+// EMPLOYER LOGO IMPORTS
+// ============================================================================
+import bbAitechLogo from '../../assets/images/employers/bbAitech.png';
+import firstBankLogo from '../../assets/images/employers/firstbank.jpg';
+import mopsonLogo from '../../assets/images/employers/mopson.png';
+import thbLogo from '../../assets/images/employers/thb.png';
+import sundryLogo from '../../assets/images/employers/sundry.png';
+import kwenuLogo from '../../assets/images/employers/kwenu.png';
+import tantalizersLogo from '../../assets/images/employers/tantalizers.png';
+import nrcLogo from '../../assets/images/employers/nrc.png';
+
+// ============================================================================
 // Fallback metrics (used only if the DB returns nothing)
 // ============================================================================
 
@@ -78,25 +90,25 @@ const FALLBACK_METRICS: FallbackMetric[] = [
 ];
 
 // ============================================================================
-// Employers strip (still hardcoded — not in scope for 14.5)
+// Employers strip
 // ============================================================================
 
 interface Employer {
   id: string;
   name: string;
-  initials: string;
-  accent: 'blue' | 'green' | 'gold' | 'purple' | 'gray';
+  logo: string;
+  website?: string; // Added website field
 }
 
 const EMPLOYERS: Employer[] = [
-  { id: 'e1', name: 'TechHub Africa', initials: 'TH', accent: 'blue' },
-  { id: 'e2', name: 'Fintech Innovations', initials: 'FI', accent: 'green' },
-  { id: 'e3', name: 'GreenBuild Co.', initials: 'GB', accent: 'gold' },
-  { id: 'e4', name: 'Brightline Media', initials: 'BM', accent: 'purple' },
-  { id: 'e5', name: 'SkyWorks Ltd', initials: 'SW', accent: 'gray' },
-  { id: 'e6', name: 'Nova Health', initials: 'NH', accent: 'blue' },
-  { id: 'e7', name: 'Vertex Consulting', initials: 'VC', accent: 'green' },
-  { id: 'e8', name: 'Pulse Retail', initials: 'PR', accent: 'gold' },
+  { id: 'bb-aitech', name: 'BB AiTech Solutions', logo: bbAitechLogo, website: 'https://www.bbaitech.com' },
+  { id: 'firstbank', name: 'First Bank', logo: firstBankLogo, website: 'https://www.firstbanknigeria.com' },
+  { id: 'mopson', name: 'Mopson Pharmaceutical', logo: mopsonLogo, website: 'https://www.mopsonpharma.com' },
+  { id: 'thb', name: 'THB Enterprise', logo: thbLogo, website: '' },
+  { id: 'sundry', name: 'Sundry Markets', logo: sundryLogo, website: 'https://www.sundrymarkets.com' },
+  { id: 'kwenu', name: 'Kwenu 93.9FM', logo: kwenuLogo, website: 'https://kwenu939.com' },
+  { id: 'tantalizers', name: 'Tantalizers PLC', logo: tantalizersLogo, website: 'https://www.tantalizersng.com' },
+  { id: 'nrc', name: 'Nigerian Railway Corp', logo: nrcLogo, website: 'https://nrc.gov.ng' },
 ];
 
 // ============================================================================
@@ -141,7 +153,7 @@ export const Impact: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   // --------------------------------------------------------------------------
-  // Load from DB (fallback to hardcoded if empty)
+  // Load from DB
   // --------------------------------------------------------------------------
   useEffect(() => {
     let isMounted = true;
@@ -153,7 +165,6 @@ export const Impact: React.FC = () => {
       if (res.success && res.data && res.data.length > 0) {
         setMetrics(res.data.map(toDisplayMetric));
       }
-      // else: keep the fallback already in state
 
       setIsLoading(false);
     };
@@ -169,11 +180,30 @@ export const Impact: React.FC = () => {
   // --------------------------------------------------------------------------
   return (
     <section className={styles.impact}>
-      {/* Background blobs */}
+      {/* ====================================================================
+          BACKGROUND SVG DECORATIONS
+          ==================================================================== */}
+      <div className={styles.bgDecor} aria-hidden="true">
+        <svg className={styles.dottedGridTL} viewBox="0 0 100 100" fill="none">
+          {[...Array(4)].map((_, row) =>
+            [...Array(4)].map((_, col) => (
+              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#ffffff" opacity="0.15" />
+            ))
+          )}
+        </svg>
+        <div className={styles.circleTR} />
+        <svg className={styles.arcBL} viewBox="0 0 200 200" fill="none">
+          <circle cx="100" cy="100" r="90" stroke="#F9A825" strokeWidth="2" opacity="0.15" strokeDasharray="10 10" />
+        </svg>
+        <svg className={styles.shapeBR} viewBox="0 0 300 300" fill="none">
+          <path d="M 350 200 C 250 50, 100 0, 50 100 C 0 200, 150 300, 250 300 C 320 300, 400 280, 350 200 Z" fill="#ffffff" opacity="0.03" />
+        </svg>
+      </div>
+
       <div className={styles.bgBlobOne} aria-hidden="true" />
       <div className={styles.bgBlobTwo} aria-hidden="true" />
 
-      <div className="container">
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         {/* ================================================================
             HEADER
             ================================================================ */}
@@ -190,7 +220,7 @@ export const Impact: React.FC = () => {
         </ScrollReveal>
 
         {/* ================================================================
-            METRICS GRID — auto-adapts to any count
+            METRICS GRID
             ================================================================ */}
         {isLoading ? (
           <div className={styles.metricsGrid}>
@@ -228,23 +258,40 @@ export const Impact: React.FC = () => {
         </ScrollReveal>
 
         <ScrollReveal animation="up" stagger className={styles.employersGrid}>
-          {EMPLOYERS.map((employer) => (
-            <div key={employer.id} className={styles.employerCard}>
-              <div
-                className={`${styles.employerLogo} ${styles[`logo-${employer.accent}`]}`}
+          {EMPLOYERS.map((employer) => {
+            const CardContent = (
+              <>
+                <div className={styles.employerLogo}>
+                  <img src={employer.logo} alt={`${employer.name} logo`} loading="lazy" />
+                </div>
+                <span className={styles.employerName}>{employer.name}</span>
+              </>
+            );
+
+            // If there is a website, render as a link. Otherwise, render a div.
+            return employer.website ? (
+              <a
+                key={employer.id}
+                href={employer.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.employerCard}
               >
-                {employer.initials}
+                {CardContent}
+              </a>
+            ) : (
+              <div key={employer.id} className={styles.employerCard}>
+                {CardContent}
               </div>
-              <span className={styles.employerName}>{employer.name}</span>
-            </div>
-          ))}
+            );
+          })}
         </ScrollReveal>
 
         {/* ================================================================
             CTA
             ================================================================ */}
         <ScrollReveal animation="zoom" delay={1} className={styles.ctaWrapper}>
-          <Button variant="primary" color="green" size="lg" href="/about#impact">
+          <Button variant="primary" color="gradient" size="lg" href="/about#impact">
             See Our Full Impact
           </Button>
           <Link to="/alumni" className={styles.secondaryLink}>
@@ -262,17 +309,8 @@ export const Impact: React.FC = () => {
           preserveAspectRatio="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path
-            d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z"
-            fill="none"
-            stroke="#F9A825"
-            strokeWidth="3"
-            opacity="0.6"
-          />
-          <path
-            d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z"
-            fill="#ffffff"
-          />
+          <path d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z" fill="none" stroke="#F9A825" strokeWidth="3" opacity="0.6" />
+          <path d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z" fill="#ffffff" />
         </svg>
       </div>
     </section>

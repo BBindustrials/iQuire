@@ -1,14 +1,70 @@
 @import '../../styles/theme.css';
 
 /* ============================================================================
-   Problem Section — Persona-driven, thought-bubble cards
+   Problem Section
    ============================================================================ */
 
 .problem {
   position: relative;
-  padding: 9rem 0 8rem;
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
   overflow: hidden;
+  background-color: #f8fafc; /* Base background for the bottom section */
+}
+
+/* ----------------------------------------------------------------------------
+   TOP SECTION (Colored Background + SVGs)
+   ---------------------------------------------------------------------------- */
+
+.topSection {
+  position: relative;
+  padding: 8rem 0 0; /* No bottom padding, the curve handles it */
+  background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%);
+  z-index: 1;
+}
+
+.topDecor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.dotsTopLeft {
+  position: absolute;
+  top: 15%;
+  left: 5%;
+  width: 120px;
+  height: 120px;
+}
+
+.vineTopRight {
+  position: absolute;
+  top: -100px;
+  right: -50px;
+  width: 500px;
+  height: 500px;
+}
+
+.blobTopRight {
+  position: absolute;
+  bottom: 10%;
+  right: 10%;
+  width: 300px;
+  height: 300px;
+  transform: rotate(-20deg);
+}
+
+.curveDivider {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+  margin-top: 2rem;
+  z-index: 2;
+}
+
+.curveDivider svg {
+  width: 100%;
+  height: 120px;
+  display: block;
 }
 
 /* ----------------------------------------------------------------------------
@@ -20,7 +76,9 @@
   grid-template-columns: 1.15fr 1fr;
   gap: 5rem;
   align-items: center;
-  margin-bottom: 5rem;
+  position: relative;
+  z-index: 2; /* Above decor */
+  padding-bottom: 4rem;
 }
 
 .topContent {
@@ -103,29 +161,90 @@
   font-weight: 700;
 }
 
+/* ----------------------------------------------------------------------------
+   Image & Shadow
+   ---------------------------------------------------------------------------- */
+
 .topVisual {
+  position: relative;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
+  height: 100%;
+}
+
+.imageWrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 0; /* Let the image hit the curve */
 }
 
 .problemImage {
+  position: relative;
+  z-index: 2;
   width: 100%;
-  max-width: 480px;
+  max-width: 100%;
   height: auto;
   display: block;
-  border-radius: 24px;
-  box-shadow: 0 30px 60px -20px rgba(15, 23, 42, 0.15);
-  object-fit: cover;
+}
+
+/* Realistic shadow beneath the image */
+.imageShadow {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 40px;
+  background: radial-gradient(ellipse at center, rgba(15, 23, 42, 0.15) 0%, transparent 100%);
+  z-index: 1;
+  border-radius: 50%;
+  filter: blur(4px);
 }
 
 /* ----------------------------------------------------------------------------
-   MIDDLE: Questions grid (thought bubbles)
+   BOTTOM SECTION (Questions & Solution)
    ---------------------------------------------------------------------------- */
+
+.bottomSection {
+  position: relative;
+  padding: 4rem 0 8rem;
+  z-index: 1;
+}
+
+.bottomDecor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.leafLeft {
+  position: absolute;
+  bottom: 0px;
+  left: -20px;
+  width: 350px;
+  height: 350px;
+}
+
+.leafRight {
+  position: absolute;
+  top: 20%;
+  right: -20px;
+  width: 350px;
+  height: 350px;
+}
 
 .questionsHeader {
   text-align: center;
   margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
 }
 
 .questionsTitle {
@@ -149,6 +268,8 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem 2.5rem;
   margin-bottom: 5rem;
+  position: relative;
+  z-index: 1;
 }
 
 .bubbleCard {
@@ -254,15 +375,17 @@
 }
 
 /* ----------------------------------------------------------------------------
-   BOTTOM: Solution card — three pillars + CTA
+   BOTTOM: Solution card — Unified Soft Yellow Block
    ---------------------------------------------------------------------------- */
 
 .solution {
-  background-color: #ffffff;
-  border-radius: 24px;
+  background: linear-gradient(180deg, #FEF3C7 0%, #FFFDF5 100%);
+  border-radius: 32px;
   padding: 3rem 2.5rem;
-  box-shadow: 0 20px 50px -20px rgba(15, 23, 42, 0.1);
+  box-shadow: 0 20px 50px -20px rgba(15, 23, 42, 0.08);
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .solutionTitle {
@@ -270,7 +393,7 @@
   font-size: clamp(1.4rem, 2.4vw, 1.9rem);
   font-weight: 800;
   color: #0f172a;
-  margin: 0 0 2.5rem 0;
+  margin: 0 0 3rem 0;
   letter-spacing: -0.02em;
 }
 
@@ -279,34 +402,55 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
   position: relative;
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .pillar {
-  position: relative;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem;
+  align-items: flex-start;
+  gap: 1rem;
+  text-align: left;
+  position: relative;
 }
 
 .pillarIcon {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #1565C0 0%, #2E7D32 100%);
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   color: #ffffff;
-  box-shadow: 0 10px 24px -8px rgba(21, 101, 192, 0.4);
-  margin-bottom: 0.25rem;
+}
+
+.icon-blue {
+  background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
+  box-shadow: 0 6px 16px -4px rgba(21, 101, 192, 0.4);
+}
+
+.icon-green {
+  background: linear-gradient(135deg, #00A878 0%, #047857 100%);
+  box-shadow: 0 6px 16px -4px rgba(0, 168, 120, 0.4);
+}
+
+.icon-gold {
+  background: linear-gradient(135deg, #F9A825 0%, #F57F17 100%);
+  box-shadow: 0 6px 16px -4px rgba(249, 168, 37, 0.4);
+}
+
+.pillarTextContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .pillarTitle {
   font-family: 'Satoshi', sans-serif;
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 800;
   color: #0f172a;
   margin: 0;
@@ -315,21 +459,20 @@
 
 .pillarDesc {
   font-family: 'Satoshi', sans-serif;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #475569;
-  line-height: 1.55;
+  line-height: 1.5;
   margin: 0;
-  max-width: 240px;
 }
 
 .pillarArrow {
   position: absolute;
-  top: 42%;
-  right: -1rem;
-  font-size: 1.5rem;
-  color: #F9A825;
-  font-weight: 700;
+  top: 50%;
+  right: -1.5rem;
   transform: translateY(-50%);
+  font-size: 1.25rem;
+  color: #cbd5e1;
+  font-weight: 700;
   pointer-events: none;
 }
 
@@ -383,66 +526,6 @@
     drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.08));
 }
 
-/* Label row (lines + dot) — sits above the wave */
-.demarcationLabel {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.25rem;
-  width: 100%;
-  max-width: 640px;
-  margin: 0 auto 1.5rem;
-  padding: 0 1rem;
-  position: relative;
-  z-index: 5;
-}
-
-.demarcationLine {
-  flex: 1;
-  height: 2px;
-  background: linear-gradient(to right, transparent, #0f172a, #0f172a);
-  border-radius: 2px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-.demarcationLine:last-child {
-  background: linear-gradient(to left, transparent, #0f172a, #0f172a);
-}
-
-.demarcationDot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background-color: #F9A825;
-  box-shadow: 0 0 0 6px rgba(249, 168, 37, 0.25),
-    0 0 0 12px rgba(249, 168, 37, 0.1),
-    0 4px 12px rgba(0, 0, 0, 0.25);
-  position: relative;
-  z-index: 6;
-  flex-shrink: 0;
-}
-
-.demarcationDot::after {
-  content: '';
-  position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  background-color: rgba(249, 168, 37, 0.3);
-  animation: pulseDot 2.5s ease-out infinite;
-  z-index: -1;
-}
-
-@keyframes pulseDot {
-  0% {
-    transform: scale(1);
-    opacity: 0.6;
-  }
-  100% {
-    transform: scale(2.4);
-    opacity: 0;
-  }
-}
-
 /* ============================================================================
    Responsive
    ============================================================================ */
@@ -452,6 +535,7 @@
     grid-template-columns: 1fr;
     gap: 3rem;
     text-align: center;
+    padding-bottom: 2rem;
   }
 
   .topContent {
@@ -468,50 +552,68 @@
     text-align: left;
   }
 
+  .imageWrapper {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .curveDivider svg {
+    height: 80px;
+  }
+
   .questionsGrid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.75rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .problem {
-    padding: 6rem 0 6rem;
-  }
-
-  .questionsGrid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
   }
 
   .pillars {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+    max-width: 500px;
   }
 
   .pillarArrow {
     display: none;
   }
 
+  .pillar {
+    justify-content: center;
+    text-align: left;
+  }
+}
+
+@media (max-width: 768px) {
+  .topSection {
+    padding: 6rem 0 0;
+  }
+
+  .bottomSection {
+    padding: 2rem 0 6rem;
+  }
+
+  .questionsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
   .solution {
     padding: 2rem 1.5rem;
   }
 
-  .problemImage {
-    max-width: 100%;
+  .leafLeft, .leafRight {
+    opacity: 0.3;
   }
 
   .demarcationBottom .demarcationWave {
     height: 90px;
   }
-
-  .demarcationLabel {
-    margin-bottom: 1rem;
-    gap: 0.85rem;
-  }
 }
 
 @media (max-width: 480px) {
+  .curveDivider svg {
+    height: 50px;
+  }
+
   .bubbleAvatar {
     width: 44px;
     height: 44px;
@@ -537,14 +639,5 @@
 
   .demarcationBottom .demarcationWave {
     height: 70px;
-  }
-
-  .demarcationDot {
-    width: 12px;
-    height: 12px;
-  }
-
-  .demarcationLine {
-    height: 1.5px;
   }
 }

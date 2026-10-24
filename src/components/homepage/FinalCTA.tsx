@@ -13,7 +13,29 @@ import finalCTAImage from '../../assets/images/final-cta-image.png';
 export const FinalCTA: React.FC = () => {
   return (
     <section className={styles.finalCTA}>
-      {/* Background accents */}
+      {/* ====================================================================
+          BACKGROUND SVG DECORATIONS
+          ==================================================================== */}
+      <div className={styles.bgDecor} aria-hidden="true">
+        {/* Top Left Dotted Grid */}
+        <svg className={styles.dottedGridLeft} viewBox="0 0 100 100" fill="none">
+          {[...Array(4)].map((_, row) =>
+            [...Array(4)].map((_, col) => (
+              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#ffffff" opacity="0.15" />
+            ))
+          )}
+        </svg>
+
+        {/* Top Right Floating Ring */}
+        <div className={styles.ringRight} />
+
+        {/* Bottom Left Abstract Leaf */}
+        <svg className={styles.leafLeft} viewBox="0 0 300 300" fill="none">
+          <path d="M -50 200 C 50 50, 200 0, 250 100 C 300 200, 150 300, 50 300 C -20 300, -100 280, -50 200 Z" fill="#00A878" opacity="0.08" />
+        </svg>
+      </div>
+
+      {/* Background accents (Blur rings) */}
       <div className={styles.bgAccentOne} aria-hidden="true" />
       <div className={styles.bgAccentTwo} aria-hidden="true" />
 

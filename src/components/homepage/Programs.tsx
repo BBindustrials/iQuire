@@ -25,7 +25,7 @@ const course4Img =
   'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&h=600&fit=crop';
 
 // ============================================================================
-// Course data — 4 courses per client doc (Section 11)
+// Course data
 // ============================================================================
 
 interface Course {
@@ -37,7 +37,7 @@ interface Course {
   audience: string[];
   duration: string;
   image: string;
-  accent: 'blue' | 'green' | 'purple' | 'orange';
+  accent: 'blue' | 'gradient' | 'purple' | 'orange';
   ctaTo: string;
 }
 
@@ -65,7 +65,7 @@ const COURSES: Course[] = [
     audience: ['Entry-level job seekers', 'Interns', 'Graduates'],
     duration: 'Self-paced · 8 weeks',
     image: course2Img,
-    accent: 'green',
+    accent: 'gradient',
     ctaTo: '/courses/digital-work-readiness',
   },
   {
@@ -103,15 +103,53 @@ const COURSES: Course[] = [
 export const Programs: React.FC = () => {
   return (
     <section className={styles.programs}>
-      <div className="container">
+      {/* ====================================================================
+          BACKGROUND SVG DECORATIONS
+          ==================================================================== */}
+      <div className={styles.bgDecor} aria-hidden="true">
+        
+        {/* Top-Left Decor: Dotted Grid & Circle */}
+        <svg className={styles.dottedGridLeft} viewBox="0 0 100 100" fill="none">
+          {[...Array(4)].map((_, row) =>
+            [...Array(4)].map((_, col) => (
+              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#94a3b8" />
+            ))
+          )}
+        </svg>
+        <div className={styles.circleTopLeft} />
+
+        {/* Top-Right Decor: Leaf & Rings */}
+        <svg className={styles.ringsTopRight} viewBox="0 0 200 200" fill="none">
+          <circle cx="100" cy="100" r="80" stroke="#D1FAE5" strokeWidth="20" opacity="0.4" />
+          <circle cx="100" cy="100" r="50" stroke="#F9A825" strokeWidth="2" opacity="0.3" strokeDasharray="6 6" />
+        </svg>
+
+        {/* Bottom-Left Decor: Leaf & Floating Circle */}
+        <svg className={styles.leafBottomLeft} viewBox="0 0 300 300" fill="none">
+          <path d="M -50 200 C 50 50, 200 0, 250 100 C 300 200, 150 300, 50 300 C -20 300, -100 280, -50 200 Z" fill="#D1FAE5" opacity="0.5" />
+        </svg>
+        <div className={styles.circleBottomLeft} />
+
+        {/* Bottom-Right Decor: Dotted Grid & Blob */}
+        <svg className={styles.dottedGridRight} viewBox="0 0 100 100" fill="none">
+          {[...Array(4)].map((_, row) =>
+            [...Array(4)].map((_, col) => (
+              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#94a3b8" />
+            ))
+          )}
+        </svg>
+        <div className={styles.blobBottomRight} />
+      </div>
+
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         {/* ================================================================
             Header
             ================================================================ */}
         <div className={styles.header}>
           <span className={styles.badge}>Our Courses</span>
           <h2 className={styles.title}>
-            Four paths. One clear goal —{' '}
-            <span className={styles.highlight}>get you hired.</span>
+            Build the skills.{' '}
+            <span className={styles.highlight}>Land the Job!</span>
           </h2>
           <p className={styles.subtitle}>
             Whether you're leaving school, starting your first job, pivoting into
@@ -149,20 +187,8 @@ export const Programs: React.FC = () => {
 
                 <Link to={course.ctaTo} className={styles.readMore}>
                   Read More
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M5 12H19M19 12L12 5M19 12L12 19"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </Link>
               </div>
@@ -191,7 +217,7 @@ export const Programs: React.FC = () => {
             Section CTA
             ================================================================ */}
         <div className={styles.ctaWrapper}>
-          <Button variant="primary" color="green" size="lg" href="/courses">
+          <Button variant="primary" color="gradient" size="lg" href="/courses">
             Explore All Courses
           </Button>
         </div>

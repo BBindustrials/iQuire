@@ -6,13 +6,55 @@
 
 .blog {
   position: relative;
-  padding: 7rem 0 0;
+  /* Reduced top padding to move content up */
+  padding: 4.5rem 0 0;
   background-color: #ffffff;
   overflow: hidden;
 }
 
 /* ----------------------------------------------------------------------------
-   Background accents
+   Background SVG Decorations
+   ---------------------------------------------------------------------------- */
+
+.bgDecor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.dottedGridLeft {
+  position: absolute;
+  top: 8%;
+  left: 4%;
+  width: 100px;
+  height: 100px;
+  opacity: 0.5;
+}
+
+.ringRight {
+  position: absolute;
+  top: 15%;
+  right: 6%;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 6px solid #FEF3C7;
+  opacity: 0.8;
+}
+
+.leafLeft {
+  position: absolute;
+  bottom: 10%;
+  left: -80px;
+  width: 350px;
+  height: 350px;
+  transform: rotate(15deg);
+}
+
+/* ----------------------------------------------------------------------------
+   Background accents (Blur rings)
    ---------------------------------------------------------------------------- */
 
 .bgAccentOne,
@@ -56,7 +98,8 @@
 .header {
   text-align: center;
   max-width: 720px;
-  margin: 0 auto 3.5rem;
+  /* Reduced bottom margin to pull cards up */
+  margin: 0 auto 2.5rem;
 }
 
 .badge {
@@ -109,6 +152,8 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 1.75rem;
   margin-bottom: 3.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 /* Post card */
@@ -288,26 +333,29 @@
   z-index: 2;
 }
 
+/* --- BRAND GRADIENT BUTTON --- */
 .footerCtaButton {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.95rem 2rem;
-  background-color: #0f172a;
+  background: linear-gradient(135deg, #00A878 0%, #0077C8 100%);
+  background-size: 150% 150%;
+  background-position: 0% 0%;
   color: #ffffff;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
   border-radius: 50px;
   text-decoration: none;
-  transition: all 0.25s ease;
-  box-shadow: 0 12px 24px -10px rgba(15, 23, 42, 0.35);
+  transition: all 0.3s ease;
+  box-shadow: 0 12px 24px -10px rgba(0, 119, 200, 0.4);
 }
 
 .footerCtaButton:hover {
-  background-color: #1e293b;
+  background-position: 100% 0%;
   transform: translateY(-2px);
-  box-shadow: 0 16px 32px -10px rgba(15, 23, 42, 0.45);
+  box-shadow: 0 16px 32px -10px rgba(0, 119, 200, 0.55);
   gap: 0.7rem;
 }
 
@@ -409,7 +457,7 @@
 
 @media (max-width: 768px) {
   .blog {
-    padding: 5rem 0 0;
+    padding: 3.5rem 0 0;
   }
 
   .container {
@@ -417,7 +465,7 @@
   }
 
   .header {
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
   }
 
   .grid {
@@ -439,6 +487,10 @@
 
   .demarcationBottom .demarcationWave {
     height: 90px;
+  }
+
+  .bgDecor {
+    opacity: 0.4;
   }
 }
 
@@ -469,7 +521,6 @@
   }
 }
 
-
 /* ----------------------------------------------------------------------------
    Loading skeleton
    ---------------------------------------------------------------------------- */
@@ -488,7 +539,7 @@
 }
 
 /* ----------------------------------------------------------------------------
-   Image placeholder (posts without a featured image)
+   Image placeholder
    ---------------------------------------------------------------------------- */
 
 .postImagePlaceholder {

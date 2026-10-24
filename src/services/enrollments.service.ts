@@ -99,11 +99,6 @@ const ENROLLMENT_SELECT = `
 // HELPERS — Auto-timestamp logic
 // ============================================================================
 
-/**
- * Given a status and current timestamps, returns the timestamps to set.
- * Only fills a timestamp if it was previously null — preserves historical
- * data (e.g., a legacy alumnus with a manually set completed_at).
- */
 export const applyStatusTimestamps = (
   status: EnrollmentStatus,
   current: {
@@ -150,19 +145,12 @@ export const applyStatusTimestamps = (
   return updates;
 };
 
-/**
- * Returns true if the enrollment is in a "terminal" state where the student
- * shouldn't appear in active course views.
- */
 export const isEnrollmentComplete = (status: EnrollmentStatus): boolean =>
   status === 'completed';
 
 export const isEnrollmentActive = (status: EnrollmentStatus): boolean =>
   status === 'active' || status === 'applied';
 
-/**
- * Pretty label for UI.
- */
 export const formatEnrollmentStatus = (status: EnrollmentStatus): string => {
   const map: Record<EnrollmentStatus, string> = {
     applied: 'Applied',
@@ -173,9 +161,6 @@ export const formatEnrollmentStatus = (status: EnrollmentStatus): string => {
   return map[status] ?? status;
 };
 
-/**
- * Extract initials from a name — safe fallback when no avatar.
- */
 export const getInitials = (name: string): string => {
   return name
     .split(' ')
@@ -294,25 +279,27 @@ export const createEnrollment = async (
 ): Promise<ServiceResponse<EnrollmentWithRelations>> => {
   try {
     const status = input.status ?? 'active';
-
-    // Auto-fill timestamps unless caller provided overrides
     const autoTimestamps = applyStatusTimestamps(status);
 
-    const payload = {
+    // Build payload — only include applied_at if we have a value,
+    // because the DB column is NOT NULL with a default.
+    const payload: Record<string, unknown> = {
       user_id: input.user_id,
       course_id: input.course_id,
       cohort_id: input.cohort_id ?? null,
       status,
-      applied_at: input.applied_at ?? autoTimestamps.applied_at ?? null,
       started_at: input.started_at ?? autoTimestamps.started_at ?? null,
       completed_at: input.completed_at ?? autoTimestamps.completed_at ?? null,
       dropped_at: input.dropped_at ?? autoTimestamps.dropped_at ?? null,
       notes: input.notes ?? null,
     };
 
+    const appliedAt = input.applied_at ?? autoTimestamps.applied_at;
+    if (appliedAt) payload.applied_at = appliedAt;
+
     const { data, error } = await supabase
       .from('enrollments')
-      .insert(payload)
+      .insert(payload as never)
       .select(ENROLLMENT_SELECT)
       .single();
 
@@ -337,9 +324,7 @@ export const updateEnrollment = async (
   try {
     const payload: Record<string, unknown> = {};
 
-    // If status is changing, apply appropriate timestamps
     if (input.status) {
-      // Fetch current to know what's already set
       const { data: current } = await supabase
         .from('enrollments')
         .select('applied_at, started_at, completed_at, dropped_at')
@@ -357,7 +342,6 @@ export const updateEnrollment = async (
       );
 
       payload.status = input.status;
-      // Only apply auto-timestamps not explicitly overridden by caller
       if (input.applied_at === undefined && autoTimestamps.applied_at) {
         payload.applied_at = autoTimestamps.applied_at;
       }
@@ -372,7 +356,6 @@ export const updateEnrollment = async (
       }
     }
 
-    // Explicit overrides (from caller) always win
     if (input.applied_at !== undefined) payload.applied_at = input.applied_at;
     if (input.started_at !== undefined) payload.started_at = input.started_at;
     if (input.completed_at !== undefined)
@@ -385,7 +368,7 @@ export const updateEnrollment = async (
 
     const { data, error } = await supabase
       .from('enrollments')
-      .update(payload)
+      .update(payload as never)
       .eq('id', id)
       .select(ENROLLMENT_SELECT)
       .single();
@@ -432,9 +415,6 @@ export const bulkUpdateEnrollmentStatus = async (
   if (ids.length === 0) return { success: true, updated: 0 };
 
   try {
-    // Build the update payload — same timestamps logic as single update
-    // but applied uniformly. If caller provided a specific completed_at,
-    // use it for all. Otherwise let the trigger do nothing (we set now()).
     const now = new Date().toISOString();
 
     const payload: Record<string, unknown> = { status };
@@ -457,7 +437,7 @@ export const bulkUpdateEnrollmentStatus = async (
 
     const { error } = await supabase
       .from('enrollments')
-      .update(payload)
+      .update(payload as never)
       .in('id', ids);
 
     if (error) return { success: false, error: error.message };
@@ -520,7 +500,11 @@ export const checkDuplicateEnrollment = async (
   userId: string,
   courseId: string,
   cohortId: string | null
-): Promise<{ exists: boolean; enrollmentId?: string; status?: EnrollmentStatus }> => {
+): Promise<{
+  exists: boolean;
+  enrollmentId?: string;
+  status?: EnrollmentStatus;
+}> => {
   try {
     let query = supabase
       .from('enrollments')
@@ -548,11 +532,8 @@ export const checkDuplicateEnrollment = async (
   }
 };
 
-
 // ============================================================================
 // BULK — Create many enrollments at once (Phase 15.5)
-// ============================================================================
-// Skips duplicates automatically. Returns counts for UI feedback.
 // ============================================================================
 
 export interface BulkEnrollResult {
@@ -577,7 +558,6 @@ export const bulkCreateEnrollments = async (
   }
 
   try {
-    // 1. Find existing enrollments for this course + cohort
     let existingQuery = supabase
       .from('enrollments')
       .select('user_id')
@@ -600,23 +580,16 @@ export const bulkCreateEnrollments = async (
       (existing ?? []).map((e: { user_id: string }) => e.user_id)
     );
 
-    // 2. Filter to students not already enrolled
     const toEnroll = userIds.filter((id) => !alreadyEnrolled.has(id));
     const skipped = userIds.length - toEnroll.length;
 
     if (toEnroll.length === 0) {
       return {
         success: true,
-        data: {
-          enrolled: 0,
-          skipped,
-          errors: 0,
-          createdIds: [],
-        },
+        data: { enrolled: 0, skipped, errors: 0, createdIds: [] },
       };
     }
 
-    // 3. Build payload using the same timestamp logic as single create
     const autoTimestamps = applyStatusTimestamps(status);
     const completedAt =
       options?.completed_at ??
@@ -634,10 +607,9 @@ export const bulkCreateEnrollments = async (
       notes: options?.notes ?? null,
     }));
 
-    // 4. Insert in one batch
     const { data: inserted, error: insertError } = await supabase
       .from('enrollments')
-      .insert(rows)
+      .insert(rows as never)
       .select('id');
 
     if (insertError) {

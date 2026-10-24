@@ -1,3 +1,4 @@
+/* src/components/layout/Header.module.css */
 @import '../../styles/theme.css';
 
 /* ============================================================================
@@ -19,13 +20,8 @@
   transition: transform 0.3s ease;
 }
 
-.visible {
-  transform: translateY(0);
-}
-
-.hidden {
-  transform: translateY(-100%);
-}
+.visible { transform: translateY(0); }
+.hidden { transform: translateY(-100%); }
 
 /* Full-width inner container — logo far left, actions far right */
 .headerInner {
@@ -43,7 +39,6 @@
 /* ----------------------------------------------------------------------------
    Logo
    ---------------------------------------------------------------------------- */
-
 .logo {
   display: flex;
   align-items: center;
@@ -61,7 +56,6 @@
 /* ----------------------------------------------------------------------------
    Navigation
    ---------------------------------------------------------------------------- */
-
 .navList {
   display: flex;
   align-items: center;
@@ -107,7 +101,6 @@
 /* ----------------------------------------------------------------------------
    Actions — far right
    ---------------------------------------------------------------------------- */
-
 .navActions {
   display: flex;
   align-items: center;
@@ -117,9 +110,8 @@
 }
 
 /* ----------------------------------------------------------------------------
-   Login button (green primary)
+   Login button (Brand Gradient)
    ---------------------------------------------------------------------------- */
-
 .loginWrapper {
   position: relative;
 }
@@ -129,24 +121,26 @@
   align-items: center;
   gap: 0.45rem;
   padding: 0.6rem 1.35rem;
-  background-color: #2E7D32;
+  /* Updated to brand gradient */
+  background: linear-gradient(135deg, #00A878 0%, #0077C8 100%);
+  background-size: 150% 150%;
+  background-position: 0% 0%;
   color: #FFFFFF;
-  border: 1.5px solid #2E7D32;
+  border: none;
   border-radius: 50px;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.88rem;
   font-weight: 700;
   letter-spacing: 0.01em;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 6px 16px rgba(46, 125, 50, 0.25);
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 16px rgba(0, 119, 200, 0.25);
 }
 
 .loginButton:hover {
-  background-color: #1B5E20;
-  border-color: #1B5E20;
+  background-position: 100% 0%;
   transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(46, 125, 50, 0.35);
+  box-shadow: 0 10px 24px rgba(0, 119, 200, 0.35);
 }
 
 .loginButton:active {
@@ -164,7 +158,6 @@
 /* ----------------------------------------------------------------------------
    User menu (logged in state)
    ---------------------------------------------------------------------------- */
-
 .userMenu {
   position: relative;
 }
@@ -183,14 +176,15 @@
 }
 
 .userButton:hover {
-  border-color: #2E7D32;
+  border-color: #0077C8; /* Updated to brand blue */
 }
 
 .avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+  /* Updated to brand gradient */
+  background: linear-gradient(135deg, #00A878 0%, #0077C8 100%);
   color: #FFFFFF;
   display: flex;
   align-items: center;
@@ -205,7 +199,6 @@
 /* ----------------------------------------------------------------------------
    Shared dropdown
    ---------------------------------------------------------------------------- */
-
 .dropdown {
   position: absolute;
   top: calc(100% + 0.65rem);
@@ -221,14 +214,8 @@
 }
 
 @keyframes dropdownIn {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .dropdownHeader {
@@ -346,7 +333,6 @@
 /* ----------------------------------------------------------------------------
    Mobile toggle
    ---------------------------------------------------------------------------- */
-
 .mobileToggle {
   display: none;
   flex-direction: column;
@@ -374,66 +360,31 @@
   position: absolute;
 }
 
-.hamburger {
-  top: 50%;
-  transform: translateY(-50%);
-}
+.hamburger { top: 50%; transform: translateY(-50%); }
+.hamburger::before { top: -7px; }
+.hamburger::after { bottom: -7px; }
 
-.hamburger::before {
-  top: -7px;
-}
-
-.hamburger::after {
-  bottom: -7px;
-}
-
-.mobileToggle[aria-expanded='true'] .hamburger {
-  transform: rotate(45deg);
-}
-
-.mobileToggle[aria-expanded='true'] .hamburger::before {
-  transform: rotate(90deg);
-  top: 0;
-}
-
-.mobileToggle[aria-expanded='true'] .hamburger::after {
-  transform: rotate(90deg);
-  bottom: 0;
-}
+.mobileToggle[aria-expanded='true'] .hamburger { transform: rotate(45deg); }
+.mobileToggle[aria-expanded='true'] .hamburger::before { transform: rotate(90deg); top: 0; }
+.mobileToggle[aria-expanded='true'] .hamburger::after { transform: rotate(90deg); bottom: 0; }
 
 /* ============================================================================
    Responsive
    ============================================================================ */
 
 @media (max-width: 1200px) {
-  .headerInner {
-    padding: 0 1.75rem;
-    gap: 1.5rem;
-  }
-
-  .navList {
-    gap: 1.25rem;
-  }
-
-  .navList li a {
-    font-size: 0.85rem;
-  }
+  .headerInner { padding: 0 1.75rem; gap: 1.5rem; }
+  .navList { gap: 1.25rem; }
+  .navList li a { font-size: 0.85rem; }
 }
 
 @media (max-width: 1024px) {
-  .navList li a {
-    font-size: 0.82rem;
-  }
-
-  .navList {
-    gap: 1rem;
-  }
+  .navList li a { font-size: 0.82rem; }
+  .navList { gap: 1rem; }
 }
 
 @media (max-width: 900px) {
-  .mobileToggle {
-    display: flex;
-  }
+  .mobileToggle { display: flex; }
 
   .navList {
     position: fixed;
@@ -455,9 +406,7 @@
     justify-content: flex-start;
   }
 
-  .navList.open {
-    transform: translateY(0);
-  }
+  .navList.open { transform: translateY(0); }
 
   .navList li a {
     font-size: 1rem;
@@ -466,38 +415,14 @@
     border-bottom: 1px solid #F3F4F6;
   }
 
-  .navList li:last-child a {
-    border-bottom: none;
-  }
+  .navList li:last-child a { border-bottom: none; }
 }
 
 @media (max-width: 640px) {
-  .headerInner {
-    padding: 0 1rem;
-    gap: 0.75rem;
-  }
-
-  .logoImage {
-    height: 34px;
-  }
-
-  .loginButton {
-    padding: 0.5rem 1.1rem;
-    font-size: 0.82rem;
-  }
-
-  .avatar {
-    width: 28px;
-    height: 28px;
-    font-size: 0.65rem;
-  }
-
-  .userButton {
-    padding: 0.25rem 0.5rem 0.25rem 0.25rem;
-  }
-
-  .dropdown {
-    min-width: 260px;
-    right: -0.5rem;
-  }
+  .headerInner { padding: 0 1rem; gap: 0.75rem; }
+  .logoImage { height: 34px; }
+  .loginButton { padding: 0.5rem 1.1rem; font-size: 0.82rem; }
+  .avatar { width: 28px; height: 28px; font-size: 0.65rem; }
+  .userButton { padding: 0.25rem 0.5rem 0.25rem 0.25rem; }
+  .dropdown { min-width: 260px; right: -0.5rem; }
 }

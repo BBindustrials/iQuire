@@ -6,7 +6,7 @@ import type { ButtonProps } from '../../types/design.types';
 export const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
   size = 'md',
-  color = 'green',
+  color = 'green', // You can change this to 'gradient' if you want it as the global default
   children,
   onClick,
   href,

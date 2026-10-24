@@ -73,7 +73,26 @@ export const Footer: React.FC = () => {
 
   return (
     <footer className={styles.footer}>
-      <div className="container">
+      {/* ====================================================================
+          BACKGROUND SVG DECORATIONS
+          ==================================================================== */}
+      <div className={styles.bgDecor} aria-hidden="true">
+        {/* Top Right Dotted Grid */}
+        <svg className={styles.dottedGridRight} viewBox="0 0 100 100" fill="none">
+          {[...Array(4)].map((_, row) =>
+            [...Array(4)].map((_, col) => (
+              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#ffffff" opacity="0.1" />
+            ))
+          )}
+        </svg>
+
+        {/* Bottom Left Abstract Glow Leaf */}
+        <svg className={styles.leafLeft} viewBox="0 0 300 300" fill="none">
+          <path d="M -50 200 C 50 50, 200 0, 250 100 C 300 200, 150 300, 50 300 C -20 300, -100 280, -50 200 Z" fill="#00A878" opacity="0.05" />
+        </svg>
+      </div>
+
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <div className={styles.footerGrid}>
           {/* Brand */}
           <div className={styles.brand}>

@@ -35,6 +35,10 @@ export interface Profile {
   tier: AccountTier;
   role: LegacyUserRole;
   participant_id: string;
+  iq_id: string | null;              // ← ADD
+  must_change_password: boolean;     // ← ADD
+  created_by_admin: string | null;   // ← ADD
+  bio_title: string | null;          // ← ADD
   first_name: string;
   middle_name: string | null;
   last_name: string;
@@ -52,7 +56,6 @@ export interface Profile {
   created_at: string;
   updated_at: string;
 }
-
 // ============================================================================
 // User Roles (additive)
 // ============================================================================

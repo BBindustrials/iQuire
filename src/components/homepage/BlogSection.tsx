@@ -156,7 +156,6 @@ export const BlogSection: React.FC = () => {
           setPosts(selected.map((p, i) => dbPostToDisplay(p, i)));
         }
       }
-      // else: keep the fallback already in state
 
       setIsLoading(false);
     };
@@ -172,7 +171,29 @@ export const BlogSection: React.FC = () => {
   // --------------------------------------------------------------------------
   return (
     <section className={styles.blog}>
-      {/* Background accents */}
+      {/* ====================================================================
+          BACKGROUND SVG DECORATIONS
+          ==================================================================== */}
+      <div className={styles.bgDecor} aria-hidden="true">
+        {/* Top Left Dotted Grid */}
+        <svg className={styles.dottedGridLeft} viewBox="0 0 100 100" fill="none">
+          {[...Array(4)].map((_, row) =>
+            [...Array(4)].map((_, col) => (
+              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#94a3b8" />
+            ))
+          )}
+        </svg>
+
+        {/* Top Right Floating Ring */}
+        <div className={styles.ringRight} />
+
+        {/* Bottom Left Abstract Leaf */}
+        <svg className={styles.leafLeft} viewBox="0 0 300 300" fill="none">
+          <path d="M -50 200 C 50 50, 200 0, 250 100 C 300 200, 150 300, 50 300 C -20 300, -100 280, -50 200 Z" fill="#D1FAE5" opacity="0.4" />
+        </svg>
+      </div>
+
+      {/* Background accents (Blur rings) */}
       <div className={styles.bgAccentOne} aria-hidden="true" />
       <div className={styles.bgAccentTwo} aria-hidden="true" />
 
@@ -204,7 +225,6 @@ export const BlogSection: React.FC = () => {
         ) : (
           <ScrollReveal animation="up" stagger className={styles.grid}>
             {posts.map((post) => {
-              // If we have a slug, link to the real post; else non-clickable
               const postHref = post.slug ? `/blog/${post.slug}` : '/blog';
 
               return (
@@ -290,7 +310,7 @@ export const BlogSection: React.FC = () => {
       </div>
 
       {/* ================================================================
-          BOTTOM demarcation
+          BOTTOM demarcation (Fill unchanged)
           ================================================================ */}
       <div className={styles.demarcationBottom} aria-hidden="true">
         <div className={styles.demarcationLabel}></div>
@@ -309,7 +329,7 @@ export const BlogSection: React.FC = () => {
           />
           <path
             d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z"
-            fill="#ffffff"
+            fill="#0A192F"
           />
         </svg>
       </div>

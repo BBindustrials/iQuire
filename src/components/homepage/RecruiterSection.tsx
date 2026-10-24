@@ -110,7 +110,6 @@ export const RecruiterSection: React.FC = () => {
       if (res.success && res.data && res.data.length > 0) {
         setCandidate(alumniToDisplay(res.data[0]));
       }
-      // else: keep the fallback already in state
 
       setIsLoading(false);
     };
@@ -126,11 +125,33 @@ export const RecruiterSection: React.FC = () => {
   // --------------------------------------------------------------------------
   return (
     <section className={styles.hireFromUs}>
+      {/* ====================================================================
+          BACKGROUND SVG DECORATIONS
+          ==================================================================== */}
+      <div className={styles.bgDecor} aria-hidden="true">
+        {/* Top Left Dotted Grid */}
+        <svg className={styles.dottedGridLeft} viewBox="0 0 100 100" fill="none">
+          {[...Array(4)].map((_, row) =>
+            [...Array(4)].map((_, col) => (
+              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#ffffff" opacity="0.15" />
+            ))
+          )}
+        </svg>
+
+        {/* Top Right Floating Ring */}
+        <div className={styles.ringRight} />
+
+        {/* Bottom Right Abstract Shape */}
+        <svg className={styles.shapeRight} viewBox="0 0 300 300" fill="none">
+          <path d="M 350 200 C 250 50, 100 0, 50 100 C 0 200, 150 300, 250 300 C 320 300, 400 280, 350 200 Z" fill="#ffffff" opacity="0.03" />
+        </svg>
+      </div>
+
       {/* Background blobs */}
       <div className={styles.bgBlobOne} aria-hidden="true" />
       <div className={styles.bgBlobTwo} aria-hidden="true" />
 
-      <div className="container">
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <div className={styles.grid}>
           {/* ==============================================================
               LEFT — Copy
@@ -202,7 +223,7 @@ export const RecruiterSection: React.FC = () => {
               <div className={styles.ctaGroup}>
                 <Button
                   variant="primary"
-                  color="green"
+                  color="gradient"
                   size="lg"
                   href="/hire-from-us"
                 >
@@ -351,7 +372,7 @@ export const RecruiterSection: React.FC = () => {
             </div>
             <Button
               variant="primary"
-              color="green"
+              color="gradient"
               size="lg"
               href="/hire-from-us"
             >

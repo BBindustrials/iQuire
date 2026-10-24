@@ -6,9 +6,50 @@
 
 .alumni {
   position: relative;
-  padding: 7rem 0 8rem;
+  padding: 4.5rem 0 8rem;
   background-color: #ffffff;
   overflow: hidden;
+}
+
+/* ----------------------------------------------------------------------------
+   Background SVG Decorations
+   ---------------------------------------------------------------------------- */
+
+.bgDecor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.dottedGridLeft {
+  position: absolute;
+  top: 8%;
+  left: 4%;
+  width: 100px;
+  height: 100px;
+  opacity: 0.5;
+}
+
+.circleRight {
+  position: absolute;
+  top: 25%;
+  right: 5%;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 6px solid #FEF3C7;
+  opacity: 0.8;
+}
+
+.leafLeft {
+  position: absolute;
+  bottom: -50px;
+  left: -80px;
+  width: 350px;
+  height: 350px;
+  transform: rotate(15deg);
 }
 
 /* ----------------------------------------------------------------------------
@@ -18,7 +59,9 @@
 .header {
   text-align: center;
   max-width: 720px;
-  margin: 0 auto 4rem;
+  margin: 0 auto 2.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 .badge {
@@ -77,6 +120,8 @@
   box-shadow: 0 24px 48px -20px rgba(15, 23, 42, 0.15);
   margin-bottom: 3rem;
   transition: all 0.4s ease;
+  position: relative;
+  z-index: 1;
 }
 
 /* Photo */
@@ -92,7 +137,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 15%;  /* ← add this */
+  object-position: 50% 15%;
 }
 
 .photoBadge {
@@ -263,6 +308,8 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
   margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
 }
 
 .switcherItem {
@@ -336,6 +383,8 @@
   justify-content: center;
   gap: 2rem;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
 }
 
 .secondaryLink {
@@ -473,11 +522,11 @@
 
 @media (max-width: 768px) {
   .alumni {
-    padding: 5rem 0 6rem;
+    padding: 4rem 0 6rem;
   }
 
   .header {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
   }
 
   .featured {
@@ -486,37 +535,97 @@
     gap: 1.5rem;
   }
 
+  /* --- 4:3 BOX CONTAINER FIXES --- */
   .featuredImage {
-    aspect-ratio: 16 / 9;
-    max-height: 260px;
+    aspect-ratio: 4 / 3; 
+    overflow: hidden; /* Keeps the image inside the rounded box */
+    border-radius: 16px; /* The box itself has the curve */
+    box-shadow: 0 16px 32px -12px rgba(15, 23, 42, 0.2);
+    width: 100%;
   }
 
+  .photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%; /* Centers the face within the box */
+  }
+
+  /* --- BADGE MOVED DOWN --- */
+  .photoBadge {
+    position: relative; 
+    bottom: auto;
+    left: auto;
+    right: auto;
+    margin-top: 1rem; 
+    background: #f8fafc; 
+    border: 1.5px solid #e5e7eb; 
+    color: #0f172a; 
+    box-shadow: none;
+    padding: 0.5rem 0.75rem; 
+  }
+
+  .photoBadgeCourse {
+    color: #0f172a;
+    font-size: 0.75rem; 
+  }
+
+  .photoBadgeCohort {
+    color: #64748b;
+    font-size: 0.65rem; 
+  }
+
+  /* --- TEXT REDUCTIONS --- */
   .quoteMark {
-    font-size: 3.5rem;
+    font-size: 2.5rem; 
+    margin-bottom: -0.5rem;
   }
 
-  .quote {
-    font-size: 1.05rem;
+  .quoteShort { 
+    font-size: 0.95rem; 
+    line-height: 1.5; 
+  }
+  
+  .quoteLong { 
+    font-size: 0.88rem; 
+    line-height: 1.6; 
   }
 
   .journeyRow {
     grid-template-columns: 1fr;
     gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .journeyText {
+    font-size: 0.8rem; 
   }
 
   .journeyArrow {
     transform: rotate(90deg);
+    font-size: 1.25rem;
   }
 
   .featuredFooter {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+    padding-top: 1rem;
+  }
+
+  .featuredName {
+    font-size: 1rem; 
+  }
+
+  .featuredRole {
+    font-size: 0.78rem; 
   }
 
   .linkedinBtn {
     width: 100%;
     justify-content: center;
+    padding: 0.55rem 1rem; 
+    font-size: 0.75rem;
   }
 
   .switcher {
@@ -525,23 +634,38 @@
   }
 
   .switcherItem {
-    padding: 0.85rem 0.5rem;
+    padding: 0.75rem 0.5rem;
   }
 
   .switcherItem img {
-    width: 52px;
-    height: 52px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .switcherName {
+    font-size: 0.75rem;
+  }
+
+  .switcherCourse {
+    font-size: 0.65rem;
+  }
+
+  .switcherAvatarPlaceholder {
+    width: 48px;
+    height: 48px;
+    font-size: 0.85rem;
   }
 
   .demarcationTop .demarcationWave { height: 70px; }
   .demarcationBottom .demarcationWave { height: 90px; }
   .demarcationLabel { margin-bottom: 1rem; gap: 0.85rem; }
+
+  .bgDecor {
+    opacity: 0.4;
+  }
 }
 
 @media (max-width: 480px) {
-  .switcherName { font-size: 0.75rem; }
-  .switcherCourse { font-size: 0.65rem; }
-
   .demarcationTop .demarcationWave { height: 50px; }
   .demarcationBottom .demarcationWave { height: 70px; }
   .demarcationDot { width: 12px; height: 12px; }
@@ -592,7 +716,6 @@
   box-shadow: 0 0 0 4px rgba(249, 168, 37, 0.2);
 }
 
-
 /* Adaptive quote sizes */
 .quoteShort {
   font-size: 1.35rem;
@@ -604,15 +727,3 @@
   line-height: 1.7;
   font-weight: 500;
 }
-
-/* On mobile, cap both */
-@media (max-width: 768px) {
-  .quoteShort { font-size: 1.05rem; }
-  .quoteLong { font-size: 0.92rem; }
-}
-
-.switcherAvatarPlaceholder {
-    width: 52px;
-    height: 52px;
-    font-size: 0.9rem;
-  }

@@ -6,13 +6,90 @@
 
 .howItWorks {
   position: relative;
-  padding: 7rem 0 8rem;
+  /* Reduced top padding to pull content up */
+  padding: 3.5rem 0 8rem;
   background: linear-gradient(180deg, #f1f5f9 0%, #f8fafc 100%);
   overflow: hidden;
 }
 
 /* ----------------------------------------------------------------------------
-   Background accents
+   Background Decorations
+   ---------------------------------------------------------------------------- */
+
+.bgDecor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Top Left */
+.dottedGridLeft {
+  position: absolute;
+  top: 10%;
+  left: 4%;
+  width: 100px;
+  height: 100px;
+  opacity: 0.4;
+}
+.crossTopLeft {
+  position: absolute;
+  top: 25%;
+  left: 12%;
+  width: 32px;
+  height: 32px;
+}
+
+/* Top Right */
+.leafTopRight {
+  position: absolute;
+  top: -50px;
+  right: -60px;
+  width: 450px;
+  height: 450px;
+  transform: rotate(-20deg);
+}
+.sweepingRing {
+  position: absolute;
+  top: 15%;
+  right: 5%;
+  width: 180px;
+  height: 180px;
+}
+
+/* Bottom Left */
+.leafBottomLeft {
+  position: absolute;
+  bottom: -80px;
+  left: -80px;
+  width: 350px;
+  height: 350px;
+  transform: rotate(15deg);
+}
+
+/* Bottom Right */
+.circleBottomRight {
+  position: absolute;
+  bottom: 25%;
+  right: 8%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 6px solid #FEF3C7;
+  opacity: 0.6;
+}
+.dottedGridRight {
+  position: absolute;
+  bottom: 10%;
+  right: 15%;
+  width: 80px;
+  height: 80px;
+  opacity: 0.3;
+}
+
+/* ----------------------------------------------------------------------------
+   Background accents (Blur rings)
    ---------------------------------------------------------------------------- */
 
 .bgAccentOne,
@@ -56,7 +133,8 @@
 .header {
   text-align: center;
   max-width: 720px;
-  margin: 0 auto 4rem;
+  /* Reduced margin to pull the circle up */
+  margin: 0 auto 2.5rem;
 }
 
 .badge {
@@ -91,7 +169,6 @@
   text-shadow: 0 2px 8px rgba(245, 127, 23, 0.2);
 }
 
-/* Pure black subtext */
 .description {
   font-family: 'Satoshi', sans-serif;
   font-size: 1.05rem;
@@ -259,7 +336,7 @@
     0 0 0 6px rgba(21, 101, 192, 0.08);
   background-color: #f1f5f9;
   transition: all 0.3s ease;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.005rem; /* Increased from 0.75rem to push text down */
 }
 
 .node:hover .nodeAvatar {
@@ -338,8 +415,8 @@
 .mobileConnector {
   flex: 1;
   width: 2px;
-  background: linear-gradient(to bottom, #F9A825, #1565C0);
-  opacity: 0.3;
+  background: linear-gradient(to bottom, #00A878, #0077C8);
+  opacity: 0.4;
   margin-top: 0.5rem;
   border-radius: 2px;
 }
@@ -391,9 +468,11 @@
 .ctaWrapper {
   text-align: center;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .secondaryLink {
@@ -402,6 +481,9 @@
   font-weight: 700;
   color: #1565C0;
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   transition: all 0.2s ease;
 }
 
@@ -411,7 +493,7 @@
 }
 
 /* ============================================================================
-   BOTTOM demarcation — wave + gold outline only (no dot, no line)
+   BOTTOM demarcation
    ============================================================================ */
 
 .demarcationBottom {
@@ -471,11 +553,15 @@
   .ctaWrapper {
     margin-top: 1rem;
   }
+
+  .bgDecor {
+    opacity: 0.4;
+  }
 }
 
 @media (max-width: 768px) {
   .howItWorks {
-    padding: 5rem 0 6rem;
+    padding: 3rem 0 6rem;
   }
 
   .container {
@@ -483,7 +569,7 @@
   }
 
   .header {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
   }
 
   .demarcationBottom .demarcationWave {

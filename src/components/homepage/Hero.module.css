@@ -12,7 +12,54 @@
 }
 
 /* ----------------------------------------------------------------------------
-   Background accents (subtle)
+   SVG Background Decorations
+   ---------------------------------------------------------------------------- */
+
+.backgroundDecor {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.dottedGridTL {
+  position: absolute;
+  top: 10%; /* Moved down to sit behind the image frame */
+  left: 2%; /* Moved right to peek out from behind the frame */
+  width: 120px;
+  height: 120px;
+  opacity: 0.8;
+}
+
+.dottedGridBR {
+  position: absolute;
+  bottom: 25%;
+  right: 3%;
+  width: 100px;
+  height: 100px;
+  opacity: 0.8;
+}
+
+.shapeTopRight {
+  position: absolute;
+  top: -50px;
+  right: -80px;
+  width: 500px;
+  height: 500px;
+  transform: rotate(45deg);
+}
+
+.shapeBottomLeft {
+  position: absolute;
+  bottom: -150px;
+  left: -150px;
+  width: 600px;
+  height: 600px;
+}
+
+/* ----------------------------------------------------------------------------
+   Background accents (subtle blur rings)
    ---------------------------------------------------------------------------- */
 
 .bgAccentOne,
@@ -46,7 +93,7 @@
   margin: 0 auto;
   padding: 0 2rem;
   position: relative;
-  z-index: 1;
+  z-index: 1; /* Keeps content above the SVG decorations */
 }
 
 /* ----------------------------------------------------------------------------
@@ -343,7 +390,6 @@
   align-items: center;
 }
 
-/* "Discover what's next" label with flanking black lines */
 .demarcationLabel {
   display: flex;
   align-items: center;
@@ -380,7 +426,6 @@
   white-space: nowrap;
 }
 
-/* Gold dot with strong glow + pulsing */
 .demarcationDotWrapper {
   position: relative;
   display: flex;
@@ -425,7 +470,6 @@
   }
 }
 
-/* Bold wave with gold outline + strong shadow */
 .demarcationWave {
   display: block;
   width: 100%;
@@ -462,6 +506,10 @@
   .imageFrame {
     max-width: 420px;
   }
+  .dottedGridTL { width: 90px; height: 90px; left: 3%; }
+  .dottedGridBR { width: 80px; height: 80px; }
+  .shapeTopRight { width: 350px; height: 350px; }
+  .shapeBottomLeft { width: 450px; height: 450px; }
 }
 
 @media (max-width: 900px) {
@@ -583,5 +631,22 @@
 
   .demarcationWave {
     height: 70px;
+  }
+
+  /* Adjusted SVG sizes for mobile so they still show but don't crowd the screen */
+  .shapeTopRight { width: 250px; height: 250px; top: -50px; right: -50px; }
+  .shapeBottomLeft { width: 300px; height: 300px; bottom: -100px; left: -100px; }
+  
+  .dottedGridTL { 
+    top: 15%; 
+    left: 2%; 
+    width: 60px; 
+    height: 60px; 
+  }
+  .dottedGridBR { 
+    bottom: 20%; 
+    right: 2%; 
+    width: 60px; 
+    height: 60px; 
   }
 }

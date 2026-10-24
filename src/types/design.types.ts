@@ -2,7 +2,7 @@
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'gold' | 'ghost';
 export type ButtonSize = 'sm' | 'md' | 'lg';
-export type ButtonColor = 'green' | 'gold';
+export type ButtonColor = 'green' | 'gold' | 'blue' | 'gradient' | 'white' | 'dark'; 
 
 export interface ButtonProps {
   variant?: ButtonVariant;

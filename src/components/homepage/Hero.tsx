@@ -149,8 +149,63 @@ export const Hero: React.FC = () => {
       aria-roledescription="carousel"
       aria-label="IQuire visual story"
     >
-      <div className={styles.bgAccentOne} aria-hidden="true" />
-      <div className={styles.bgAccentTwo} aria-hidden="true" />
+      {/* ====================================================================
+          BACKGROUND SVG DECORATIONS
+          ==================================================================== */}
+      <div className={styles.backgroundDecor} aria-hidden="true">
+        {/* Top-left dotted grid (Light Green) */}
+        <svg className={styles.dottedGridTL} viewBox="0 0 100 100" fill="none">
+          {[...Array(5)].map((_, row) =>
+            [...Array(5)].map((_, col) => (
+              <circle
+                key={`${row}-${col}`}
+                cx={10 + col * 20}
+                cy={10 + row * 20}
+                r="2"
+                fill="#86efac"
+              />
+            ))
+          )}
+        </svg>
+
+        {/* Bottom-right dotted grid (Light Green) */}
+        <svg className={styles.dottedGridBR} viewBox="0 0 100 100" fill="none">
+          {[...Array(5)].map((_, row) =>
+            [...Array(5)].map((_, col) => (
+              <circle
+                key={`${row}-${col}`}
+                cx={10 + col * 20}
+                cy={10 + row * 20}
+                r="2"
+                fill="#86efac"
+              />
+            ))
+          )}
+        </svg>
+
+        {/* Top-right yellow abstract shape */}
+        <svg className={styles.shapeTopRight} viewBox="0 0 200 200" fill="none">
+          <path
+            d="M 0 100 C 0 20, 80 0, 150 20 C 200 40, 200 150, 150 180 C 80 200, 0 180, 0 100 Z"
+            fill="#FEF3C7"
+            opacity="0.5"
+          />
+        </svg>
+
+        {/* Bottom-left green/yellow abstract shape */}
+        <svg className={styles.shapeBottomLeft} viewBox="0 0 300 300" fill="none">
+          <path
+            d="M -50 200 C 50 50, 200 0, 250 100 C 300 200, 150 300, 50 300 C -20 300, -100 280, -50 200 Z"
+            fill="#D1FAE5"
+            opacity="0.4"
+          />
+          <path
+            d="M -50 250 C 50 150, 150 100, 200 150 C 250 200, 150 300, 50 300 C -20 300, -100 320, -50 250 Z"
+            fill="#FEF3C7"
+            opacity="0.3"
+          />
+        </svg>
+      </div>
 
       <div className={styles.heroContainer}>
         <div className={styles.slideStage}>
@@ -239,7 +294,7 @@ export const Hero: React.FC = () => {
                   >
                     <Button
                       variant="primary"
-                      color="green"
+                      color="gradient"
                       size="lg"
                       href={slide.ctaPrimary.to}
                     >
@@ -334,8 +389,7 @@ export const Hero: React.FC = () => {
           </span>
         </div>
 
-        <div className={styles.demarcationDotWrapper}>
-        </div>
+        <div className={styles.demarcationDotWrapper}></div>
 
         <svg
           className={styles.demarcationWave}
@@ -352,7 +406,7 @@ export const Hero: React.FC = () => {
           />
           <path
             d="M0,60 C240,10 480,110 720,60 C960,10 1200,110 1440,60 L1440,120 L0,120 Z"
-            fill="#f8fafc"
+            fill="#f0fdf4"
           />
         </svg>
       </div>

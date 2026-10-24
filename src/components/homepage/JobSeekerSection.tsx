@@ -17,7 +17,7 @@ interface OpportunityType {
   emoji: string;
   label: string;
   description: string;
-  accent: 'blue' | 'green' | 'gold' | 'purple';
+  accent: 'blue' | 'gradient' | 'gold' | 'purple';
 }
 
 const OPPORTUNITY_TYPES: OpportunityType[] = [
@@ -33,7 +33,7 @@ const OPPORTUNITY_TYPES: OpportunityType[] = [
     emoji: '💼',
     label: 'Internships',
     description: 'Real-world experience with real teams.',
-    accent: 'green',
+    accent: 'gradient',
   },
   {
     id: 'entry-level',
@@ -54,7 +54,7 @@ const OPPORTUNITY_TYPES: OpportunityType[] = [
     emoji: '📅',
     label: 'Part-Time',
     description: 'Flexible roles that fit around your life.',
-    accent: 'green',
+    accent: 'gradient',
   },
   {
     id: 'volunteering',
@@ -127,10 +127,32 @@ const SAMPLE_OPPORTUNITIES: SampleOpportunity[] = [
 export const Opportunities: React.FC = () => {
   return (
     <section className={styles.opportunities}>
-      {/* 
-        FIX: Added styles.contentWrapper here. 
-        This lifts the content above the demarcation waves.
-      */}
+      
+      {/* ====================================================================
+          BACKGROUND SVG DECORATIONS
+          ==================================================================== */}
+      <div className={styles.bgDecor} aria-hidden="true">
+        {/* Top Left Dotted Grid */}
+        <svg className={styles.dottedGridLeft} viewBox="0 0 100 100" fill="none">
+          {[...Array(4)].map((_, row) =>
+            [...Array(4)].map((_, col) => (
+              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#94a3b8" />
+            ))
+          )}
+        </svg>
+
+        {/* Top Right Floating Circle */}
+        <div className={styles.circleRight} />
+
+        {/* Bottom Left Abstract Leaf */}
+        <svg className={styles.leafLeft} viewBox="0 0 300 300" fill="none">
+          <path d="M -50 200 C 50 50, 200 0, 250 100 C 300 200, 150 300, 50 300 C -20 300, -100 280, -50 200 Z" fill="#D1FAE5" opacity="0.3" />
+        </svg>
+
+        {/* Center Blur Blob */}
+        <div className={styles.blobCenter} />
+      </div>
+
       <div className={`container ${styles.contentWrapper}`}>
         
         {/* ================================================================
@@ -268,7 +290,7 @@ export const Opportunities: React.FC = () => {
             CTA
             ================================================================ */}
         <ScrollReveal animation="zoom" delay={1} className={styles.ctaWrapper}>
-          <Button variant="primary" color="green" size="lg" href="/jobs">
+          <Button variant="primary" color="gradient" size="lg" href="/jobs">
             Explore Opportunities
           </Button>
           <Link to="/courses" className={styles.secondaryLink}>
@@ -279,8 +301,7 @@ export const Opportunities: React.FC = () => {
 
       {/* BOTTOM demarcation */}
       <div className={styles.demarcationBottom} aria-hidden="true">
-        <div className={styles.demarcationLabel}>
-        </div>
+        <div className={styles.demarcationLabel}></div>
         <svg
           className={styles.demarcationWave}
           viewBox="0 0 1440 120"

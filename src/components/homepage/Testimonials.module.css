@@ -92,7 +92,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 15%;  /* ← add this */
+  object-position: 50% 15%;
 }
 
 .photoBadge {
@@ -289,24 +289,24 @@
 }
 
 .switcherItem:hover {
-  border-color: #F9A825;
+  border-color: #00A878; /* Changed to brand Teal */
   transform: translateY(-3px);
-  box-shadow: 0 12px 24px -8px rgba(249, 168, 37, 0.2);
+  box-shadow: 0 12px 24px -8px rgba(0, 168, 120, 0.2);
 }
 
 .switcherItem:hover img {
-  border-color: #F9A825;
+  border-color: #00A878;
 }
 
 .switcherItemActive {
-  border-color: #F9A825;
-  background-color: #fffbf0;
-  box-shadow: 0 12px 24px -8px rgba(249, 168, 37, 0.25);
+  border-color: #00A878; /* Changed to brand Teal */
+  background-color: #f0fdf8; /* Soft Teal tint */
+  box-shadow: 0 12px 24px -8px rgba(0, 168, 120, 0.25);
 }
 
 .switcherItemActive img {
-  border-color: #F9A825;
-  box-shadow: 0 0 0 4px rgba(249, 168, 37, 0.2);
+  border-color: #00A878;
+  box-shadow: 0 0 0 4px rgba(0, 168, 120, 0.2);
 }
 
 .switcherName {

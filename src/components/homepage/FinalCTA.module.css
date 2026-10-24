@@ -6,14 +6,55 @@
 
 .finalCTA {
   position: relative;
-  padding: 7rem 0 0;
-  background: #ffffff;             /* ← pure white */
+  /* Moved content up by reducing top padding */
+  padding: 4.5rem 0 0;
+  background: linear-gradient(180deg, #0A192F 0%, #112240 100%);
   overflow: hidden;
   width: 100%;
 }
 
 /* ----------------------------------------------------------------------------
-   Background accents
+   Background SVG Decorations
+   ---------------------------------------------------------------------------- */
+
+.bgDecor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.dottedGridLeft {
+  position: absolute;
+  top: 8%;
+  left: 4%;
+  width: 100px;
+  height: 100px;
+}
+
+.ringRight {
+  position: absolute;
+  top: 20%;
+  right: 6%;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 6px solid #F9A825;
+  opacity: 0.2;
+}
+
+.leafLeft {
+  position: absolute;
+  bottom: 10%;
+  left: -80px;
+  width: 350px;
+  height: 350px;
+  transform: rotate(15deg);
+}
+
+/* ----------------------------------------------------------------------------
+   Background accents (Blur rings)
    ---------------------------------------------------------------------------- */
 
 .bgAccentOne,
@@ -21,7 +62,7 @@
   position: absolute;
   border-radius: 50%;
   filter: blur(100px);
-  opacity: 0.1;
+  opacity: 0.15;
   pointer-events: none;
   z-index: 0;
 }
@@ -29,7 +70,7 @@
 .bgAccentOne {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, #2E7D32 0%, transparent 70%);
+  background: radial-gradient(circle, #00A878 0%, transparent 70%);
   top: -180px;
   left: -140px;
 }
@@ -79,7 +120,7 @@
   height: auto;
   display: block;
   object-fit: contain;
-  margin-bottom: 3.0rem;             /* ← moved UP slightly off the wave */
+  margin-bottom: 0; 
 }
 
 /* ----------------------------------------------------------------------------
@@ -91,7 +132,7 @@
   flex-direction: column;
   gap: 1.25rem;
   text-align: left;
-  padding-bottom: 10rem;              /* ← moved UP — clear of the wave */
+  padding-bottom: 10rem; /* Keeps text clear of the wave */
 }
 
 .badge {
@@ -115,22 +156,22 @@
   font-family: 'Satoshi', sans-serif;
   font-size: clamp(2rem, 4vw, 3.25rem);
   font-weight: 800;
-  color: #0f172a;
+  color: #ffffff;
   margin: 0;
   line-height: 1.1;
   letter-spacing: -0.03em;
-  text-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .highlight {
-  color: #F57F17;
-  text-shadow: 0 2px 8px rgba(245, 127, 23, 0.2);
+  color: #F9A825;
+  text-shadow: 0 2px 8px rgba(249, 168, 37, 0.3);
 }
 
 .subtitle {
   font-family: 'Satoshi', sans-serif;
   font-size: 1.05rem;
-  color: #000000;
+  color: rgba(255, 255, 255, 0.9);
   margin: 0;
   line-height: 1.7;
   font-weight: 500;
@@ -147,27 +188,30 @@
   margin-top: 0.75rem;
 }
 
+/* Primary Button - Brand Gradient */
 .ctaPrimary {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.95rem 2rem;
-  background-color: #2E7D32;
+  background: linear-gradient(135deg, #00A878 0%, #0077C8 100%);
+  background-size: 150% 150%;
+  background-position: 0% 0%;
   color: #ffffff;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
   border-radius: 50px;
   text-decoration: none;
-  transition: all 0.25s ease;
-  box-shadow: 0 12px 24px -10px rgba(46, 125, 50, 0.4);
+  transition: all 0.3s ease;
+  box-shadow: 0 12px 24px -10px rgba(0, 119, 200, 0.4);
   white-space: nowrap;
 }
 
 .ctaPrimary:hover {
-  background-color: #1B5E20;
+  background-position: 100% 0%;
   transform: translateY(-2px);
-  box-shadow: 0 16px 32px -10px rgba(46, 125, 50, 0.55);
+  box-shadow: 0 16px 32px -10px rgba(0, 119, 200, 0.55);
   gap: 0.7rem;
 }
 
@@ -179,29 +223,29 @@
   transform: translateX(3px);
 }
 
+/* Secondary Button - White Outline */
 .ctaSecondary {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.95rem 2rem;
   background-color: transparent;
-  color: #F57F17;
+  color: #ffffff;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
-  border: 2px solid #F9A825;
+  border: 2px solid rgba(255, 255, 255, 0.4);
   border-radius: 50px;
   text-decoration: none;
   transition: all 0.25s ease;
-  box-shadow: 0 4px 15px rgba(249, 168, 37, 0.15);
   white-space: nowrap;
 }
 
 .ctaSecondary:hover {
-  background-color: #F9A825;
-  color: #1A1A2E;
+  background-color: #ffffff;
+  color: #0A192F;
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(249, 168, 37, 0.35);
+  border-color: #ffffff;
   gap: 0.7rem;
 }
 
@@ -234,8 +278,8 @@
   width: 100%;
   height: 120px;
   display: block;
-  filter: drop-shadow(0 -6px 16px rgba(0, 0, 0, 0.12))
-    drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.06));
+  filter: drop-shadow(0 -6px 16px rgba(0, 0, 0, 0.4))
+    drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .demarcationLabel {
@@ -254,13 +298,13 @@
 .demarcationLine {
   flex: 1;
   height: 2px;
-  background: linear-gradient(to right, transparent, #000000, #000000);
+  background: linear-gradient(to right, transparent, #ffffff, #ffffff);
   border-radius: 2px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .demarcationLine:last-child {
-  background: linear-gradient(to left, transparent, #000000, #000000);
+  background: linear-gradient(to left, transparent, #ffffff, #ffffff);
 }
 
 .demarcationDot {
@@ -311,7 +355,7 @@
 
 @media (max-width: 768px) {
   .finalCTA {
-    padding: 5rem 0 0;
+    padding: 3.5rem 0 0;
   }
 
   .container {
@@ -338,7 +382,7 @@
   .textContent {
     text-align: center;
     align-items: center;
-    padding-bottom: 5.5rem;         /* ← clear of wave on mobile */
+    padding-bottom: 5.5rem;
   }
 
   .badge {
@@ -365,6 +409,10 @@
 
   .demarcationBottom .demarcationWave {
     height: 90px;
+  }
+
+  .bgDecor {
+    opacity: 0.4;
   }
 }
 

@@ -132,14 +132,18 @@ export const updateAboutSection = async <T extends Record<string, unknown>>(
     const { data, error } = await supabase
       .from('site_content')
       .upsert(
-        { page: 'about', section, content },
+        {
+          page: 'about',
+          section,
+          content: content as never,
+        },
         { onConflict: 'page,section' }
       )
       .select()
       .single();
 
     if (error) return { success: false, error: error.message };
-    return { success: true, data: data as SiteSection<T> };
+    return { success: true, data: data as unknown as SiteSection<T> };
   } catch (err) {
     return { success: false, error: String(err) };
   }

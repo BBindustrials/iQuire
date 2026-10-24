@@ -6,9 +6,99 @@
 
 .programs {
   position: relative;
-  padding: 7rem 0 8rem;
+  /* Reduced top padding to move the content up */
+  padding: 5rem 0 8rem;
   background-color: #ffffff;
   overflow: hidden;
+}
+
+/* ----------------------------------------------------------------------------
+   Background Decorations
+   ---------------------------------------------------------------------------- */
+
+.bgDecor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Top Left */
+.dottedGridLeft {
+  position: absolute;
+  top: 8%;
+  left: 3%;
+  width: 100px;
+  height: 100px;
+  opacity: 0.5;
+}
+.circleTopLeft {
+  position: absolute;
+  top: 25%;
+  left: 8%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 4px solid #D1FAE5;
+  opacity: 0.6;
+}
+
+/* Top Right */
+.leafTopRight {
+  position: absolute;
+  top: -50px;
+  right: -60px;
+  width: 400px;
+  height: 400px;
+  transform: rotate(-20deg);
+}
+.ringsTopRight {
+  position: absolute;
+  top: 15%;
+  right: 5%;
+  width: 150px;
+  height: 150px;
+}
+
+/* Bottom Left */
+.leafBottomLeft {
+  position: absolute;
+  bottom: -80px;
+  left: -80px;
+  width: 350px;
+  height: 350px;
+  transform: rotate(15deg);
+}
+.circleBottomLeft {
+  position: absolute;
+  bottom: 20%;
+  left: 12%;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #FEF3C7;
+  opacity: 0.8;
+}
+
+/* Bottom Right */
+.dottedGridRight {
+  position: absolute;
+  bottom: 15%;
+  right: 4%;
+  width: 100px;
+  height: 100px;
+  opacity: 0.5;
+}
+.blobBottomRight {
+  position: absolute;
+  bottom: 5%;
+  right: 10%;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, #f0fdf4 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0.8;
 }
 
 /* ----------------------------------------------------------------------------
@@ -18,7 +108,10 @@
 .header {
   text-align: center;
   max-width: 720px;
-  margin: 0 auto 4rem;
+  /* Reduced bottom margin to pull cards up */
+  margin: 0 auto 3rem;
+  position: relative;
+  z-index: 1;
 }
 
 .badge {
@@ -71,6 +164,8 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 1.75rem;
   margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
 }
 
 /* ----------------------------------------------------------------------------
@@ -110,18 +205,10 @@
   height: 6px;
 }
 
-.accent-blue::before {
-  background: linear-gradient(90deg, #1565C0, #0D47A1);
-}
-.accent-green::before {
-  background: linear-gradient(90deg, #2E7D32, #1B5E20);
-}
-.accent-purple::before {
-  background: linear-gradient(90deg, #7C3AED, #5B21B6);
-}
-.accent-orange::before {
-  background: linear-gradient(90deg, #F9A825, #F57F17);
-}
+.accent-blue::before { background: linear-gradient(90deg, #1565C0, #0D47A1); }
+.accent-gradient::before { background: linear-gradient(90deg, #00A878, #0077C8); }
+.accent-purple::before { background: linear-gradient(90deg, #7C3AED, #5B21B6); }
+.accent-orange::before { background: linear-gradient(90deg, #F9A825, #F57F17); }
 
 /* ----------------------------------------------------------------------------
    Card image
@@ -195,7 +282,7 @@
 }
 
 .accent-blue .cardTagline { color: #1565C0; }
-.accent-green .cardTagline { color: #2E7D32; }
+.accent-gradient .cardTagline { color: #0077C8; }
 .accent-purple .cardTagline { color: #7C3AED; }
 .accent-orange .cardTagline { color: #F57F17; }
 
@@ -244,7 +331,7 @@
 }
 
 .accent-blue .readMore { color: #1565C0; }
-.accent-green .readMore { color: #2E7D32; }
+.accent-gradient .readMore { color: #0077C8; }
 .accent-purple .readMore { color: #7C3AED; }
 .accent-orange .readMore { color: #F57F17; }
 
@@ -270,6 +357,8 @@
   border-left: 5px solid #F9A825;
   border-radius: 16px;
   margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
 }
 
 .scholarshipIcon {
@@ -322,6 +411,8 @@
 
 .ctaWrapper {
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 /* ============================================================================
@@ -349,65 +440,6 @@
     drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.08));
 }
 
-.demarcationLabel {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.25rem;
-  width: 100%;
-  max-width: 640px;
-  margin: 0 auto 1.5rem;
-  padding: 0 1rem;
-  position: relative;
-  z-index: 5;
-}
-
-.demarcationLine {
-  flex: 1;
-  height: 2px;
-  background: linear-gradient(to right, transparent, #0f172a, #0f172a);
-  border-radius: 2px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-.demarcationLine:last-child {
-  background: linear-gradient(to left, transparent, #0f172a, #0f172a);
-}
-
-.demarcationDot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background-color: #F9A825;
-  box-shadow: 0 0 0 6px rgba(249, 168, 37, 0.25),
-    0 0 0 12px rgba(249, 168, 37, 0.1),
-    0 4px 12px rgba(0, 0, 0, 0.25);
-  position: relative;
-  z-index: 6;
-  flex-shrink: 0;
-}
-
-.demarcationDot::after {
-  content: '';
-  position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  background-color: rgba(249, 168, 37, 0.3);
-  animation: pulseDot 2.5s ease-out infinite;
-  z-index: -1;
-}
-
-@keyframes pulseDot {
-  0% {
-    transform: scale(1);
-    opacity: 0.6;
-  }
-  100% {
-    transform: scale(2.4);
-    opacity: 0;
-  }
-}
-
 /* ============================================================================
    Responsive
    ============================================================================ */
@@ -421,11 +453,11 @@
 
 @media (max-width: 768px) {
   .programs {
-    padding: 5rem 0 6rem;
+    padding: 4rem 0 6rem;
   }
 
   .header {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
   }
 
   .grid {
@@ -449,9 +481,9 @@
     height: 90px;
   }
 
-  .demarcationLabel {
-    margin-bottom: 1rem;
-    gap: 0.85rem;
+  /* Dim the background SVGs on mobile so they don't distract */
+  .bgDecor {
+    opacity: 0.4;
   }
 }
 
@@ -468,12 +500,5 @@
 
   .demarcationBottom .demarcationWave {
     height: 70px;
-  }
-  .demarcationDot {
-    width: 12px;
-    height: 12px;
-  }
-  .demarcationLine {
-    height: 1.5px;
   }
 }

@@ -21,14 +21,12 @@ const stepImages = {
     'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face',
   build:
     'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop&crop=face',
-  connect:
-    'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop&crop=face',
   hired:
     'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300&fit=crop&crop=face',
 };
 
 // ============================================================================
-// Step data
+// Step data (Reduced to 4 steps)
 // ============================================================================
 
 interface Step {
@@ -66,16 +64,8 @@ const STEPS: Step[] = [
     imageAlt: 'Person building their CV and portfolio',
   },
   {
-    id: 'connect',
-    number: '04',
-    title: 'Connect',
-    description: 'Discover jobs, internships, mentors, and opportunities.',
-    image: stepImages.connect,
-    imageAlt: 'Person connecting with opportunities and mentors',
-  },
-  {
     id: 'hired',
-    number: '05',
+    number: '04',
     title: 'Get Hired',
     description: 'Connect with employers looking for work-ready talent.',
     image: stepImages.hired,
@@ -87,8 +77,8 @@ const STEPS: Step[] = [
 // Radial helpers
 // ============================================================================
 
-// 5 evenly spaced angles, starting at top (12 o'clock)
-const NODE_ANGLES_DEG = [0, 72, 144, 216, 288];
+// 4 evenly spaced angles, starting at top (12 o'clock)
+const NODE_ANGLES_DEG = [0, 90, 180, 270];
 
 const angleToPosition = (angleDeg: number, radiusPercent = 42) => {
   const rad = ((angleDeg - 90) * Math.PI) / 180;
@@ -105,8 +95,7 @@ export const HowItWorks: React.FC = () => {
   // Position of each node as percentage (0-100) inside the circle
   const nodePositions = NODE_ANGLES_DEG.map((deg) => angleToPosition(deg, 42));
 
-  // Build a single continuous circle path with SVG arcs connecting all 5 nodes
-  // We use two <path> arcs per segment to guarantee a closed circle.
+  // Build a single continuous circle path with SVG arcs connecting all 4 nodes
   const radius = 42; // must match angleToPosition's radiusPercent
   const circumferencePath = `M 50 ${50 - radius} ` +
     NODE_ANGLES_DEG.slice(1).map((_, idx) => {
@@ -118,9 +107,42 @@ export const HowItWorks: React.FC = () => {
 
   return (
     <section className={styles.howItWorks}>
-      {/* Background accents */}
-      <div className={styles.bgAccentOne} aria-hidden="true" />
-      <div className={styles.bgAccentTwo} aria-hidden="true" />
+      {/* ====================================================================
+          BACKGROUND SVG DECORATIONS
+          ==================================================================== */}
+      <div className={styles.bgDecor} aria-hidden="true">
+        {/* Top-Left: Dotted Grid & Floating Cross */}
+        <svg className={styles.dottedGridLeft} viewBox="0 0 100 100" fill="none">
+          {[...Array(4)].map((_, row) =>
+            [...Array(4)].map((_, col) => (
+              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#94a3b8" />
+            ))
+          )}
+        </svg>
+        <svg className={styles.crossTopLeft} viewBox="0 0 24 24" fill="none">
+          <path d="M12 4V20M4 12H20" stroke="#F9A825" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
+        </svg>
+
+        {/* Top-Right: Abstract Leaf & Sweeping Ring */}
+        <svg className={styles.sweepingRing} viewBox="0 0 200 200" fill="none">
+          <ellipse cx="100" cy="100" rx="90" ry="60" transform="rotate(-30 100 100)" stroke="#00A878" strokeWidth="2" opacity="0.2" strokeDasharray="8 8" />
+        </svg>
+
+        {/* Bottom-Left: Green Leaf */}
+        <svg className={styles.leafBottomLeft} viewBox="0 0 300 300" fill="none">
+          <path d="M -50 200 C 50 50, 200 0, 250 100 C 300 200, 150 300, 50 300 C -20 300, -100 280, -50 200 Z" fill="#D1FAE5" opacity="0.5" />
+        </svg>
+        
+        {/* Bottom-Right: Floating Circle & Dotted Grid */}
+        <div className={styles.circleBottomRight} />
+        <svg className={styles.dottedGridRight} viewBox="0 0 100 100" fill="none">
+          {[...Array(3)].map((_, row) =>
+            [...Array(3)].map((_, col) => (
+              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#94a3b8" />
+            ))
+          )}
+        </svg>
+      </div>
 
       <div className={styles.container}>
         {/* ================================================================
@@ -129,12 +151,12 @@ export const HowItWorks: React.FC = () => {
         <ScrollReveal animation="up" className={styles.header}>
           <span className={styles.badge}>How It Works</span>
           <h2 className={styles.title}>
-            From <span className={styles.highlight}>Skills</span> to{' '}
-            <span className={styles.highlight}>Opportunity</span>
+            Four clear paths.{' '}
+            <span className={styles.highlight}>One destination.</span>
           </h2>
           <p className={styles.description}>
             Your journey from learning to landing meaningful opportunities —
-            in five clear steps.
+            in four simple steps.
           </p>
         </ScrollReveal>
 
@@ -162,7 +184,7 @@ export const HowItWorks: React.FC = () => {
                 </linearGradient>
               </defs>
 
-              {/* One continuous dashed path — connects all 5 nodes in order */}
+              {/* One continuous dashed path — connects all 4 nodes in order */}
               <path
                 d={circumferencePath}
                 fill="none"
@@ -184,7 +206,7 @@ export const HowItWorks: React.FC = () => {
               </div>
             </div>
 
-            {/* 5 Step nodes */}
+            {/* 4 Step nodes */}
             {STEPS.map((step, idx) => {
               const pos = nodePositions[idx];
               return (
@@ -240,7 +262,7 @@ export const HowItWorks: React.FC = () => {
             CTA
             ================================================================ */}
         <ScrollReveal animation="up" delay={3} className={styles.ctaWrapper}>
-        <Button variant="primary" color="green" size="lg" href="/courses">
+        <Button variant="primary" color="gradient" size="lg" href="/courses">
             Start Your Journey
           </Button>
           <Link to="/courses" className={styles.secondaryLink}>
@@ -250,7 +272,7 @@ export const HowItWorks: React.FC = () => {
       </div>
 
       {/* ================================================================
-          BOTTOM demarcation — wave + gold outline only
+          BOTTOM demarcation — wave + gold outline only (Fill unchanged)
           ================================================================ */}
       <div className={styles.demarcationBottom} aria-hidden="true">
         <svg
@@ -266,6 +288,7 @@ export const HowItWorks: React.FC = () => {
             strokeWidth="3"
             opacity="0.6"
           />
+          {/* Fill kept as #0f172a */}
           <path
             d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z"
             fill="#0f172a"

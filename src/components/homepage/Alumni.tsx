@@ -169,7 +169,6 @@ export const Alumni: React.FC = () => {
       if (result.success && result.data && result.data.length > 0) {
         setAlumni(result.data.map(mapRecordToDisplay));
       }
-      // else: keep fallback
     };
 
     load();
@@ -187,7 +186,29 @@ export const Alumni: React.FC = () => {
 
   return (
     <section className={styles.alumni}>
-      <div className="container">
+      {/* ====================================================================
+          BACKGROUND SVG DECORATIONS
+          ==================================================================== */}
+      <div className={styles.bgDecor} aria-hidden="true">
+        {/* Top Left Dotted Grid */}
+        <svg className={styles.dottedGridLeft} viewBox="0 0 100 100" fill="none">
+          {[...Array(4)].map((_, row) =>
+            [...Array(4)].map((_, col) => (
+              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#94a3b8" />
+            ))
+          )}
+        </svg>
+        
+        {/* Top Right Floating Circle */}
+        <div className={styles.circleRight} />
+
+        {/* Bottom Left Abstract Leaf */}
+        <svg className={styles.leafLeft} viewBox="0 0 300 300" fill="none">
+          <path d="M -50 200 C 50 50, 200 0, 250 100 C 300 200, 150 300, 50 300 C -20 300, -100 280, -50 200 Z" fill="#D1FAE5" opacity="0.4" />
+        </svg>
+      </div>
+
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         {/* ================================================================
             HEADER
             ================================================================ */}
@@ -337,7 +358,7 @@ export const Alumni: React.FC = () => {
             CTA
             ================================================================ */}
         <ScrollReveal animation="zoom" delay={1} className={styles.ctaWrapper}>
-          <Button variant="primary" color="green" size="lg" href="/alumni">
+          <Button variant="primary" color="gradient" size="lg" href="/alumni">
             Meet More of Our Alumni
           </Button>
           <Link to="/hire-from-us" className={styles.secondaryLink}>
