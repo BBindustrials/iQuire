@@ -22,6 +22,7 @@ export type Database = {
           career_experience: string | null
           cohort: string | null
           created_at: string
+          cv_url: string | null
           display_order: number
           featured: boolean
           feedback: string | null
@@ -31,10 +32,12 @@ export type Database = {
           linkedin_url: string | null
           organization: string | null
           photo_url: string | null
+          portfolio_url: string | null
           professional_summary: string | null
           professional_title: string
           programme: string | null
           short_summary: string
+          slug: string | null
           status: Database["public"]["Enums"]["alumni_status"]
           trustpilot_url: string | null
           updated_at: string
@@ -46,6 +49,7 @@ export type Database = {
           career_experience?: string | null
           cohort?: string | null
           created_at?: string
+          cv_url?: string | null
           display_order?: number
           featured?: boolean
           feedback?: string | null
@@ -55,10 +59,12 @@ export type Database = {
           linkedin_url?: string | null
           organization?: string | null
           photo_url?: string | null
+          portfolio_url?: string | null
           professional_summary?: string | null
           professional_title: string
           programme?: string | null
           short_summary: string
+          slug?: string | null
           status?: Database["public"]["Enums"]["alumni_status"]
           trustpilot_url?: string | null
           updated_at?: string
@@ -70,6 +76,7 @@ export type Database = {
           career_experience?: string | null
           cohort?: string | null
           created_at?: string
+          cv_url?: string | null
           display_order?: number
           featured?: boolean
           feedback?: string | null
@@ -79,10 +86,12 @@ export type Database = {
           linkedin_url?: string | null
           organization?: string | null
           photo_url?: string | null
+          portfolio_url?: string | null
           professional_summary?: string | null
           professional_title?: string
           programme?: string | null
           short_summary?: string
+          slug?: string | null
           status?: Database["public"]["Enums"]["alumni_status"]
           trustpilot_url?: string | null
           updated_at?: string
@@ -100,10 +109,10 @@ export type Database = {
           created_by: string | null
           expires_at: string | null
           id: string
-          priority: 'low' | 'normal' | 'high' | 'urgent'
+          priority: string
           published: boolean
           published_at: string
-          target_account_type: 'member' | 'recruiter' | 'admin' | null
+          target_account_type: string | null
           title: string
           updated_at: string
         }
@@ -117,10 +126,10 @@ export type Database = {
           created_by?: string | null
           expires_at?: string | null
           id?: string
-          priority?: 'low' | 'normal' | 'high' | 'urgent'
+          priority?: string
           published?: boolean
           published_at?: string
-          target_account_type?: 'member' | 'recruiter' | 'admin' | null
+          target_account_type?: string | null
           title: string
           updated_at?: string
         }
@@ -134,14 +143,36 @@ export type Database = {
           created_by?: string | null
           expires_at?: string | null
           id?: string
-          priority?: 'low' | 'normal' | 'high' | 'urgent'
+          priority?: string
           published?: boolean
           published_at?: string
-          target_account_type?: 'member' | 'recruiter' | 'admin' | null
+          target_account_type?: string | null
           title?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "announcements_cohort_id_fkey"
+            columns: ["cohort_id"]
+            isOneToOne: false
+            referencedRelation: "cohorts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "announcements_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "announcements_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       assignment_submissions: {
         Row: {
@@ -153,7 +184,7 @@ export type Database = {
           graded_by: string | null
           id: string
           score: number | null
-          status: 'submitted' | 'graded' | 'returned' | 'resubmission-requested'
+          status: string
           submission_text: string | null
           submission_url: string | null
           submitted_at: string
@@ -169,7 +200,7 @@ export type Database = {
           graded_by?: string | null
           id?: string
           score?: number | null
-          status?: 'submitted' | 'graded' | 'returned' | 'resubmission-requested'
+          status?: string
           submission_text?: string | null
           submission_url?: string | null
           submitted_at?: string
@@ -185,14 +216,36 @@ export type Database = {
           graded_by?: string | null
           id?: string
           score?: number | null
-          status?: 'submitted' | 'graded' | 'returned' | 'resubmission-requested'
+          status?: string
           submission_text?: string | null
           submission_url?: string | null
           submitted_at?: string
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "assignment_submissions_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignment_submissions_graded_by_fkey"
+            columns: ["graded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignment_submissions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       assignments: {
         Row: {
@@ -207,7 +260,7 @@ export type Database = {
           instructions: string | null
           max_score: number | null
           published: boolean
-          submission_type: 'link' | 'text' | 'file'
+          submission_type: string
           title: string
           updated_at: string
         }
@@ -223,7 +276,7 @@ export type Database = {
           instructions?: string | null
           max_score?: number | null
           published?: boolean
-          submission_type?: 'link' | 'text' | 'file'
+          submission_type?: string
           title: string
           updated_at?: string
         }
@@ -239,11 +292,33 @@ export type Database = {
           instructions?: string | null
           max_score?: number | null
           published?: boolean
-          submission_type?: 'link' | 'text' | 'file'
+          submission_type?: string
           title?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "assignments_cohort_id_fkey"
+            columns: ["cohort_id"]
+            isOneToOne: false
+            referencedRelation: "cohorts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignments_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignments_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       blog_categories: {
         Row: {
@@ -584,7 +659,7 @@ export type Database = {
           meeting_url: string | null
           recording_url: string | null
           session_date: string
-          status: 'scheduled' | 'live' | 'completed' | 'cancelled'
+          status: string
           title: string
           updated_at: string
         }
@@ -601,7 +676,7 @@ export type Database = {
           meeting_url?: string | null
           recording_url?: string | null
           session_date: string
-          status?: 'scheduled' | 'live' | 'completed' | 'cancelled'
+          status?: string
           title: string
           updated_at?: string
         }
@@ -618,11 +693,33 @@ export type Database = {
           meeting_url?: string | null
           recording_url?: string | null
           session_date?: string
-          status?: 'scheduled' | 'live' | 'completed' | 'cancelled'
+          status?: string
           title?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "cohort_sessions_cohort_id_fkey"
+            columns: ["cohort_id"]
+            isOneToOne: false
+            referencedRelation: "cohorts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cohort_sessions_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cohort_sessions_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       cohorts: {
         Row: {
@@ -758,6 +855,7 @@ export type Database = {
           emoji: string | null
           experience: Json | null
           faqs: Json | null
+          featured_on_homepage: boolean
           final_cta: Json | null
           format: string | null
           hero_image_url: string | null
@@ -793,6 +891,7 @@ export type Database = {
           emoji?: string | null
           experience?: Json | null
           faqs?: Json | null
+          featured_on_homepage?: boolean
           final_cta?: Json | null
           format?: string | null
           hero_image_url?: string | null
@@ -828,6 +927,7 @@ export type Database = {
           emoji?: string | null
           experience?: Json | null
           faqs?: Json | null
+          featured_on_homepage?: boolean
           final_cta?: Json | null
           format?: string | null
           hero_image_url?: string | null
@@ -959,7 +1059,7 @@ export type Database = {
           created_at: string
           description: string | null
           display_order: number
-          emoji: string
+          emoji: string | null
           id: string
           label: string
           published: boolean
@@ -971,7 +1071,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           display_order?: number
-          emoji: string
+          emoji?: string | null
           id?: string
           label: string
           published?: boolean
@@ -983,7 +1083,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           display_order?: number
-          emoji?: string
+          emoji?: string | null
           id?: string
           label?: string
           published?: boolean
@@ -1140,7 +1240,7 @@ export type Database = {
         Row: {
           body: string | null
           cohort_id: string
-          content_type: 'video' | 'pdf' | 'text' | 'link' | 'mixed'
+          content_type: string
           course_id: string
           created_at: string
           created_by: string | null
@@ -1158,7 +1258,7 @@ export type Database = {
         Insert: {
           body?: string | null
           cohort_id: string
-          content_type?: 'video' | 'pdf' | 'text' | 'link' | 'mixed'
+          content_type?: string
           course_id: string
           created_at?: string
           created_by?: string | null
@@ -1176,7 +1276,7 @@ export type Database = {
         Update: {
           body?: string | null
           cohort_id?: string
-          content_type?: 'video' | 'pdf' | 'text' | 'link' | 'mixed'
+          content_type?: string
           course_id?: string
           created_at?: string
           created_by?: string | null
@@ -1191,7 +1291,29 @@ export type Database = {
           updated_at?: string
           video_url?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "lessons_cohort_id_fkey"
+            columns: ["cohort_id"]
+            isOneToOne: false
+            referencedRelation: "cohorts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lessons_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lessons_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       materials: {
         Row: {
@@ -1202,7 +1324,7 @@ export type Database = {
           external_url: string | null
           file_url: string | null
           id: string
-          material_type: 'pdf' | 'doc' | 'link' | 'video' | 'other'
+          material_type: string
           published: boolean
           title: string
           updated_at: string
@@ -1215,7 +1337,7 @@ export type Database = {
           external_url?: string | null
           file_url?: string | null
           id?: string
-          material_type?: 'pdf' | 'doc' | 'link' | 'video' | 'other'
+          material_type?: string
           published?: boolean
           title: string
           updated_at?: string
@@ -1228,12 +1350,20 @@ export type Database = {
           external_url?: string | null
           file_url?: string | null
           id?: string
-          material_type?: 'pdf' | 'doc' | 'link' | 'video' | 'other'
+          material_type?: string
           published?: boolean
           title?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "materials_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       nysc_details: {
         Row: {
@@ -1275,6 +1405,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      opportunities: {
+        Row: {
+          apply_url: string
+          company: string
+          created_at: string
+          deadline: string | null
+          description: string
+          experience_level: string | null
+          id: string
+          location: string
+          published: boolean
+          salary_range: string | null
+          skills_required: string[] | null
+          title: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          apply_url: string
+          company: string
+          created_at?: string
+          deadline?: string | null
+          description: string
+          experience_level?: string | null
+          id?: string
+          location: string
+          published?: boolean
+          salary_range?: string | null
+          skills_required?: string[] | null
+          title: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          apply_url?: string
+          company?: string
+          created_at?: string
+          deadline?: string | null
+          description?: string
+          experience_level?: string | null
+          id?: string
+          location?: string
+          published?: boolean
+          salary_range?: string | null
+          skills_required?: string[] | null
+          title?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       previous_cohorts: {
         Row: {
@@ -1329,10 +1510,12 @@ export type Database = {
           account_type: Database["public"]["Enums"]["account_type"]
           avatar_url: string | null
           bio_title: string | null
+          career_goals: string | null
           country: string | null
           created_at: string
           created_by_admin: string | null
           cv_data: Json | null
+          education: Json | null
           email: string
           first_name: string
           gender: Database["public"]["Enums"]["gender_type"] | null
@@ -1348,6 +1531,7 @@ export type Database = {
           profile_completion: number
           readiness_assessment: Json | null
           role: Database["public"]["Enums"]["user_role"]
+          skills: Json | null
           state: string | null
           tier: Database["public"]["Enums"]["account_tier"]
           updated_at: string
@@ -1358,10 +1542,12 @@ export type Database = {
           account_type?: Database["public"]["Enums"]["account_type"]
           avatar_url?: string | null
           bio_title?: string | null
+          career_goals?: string | null
           country?: string | null
           created_at?: string
           created_by_admin?: string | null
           cv_data?: Json | null
+          education?: Json | null
           email: string
           first_name?: string
           gender?: Database["public"]["Enums"]["gender_type"] | null
@@ -1377,6 +1563,7 @@ export type Database = {
           profile_completion?: number
           readiness_assessment?: Json | null
           role?: Database["public"]["Enums"]["user_role"]
+          skills?: Json | null
           state?: string | null
           tier?: Database["public"]["Enums"]["account_tier"]
           updated_at?: string
@@ -1387,10 +1574,12 @@ export type Database = {
           account_type?: Database["public"]["Enums"]["account_type"]
           avatar_url?: string | null
           bio_title?: string | null
+          career_goals?: string | null
           country?: string | null
           created_at?: string
           created_by_admin?: string | null
           cv_data?: Json | null
+          education?: Json | null
           email?: string
           first_name?: string
           gender?: Database["public"]["Enums"]["gender_type"] | null
@@ -1406,6 +1595,7 @@ export type Database = {
           profile_completion?: number
           readiness_assessment?: Json | null
           role?: Database["public"]["Enums"]["user_role"]
+          skills?: Json | null
           state?: string | null
           tier?: Database["public"]["Enums"]["account_tier"]
           updated_at?: string
@@ -1511,6 +1701,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      resources: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          published: boolean
+          title: string
+          type: string
+          updated_at: string
+          url: string | null
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          published?: boolean
+          title: string
+          type?: string
+          updated_at?: string
+          url?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          published?: boolean
+          title?: string
+          type?: string
+          updated_at?: string
+          url?: string | null
+        }
+        Relationships: []
       }
       scholarships: {
         Row: {

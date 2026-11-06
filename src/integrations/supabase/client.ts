@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js';
-import type { Database } from './types';
 
 // ============================================================================
 // Supabase Client — Singleton
@@ -33,7 +32,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 // ----------------------------------------------------------------------------
 // Create the Supabase client
 // ----------------------------------------------------------------------------
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,          // Keep user logged in across page reloads
     autoRefreshToken: true,         // Auto-refresh expired tokens
