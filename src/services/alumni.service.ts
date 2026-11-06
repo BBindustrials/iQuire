@@ -1,7 +1,5 @@
 // ============================================================================
-// iQuire — Alumni Service (Phase 9B.1a)
-// ============================================================================
-// CRUD operations + image upload with client-side compression.
+// iQuire — Alumni Service (Phase 17.21 — Slug + CV/Portfolio)
 // ============================================================================
 
 import { supabase } from '../integrations/supabase/client';
@@ -14,6 +12,7 @@ export type AlumniStatus = 'draft' | 'published' | 'archived';
 
 export interface Alumni {
   id: string;
+  slug: string | null;
   full_name: string;
   professional_title: string;
   organization: string | null;
@@ -30,6 +29,8 @@ export interface Alumni {
   feedback: string | null;
   trustpilot_url: string | null;
   linkedin_url: string | null;
+  cv_url: string | null;
+  portfolio_url: string | null;
   featured: boolean;
   display_order: number;
   status: AlumniStatus;
@@ -54,6 +55,8 @@ export interface AlumniInput {
   feedback?: string | null;
   trustpilot_url?: string | null;
   linkedin_url?: string | null;
+  cv_url?: string | null;
+  portfolio_url?: string | null;
   featured?: boolean;
   display_order?: number;
   status?: AlumniStatus;
@@ -65,20 +68,43 @@ interface ServiceResponse<T> {
   error?: string;
 }
 
-// ----------------------------------------------------------------------------
-// Typed table accessor
-// ----------------------------------------------------------------------------
-// The Supabase client is not generated with a `Database` generic, so
-// `.from('alumni')` infers `never` for row shapes. This helper centralizes a
-// single cast so the rest of the file stays clean. For full type safety,
-// replace this with generated Supabase types:
-//   npx supabase gen types typescript --project-id <id> --schema public \
-//     > src/integrations/supabase/types.ts
-// then pass `Database` into createClient<Database>(...).
-// ----------------------------------------------------------------------------
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const alumniTable = (): any => supabase.from('alumni');
+
+// ============================================================================
+// SLUG HELPERS
+// ============================================================================
+
+const slugify = (text: string): string =>
+  text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // strip accents
+    .replace(/[^a-z0-9\s-]/g, '')    // remove non-alphanumeric
+    .trim()
+    .replace(/\s+/g, '-')            // spaces → dashes
+    .replace(/-+/g, '-');            // collapse dashes
+
+const generateUniqueSlug = async (
+  fullName: string,
+  excludeId?: string
+): Promise<string> => {
+  const base = slugify(fullName);
+  let candidate = base;
+  let counter = 1;
+
+  while (true) {
+    let query = alumniTable().select('id').eq('slug', candidate);
+    if (excludeId) query = query.neq('id', excludeId);
+
+    const { data } = await query.maybeSingle();
+
+    if (!data) return candidate;
+
+    candidate = `${base}-${counter}`;
+    counter++;
+  }
+};
 
 // ============================================================================
 // LIST — Admin (all alumni)
@@ -118,7 +144,7 @@ export const fetchPublishedAlumni = async (): Promise<ServiceResponse<Alumni[]>>
 };
 
 // ============================================================================
-// LIST — Public Featured (home section, max N)
+// LIST — Public Featured
 // ============================================================================
 
 export const fetchFeaturedAlumni = async (
@@ -162,15 +188,40 @@ export const fetchAlumniById = async (
 };
 
 // ============================================================================
-// CREATE
+// GET BY SLUG (NEW)
+// ============================================================================
+
+export const fetchAlumniBySlug = async (
+  slug: string
+): Promise<ServiceResponse<Alumni>> => {
+  try {
+    const { data, error } = await alumniTable()
+      .select('*')
+      .eq('slug', slug)
+      .maybeSingle();
+
+    if (error) return { success: false, error: error.message };
+    if (!data) return { success: false, error: 'Alumni not found' };
+
+    return { success: true, data: data as Alumni };
+  } catch (err) {
+    return { success: false, error: String(err) };
+  }
+};
+
+// ============================================================================
+// CREATE (with auto-slug)
 // ============================================================================
 
 export const createAlumni = async (
   input: AlumniInput
 ): Promise<ServiceResponse<Alumni>> => {
   try {
+    const slug = await generateUniqueSlug(input.full_name);
+
     const { data, error } = await alumniTable()
       .insert({
+        slug,
         full_name: input.full_name.trim(),
         professional_title: input.professional_title.trim(),
         organization: input.organization?.trim() || null,
@@ -187,6 +238,8 @@ export const createAlumni = async (
         feedback: input.feedback?.trim() || null,
         trustpilot_url: input.trustpilot_url?.trim() || null,
         linkedin_url: input.linkedin_url?.trim() || null,
+        cv_url: input.cv_url?.trim() || null,
+        portfolio_url: input.portfolio_url?.trim() || null,
         featured: input.featured ?? false,
         display_order: input.display_order ?? 0,
         status: input.status ?? 'draft',
@@ -202,7 +255,7 @@ export const createAlumni = async (
 };
 
 // ============================================================================
-// UPDATE
+// UPDATE (regenerate slug if name changes)
 // ============================================================================
 
 export const updateAlumni = async (
@@ -212,7 +265,10 @@ export const updateAlumni = async (
   try {
     const payload: Record<string, unknown> = {};
 
-    if (input.full_name !== undefined) payload.full_name = input.full_name.trim();
+    if (input.full_name !== undefined) {
+      payload.full_name = input.full_name.trim();
+      payload.slug = await generateUniqueSlug(input.full_name, id);
+    }
     if (input.professional_title !== undefined)
       payload.professional_title = input.professional_title.trim();
     if (input.organization !== undefined)
@@ -237,6 +293,10 @@ export const updateAlumni = async (
       payload.trustpilot_url = input.trustpilot_url?.trim() || null;
     if (input.linkedin_url !== undefined)
       payload.linkedin_url = input.linkedin_url?.trim() || null;
+    if (input.cv_url !== undefined)
+      payload.cv_url = input.cv_url?.trim() || null;
+    if (input.portfolio_url !== undefined)
+      payload.portfolio_url = input.portfolio_url?.trim() || null;
     if (input.featured !== undefined) payload.featured = input.featured;
     if (input.display_order !== undefined) payload.display_order = input.display_order;
     if (input.status !== undefined) payload.status = input.status;

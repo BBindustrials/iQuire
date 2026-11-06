@@ -17,7 +17,7 @@ import hero4 from '../../assets/images/hero/hero-4-ai.png';
 // Config
 // ============================================================================
 
-/** Auto-rotate interval in milliseconds (7 seconds) */
+/** Auto rotate interval in milliseconds (7 seconds) */
 const AUTO_ROTATE_MS = 7000;
 
 // ============================================================================
@@ -27,7 +27,6 @@ const AUTO_ROTATE_MS = 7000;
 interface HeroSlide {
   id: string;
   badge: string;
-  badgeIcon: string;
   headline: string;
   headlineHighlight: string;
   subheadline: string;
@@ -42,11 +41,10 @@ const SLIDES: HeroSlide[] = [
   {
     id: 'education',
     badge: 'Just Graduated? Start Here.',
-    badgeIcon: '🎓',
     headline: 'You finished school.',
     headlineHighlight: 'Now what?',
     subheadline:
-      'Turn your education into a real career. Learn practical skills, prepare for apprenticeships and internships, and become work-ready — wherever you are in the world.',
+      'Turn your education into a real career. Learn practical skills, prepare for apprenticeships and internships, and become work ready wherever you are in the world.',
     ctaPrimary: { label: 'Explore Courses', to: '/courses' },
     ctaSecondary: { label: 'Explore Courses', to: '/courses' },
     image: hero1,
@@ -56,11 +54,10 @@ const SLIDES: HeroSlide[] = [
   {
     id: 'professionals',
     badge: 'Already Working? Level Up.',
-    badgeIcon: '💼',
     headline: 'You started your career.',
     headlineHighlight: 'Now grow it.',
     subheadline:
-      "Sharpen your skills, transition into new fields, and unlock opportunities for advancement — whether you're in tech, healthcare, engineering, or something else entirely.",
+      'Sharpen your skills, transition into new fields, and unlock opportunities for advancement whether you are in tech, healthcare, engineering, or something else entirely.',
     ctaPrimary: { label: 'Explore Courses', to: '/courses' },
     ctaSecondary: { label: 'See Courses', to: '/courses' },
     image: hero2,
@@ -70,11 +67,10 @@ const SLIDES: HeroSlide[] = [
   {
     id: 'recruiters',
     badge: 'For Recruiters & Hiring Teams',
-    badgeIcon: '🏢',
     headline: 'Hire trained,',
-    headlineHighlight: 'work-ready talent.',
+    headlineHighlight: 'work ready talent.',
     subheadline:
-      'Discover motivated young professionals trained in digital skills, workplace readiness, and modern tools. Every candidate is verified by IQuire.',
+      'Discover motivated young professionals trained in digital skills, workplace readiness, and modern tools. Every candidate is verified by iQuire.',
     ctaPrimary: { label: 'Hire From Us', to: '/hire-from-us' },
     ctaSecondary: { label: 'Browse Talent', to: '/hire-from-us' },
     image: hero3,
@@ -84,11 +80,10 @@ const SLIDES: HeroSlide[] = [
   {
     id: 'ai-counselor',
     badge: 'Meet Your AI Career Guide',
-    badgeIcon: '🤖',
     headline: 'Your personal',
     headlineHighlight: 'AI career counselor.',
     subheadline:
-      'Get career direction, identify skill gaps, build your CV, match with opportunities, and prepare for interviews — all with one intelligent companion.',
+      'Get career direction, identify skill gaps, build your CV, match with opportunities, and prepare for interviews all with one intelligent companion.',
     ctaPrimary: { label: 'Meet Your AI Counselor', to: '/ai-career-counselor' },
     ctaSecondary: { label: 'Explore Courses', to: '/courses' },
     image: hero4,
@@ -105,7 +100,7 @@ export const Hero: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [animationKey, setAnimationKey] = useState(0);
 
-  // Ref holds the current slide index → avoids stale closures
+  // Ref holds the current slide index to avoid stale closures
   const indexRef = useRef(0);
 
   useEffect(() => {
@@ -147,13 +142,13 @@ export const Hero: React.FC = () => {
     <section
       className={styles.hero}
       aria-roledescription="carousel"
-      aria-label="IQuire visual story"
+      aria-label="iQuire visual story"
     >
       {/* ====================================================================
           BACKGROUND SVG DECORATIONS
           ==================================================================== */}
       <div className={styles.backgroundDecor} aria-hidden="true">
-        {/* Top-left dotted grid (Light Green) */}
+        {/* Top left dotted grid (brand green) */}
         <svg className={styles.dottedGridTL} viewBox="0 0 100 100" fill="none">
           {[...Array(5)].map((_, row) =>
             [...Array(5)].map((_, col) => (
@@ -162,13 +157,13 @@ export const Hero: React.FC = () => {
                 cx={10 + col * 20}
                 cy={10 + row * 20}
                 r="2"
-                fill="#86efac"
+                fill="#2BBBAD"
               />
             ))
           )}
         </svg>
 
-        {/* Bottom-right dotted grid (Light Green) */}
+        {/* Bottom right dotted grid (brand green) */}
         <svg className={styles.dottedGridBR} viewBox="0 0 100 100" fill="none">
           {[...Array(5)].map((_, row) =>
             [...Array(5)].map((_, col) => (
@@ -177,32 +172,44 @@ export const Hero: React.FC = () => {
                 cx={10 + col * 20}
                 cy={10 + row * 20}
                 r="2"
-                fill="#86efac"
+                fill="#2BBBAD"
               />
             ))
           )}
         </svg>
 
-        {/* Top-right yellow abstract shape */}
+        {/* Top right soft brand shape */}
         <svg className={styles.shapeTopRight} viewBox="0 0 200 200" fill="none">
+          <defs>
+            <linearGradient id="brandGradTopRight" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#2BBBAD" />
+              <stop offset="100%" stopColor="#1E88E5" />
+            </linearGradient>
+          </defs>
           <path
             d="M 0 100 C 0 20, 80 0, 150 20 C 200 40, 200 150, 150 180 C 80 200, 0 180, 0 100 Z"
-            fill="#FEF3C7"
-            opacity="0.5"
+            fill="url(#brandGradTopRight)"
+            opacity="0.12"
           />
         </svg>
 
-        {/* Bottom-left green/yellow abstract shape */}
+        {/* Bottom left soft brand shape */}
         <svg className={styles.shapeBottomLeft} viewBox="0 0 300 300" fill="none">
+          <defs>
+            <linearGradient id="brandGradBottomLeft" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#2BBBAD" />
+              <stop offset="100%" stopColor="#1E88E5" />
+            </linearGradient>
+          </defs>
           <path
             d="M -50 200 C 50 50, 200 0, 250 100 C 300 200, 150 300, 50 300 C -20 300, -100 280, -50 200 Z"
-            fill="#D1FAE5"
-            opacity="0.4"
+            fill="url(#brandGradBottomLeft)"
+            opacity="0.10"
           />
           <path
             d="M -50 250 C 50 150, 150 100, 200 150 C 250 200, 150 300, 50 300 C -20 300, -100 320, -50 250 Z"
-            fill="#FEF3C7"
-            opacity="0.3"
+            fill="url(#brandGradBottomLeft)"
+            opacity="0.08"
           />
         </svg>
       </div>
@@ -254,7 +261,6 @@ export const Hero: React.FC = () => {
                     }`}
                     style={{ animationDelay: '0.05s' }}
                   >
-                    <span className={styles.badgeIcon}>{slide.badgeIcon}</span>
                     <span className={styles.badgeText}>{slide.badge}</span>
                   </div>
 
@@ -379,9 +385,9 @@ export const Hero: React.FC = () => {
         </div>
       </div>
 
-      {/* ==========================================================================
+      {/* ======================================================================
           SECTION DEMARCATION — bold wave into next section
-          ========================================================================== */}
+          ====================================================================== */}
       <div className={styles.demarcation} aria-hidden="true">
         <div className={styles.demarcationLabel}>
           <span className={styles.demarcationLabelText}>
@@ -389,7 +395,9 @@ export const Hero: React.FC = () => {
           </span>
         </div>
 
-        <div className={styles.demarcationDotWrapper}></div>
+        <div className={styles.demarcationDotWrapper}>
+          <span className={styles.demarcationDot}></span>
+        </div>
 
         <svg
           className={styles.demarcationWave}
@@ -397,16 +405,26 @@ export const Hero: React.FC = () => {
           preserveAspectRatio="none"
           xmlns="http://www.w3.org/2000/svg"
         >
+          <defs>
+            <linearGradient id="waveStroke" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#2BBBAD" />
+              <stop offset="100%" stopColor="#1E88E5" />
+            </linearGradient>
+            <linearGradient id="waveFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#f0fdfb" />
+              <stop offset="100%" stopColor="#eff6ff" />
+            </linearGradient>
+          </defs>
           <path
             d="M0,60 C240,10 480,110 720,60 C960,10 1200,110 1440,60 L1440,120 L0,120 Z"
             fill="none"
-            stroke="#F9A825"
+            stroke="url(#waveStroke)"
             strokeWidth="3"
-            opacity="0.6"
+            opacity="0.7"
           />
           <path
             d="M0,60 C240,10 480,110 720,60 C960,10 1200,110 1440,60 L1440,120 L0,120 Z"
-            fill="#f0fdf4"
+            fill="#d6eaff"
           />
         </svg>
       </div>

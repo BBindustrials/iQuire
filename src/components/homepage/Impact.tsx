@@ -1,11 +1,11 @@
+/* eslint-disable react-hooks/refs */
 // ============================================================================
-// iQuire — Impact Section (Phase 14.5 — DB-driven)
+// iQuire — Impact Section (Phase 17.18 — Net Grid, Marquee, Pills)
 // ============================================================================
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../common/Button';
-import { ScrollReveal } from '../common/ScrollReveal';
 import {
   fetchPublishedImpactMetrics,
   type ImpactMetric,
@@ -14,8 +14,9 @@ import type { ImpactAccent } from '../../types/content.types';
 import styles from './Impact.module.css';
 
 // ============================================================================
-// EMPLOYER LOGO IMPORTS
+// Employer logos
 // ============================================================================
+
 import bbAitechLogo from '../../assets/images/employers/bbAitech.png';
 import firstBankLogo from '../../assets/images/employers/firstbank.jpg';
 import mopsonLogo from '../../assets/images/employers/mopson.png';
@@ -25,99 +26,32 @@ import kwenuLogo from '../../assets/images/employers/kwenu.png';
 import tantalizersLogo from '../../assets/images/employers/tantalizers.png';
 import nrcLogo from '../../assets/images/employers/nrc.png';
 
-// ============================================================================
-// Fallback metrics (used only if the DB returns nothing)
-// ============================================================================
-
-interface FallbackMetric {
-  id: string;
-  value: string;
-  label: string;
-  description: string;
-  emoji: string;
-  accent: ImpactAccent;
-}
-
-const FALLBACK_METRICS: FallbackMetric[] = [
-  {
-    id: 'trained',
-    value: '1,000+',
-    label: 'Young people trained',
-    description: 'Across work-readiness, tech, AI, and career programs since 2023.',
-    emoji: '🎓',
-    accent: 'blue',
-  },
-  {
-    id: 'countries',
-    value: '4',
-    label: 'African countries',
-    description: 'Reaching learners and alumni across the continent.',
-    emoji: '🌍',
-    accent: 'green',
-  },
-  {
-    id: 'states',
-    value: '5',
-    label: 'Nigerian states',
-    description: 'Physical and virtual training programs delivered.',
-    emoji: '📍',
-    accent: 'gold',
-  },
-  {
-    id: 'programs',
-    value: '10+',
-    label: 'Programs delivered',
-    description: 'Cohorts run across our four flagship course tracks.',
-    emoji: '📚',
-    accent: 'purple',
-  },
-  {
-    id: 'sessions',
-    value: '350+',
-    label: 'Training sessions',
-    description: 'Live classes, workshops, and mentoring sessions.',
-    emoji: '🎤',
-    accent: 'blue',
-  },
-  {
-    id: 'hired',
-    value: '70%',
-    label: 'Career progression',
-    description: 'Of alumni report new opportunities, roles, or promotions.',
-    emoji: '🚀',
-    accent: 'green',
-  },
-];
-
-// ============================================================================
-// Employers strip
-// ============================================================================
-
 interface Employer {
   id: string;
   name: string;
   logo: string;
-  website?: string; // Added website field
 }
 
-const EMPLOYERS: Employer[] = [
-  { id: 'bb-aitech', name: 'BB AiTech Solutions', logo: bbAitechLogo, website: 'https://www.bbaitech.com' },
-  { id: 'firstbank', name: 'First Bank', logo: firstBankLogo, website: 'https://www.firstbanknigeria.com' },
-  { id: 'mopson', name: 'Mopson Pharmaceutical', logo: mopsonLogo, website: 'https://www.mopsonpharma.com' },
-  { id: 'thb', name: 'THB Enterprise', logo: thbLogo, website: '' },
-  { id: 'sundry', name: 'Sundry Markets', logo: sundryLogo, website: 'https://www.sundrymarkets.com' },
-  { id: 'kwenu', name: 'Kwenu 93.9FM', logo: kwenuLogo, website: 'https://kwenu939.com' },
-  { id: 'tantalizers', name: 'Tantalizers PLC', logo: tantalizersLogo, website: 'https://www.tantalizersng.com' },
-  { id: 'nrc', name: 'Nigerian Railway Corp', logo: nrcLogo, website: 'https://nrc.gov.ng' },
+const ROW_ONE: Employer[] = [
+  { id: 'bb-aitech', name: 'BB AiTech Solutions', logo: bbAitechLogo },
+  { id: 'firstbank', name: 'First Bank', logo: firstBankLogo },
+  { id: 'mopson', name: 'Mopson Pharmaceutical', logo: mopsonLogo },
+  { id: 'thb', name: 'THB Enterprise', logo: thbLogo },
+];
+
+const ROW_TWO: Employer[] = [
+  { id: 'sundry', name: 'Sundry Markets', logo: sundryLogo },
+  { id: 'kwenu', name: 'Kwenu 93.9FM', logo: kwenuLogo },
+  { id: 'tantalizers', name: 'Tantalizers PLC', logo: tantalizersLogo },
+  { id: 'nrc', name: 'Nigerian Railway Corp', logo: nrcLogo },
 ];
 
 // ============================================================================
-// Normalized metric shape for rendering
+// Display shape
 // ============================================================================
 
 interface DisplayMetric {
   id: string;
-  emoji: string;
   value: string;
   label: string;
   description: string;
@@ -126,192 +60,209 @@ interface DisplayMetric {
 
 const toDisplayMetric = (m: ImpactMetric): DisplayMetric => ({
   id: m.id,
-  emoji: m.emoji,
   value: m.value,
   label: m.label,
   description: m.description ?? '',
   accent: m.accent,
 });
 
-const fallbackToDisplay = (m: FallbackMetric): DisplayMetric => ({
-  id: m.id,
-  emoji: m.emoji,
-  value: m.value,
-  label: m.label,
-  description: m.description,
-  accent: m.accent,
-});
+// ============================================================================
+// Custom Hook for 4s Slide-Up
+// ============================================================================
+const useSlideUp = (threshold = 0.1) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold }
+    );
+
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [threshold]);
+
+  return { ref, isVisible };
+};
 
 // ============================================================================
 // Component
 // ============================================================================
 
 export const Impact: React.FC = () => {
-  const [metrics, setMetrics] = useState<DisplayMetric[]>(
-    FALLBACK_METRICS.map(fallbackToDisplay)
-  );
+  const [metrics, setMetrics] = useState<DisplayMetric[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // --------------------------------------------------------------------------
-  // Load from DB
-  // --------------------------------------------------------------------------
+  const headerAnim = useSlideUp();
+  const pillsAnim = useSlideUp();
+  const marqueeAnim = useSlideUp();
+
   useEffect(() => {
     let isMounted = true;
-
     const load = async () => {
       const res = await fetchPublishedImpactMetrics();
       if (!isMounted) return;
-
-      if (res.success && res.data && res.data.length > 0) {
-        setMetrics(res.data.map(toDisplayMetric));
-      }
-
+      if (res.success && res.data) setMetrics(res.data.map(toDisplayMetric));
       setIsLoading(false);
     };
-
     load();
     return () => {
       isMounted = false;
     };
   }, []);
 
-  // --------------------------------------------------------------------------
-  // Render
-  // --------------------------------------------------------------------------
   return (
     <section className={styles.impact}>
       {/* ====================================================================
-          BACKGROUND SVG DECORATIONS
+          SVG NET GRID BACKGROUND
           ==================================================================== */}
-      <div className={styles.bgDecor} aria-hidden="true">
-        <svg className={styles.dottedGridTL} viewBox="0 0 100 100" fill="none">
-          {[...Array(4)].map((_, row) =>
-            [...Array(4)].map((_, col) => (
-              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#ffffff" opacity="0.15" />
-            ))
-          )}
-        </svg>
-        <div className={styles.circleTR} />
-        <svg className={styles.arcBL} viewBox="0 0 200 200" fill="none">
-          <circle cx="100" cy="100" r="90" stroke="#F9A825" strokeWidth="2" opacity="0.15" strokeDasharray="10 10" />
-        </svg>
-        <svg className={styles.shapeBR} viewBox="0 0 300 300" fill="none">
-          <path d="M 350 200 C 250 50, 100 0, 50 100 C 0 200, 150 300, 250 300 C 320 300, 400 280, 350 200 Z" fill="#ffffff" opacity="0.03" />
-        </svg>
-      </div>
+      <svg
+        className={styles.netGrid}
+        aria-hidden="true"
+        preserveAspectRatio="xMidYMid slice"
+        viewBox="0 0 1440 900"
+      >
+        <defs>
+          <pattern
+            id="netPattern"
+            x="0"
+            y="0"
+            width="80"
+            height="80"
+            patternUnits="userSpaceOnUse"
+          >
+            <path
+              d="M 80 0 L 0 0 0 80"
+              fill="none"
+              stroke="#000000"
+              strokeWidth="1"
+            />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#netPattern)" />
+      </svg>
 
-      <div className={styles.bgBlobOne} aria-hidden="true" />
-      <div className={styles.bgBlobTwo} aria-hidden="true" />
-
-      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+      <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+        
         {/* ================================================================
-            HEADER
+            HEADER (Centered) — 4s Slide Up
             ================================================================ */}
-        <ScrollReveal animation="up" className={styles.header}>
-          <span className={styles.badge}>Our Impact</span>
-          <h2 className={styles.title}>
-            Real training.{' '}
-            <span className={styles.highlight}>Real outcomes.</span>
-          </h2>
-          <p className={styles.subtitle}>
-            Since 2023, IQuire has trained over 1,000 young people across
-            Nigeria and Africa — moving them from learning to employability.
-          </p>
-        </ScrollReveal>
-
-        {/* ================================================================
-            METRICS GRID
-            ================================================================ */}
-        {isLoading ? (
-          <div className={styles.metricsGrid}>
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className={styles.skeletonCard} />
-            ))}
+        <div ref={headerAnim.ref} className={styles.headerCentered}>
+          <div className={`${styles.slideUpText} ${headerAnim.isVisible ? styles.isVisible : ''}`}>
+            <span className={styles.badge}>Our Impact</span>
+            <h2 className={styles.title}>
+              Real training.{' '}
+              <span className={styles.highlight}>Measurable outcomes.</span>
+            </h2>
+            <p className={styles.subtitle}>
+              Since 2023, iQuire has trained thousands of young people across
+              Nigeria and Africa moving them from learning to real opportunity.
+            </p>
           </div>
-        ) : (
-          <ScrollReveal animation="up" stagger className={styles.metricsGrid}>
-            {metrics.map((metric) => (
-              <div
-                key={metric.id}
-                className={`${styles.metricCard} ${styles[`accent-${metric.accent}`]}`}
-              >
-                <div className={styles.metricIcon}>{metric.emoji}</div>
-                <div className={styles.metricValue}>{metric.value}</div>
-                <div className={styles.metricLabel}>{metric.label}</div>
-                {metric.description && (
-                  <p className={styles.metricDesc}>{metric.description}</p>
-                )}
-              </div>
-            ))}
-          </ScrollReveal>
-        )}
+        </div>
 
         {/* ================================================================
-            EMPLOYERS STRIP
+            ACHIEVEMENT PILLS — 4s Slide Up
             ================================================================ */}
-        <ScrollReveal animation="up" delay={1} className={styles.employersHeader}>
-          <h3 className={styles.employersTitle}>Where our alumni work</h3>
-          <p className={styles.employersSubtitle}>
-            IQuire-trained professionals have gone on to join a growing list of
-            employers across industries.
-          </p>
-        </ScrollReveal>
+        <div ref={pillsAnim.ref} className={styles.pillsSection}>
+          <div className={`${styles.slideUpText} ${pillsAnim.isVisible ? styles.isVisible : ''}`}>
+            <h3 className={styles.sectionTitle}>
+              The numbers{' '}
+              <span className={styles.highlight}>behind the mission.</span>
+            </h3>
+            <p className={styles.sectionSubtitle}>
+              Every metric reflects a real outcome from our community.
+            </p>
+          </div>
 
-        <ScrollReveal animation="up" stagger className={styles.employersGrid}>
-          {EMPLOYERS.map((employer) => {
-            const CardContent = (
-              <>
-                <div className={styles.employerLogo}>
-                  <img src={employer.logo} alt={`${employer.name} logo`} loading="lazy" />
+          {isLoading ? (
+            <div className={styles.pillsGrid}>
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className={styles.skeletonPill} />
+              ))}
+            </div>
+          ) : (
+            <div className={styles.pillsGrid}>
+              {metrics.map((metric) => (
+                <div
+                  key={metric.id}
+                  className={`${styles.pill} ${
+                    styles[`pill-${metric.accent}`]
+                  }`}
+                >
+                  <span className={styles.pillValue}>{metric.value}</span>
+                  <span className={styles.pillLabel}>{metric.label}</span>
                 </div>
-                <span className={styles.employerName}>{employer.name}</span>
-              </>
-            );
-
-            // If there is a website, render as a link. Otherwise, render a div.
-            return employer.website ? (
-              <a
-                key={employer.id}
-                href={employer.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.employerCard}
-              >
-                {CardContent}
-              </a>
-            ) : (
-              <div key={employer.id} className={styles.employerCard}>
-                {CardContent}
-              </div>
-            );
-          })}
-        </ScrollReveal>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* ================================================================
-            CTA
+            MARQUEE — 4s Slide Up
             ================================================================ */}
-        <ScrollReveal animation="zoom" delay={1} className={styles.ctaWrapper}>
-          <Button variant="primary" color="gradient" size="lg" href="/about#impact">
+        <div ref={marqueeAnim.ref} className={styles.marqueeSection}>
+          <div className={`${styles.slideUpText} ${marqueeAnim.isVisible ? styles.isVisible : ''}`}>
+            <span className={styles.sectionEyebrow}>Trusted By Employers</span>
+            <h3 className={styles.sectionTitle}>
+              Our talent works with{' '}
+              <span className={styles.highlight}>leading companies.</span>
+            </h3>
+          </div>
+
+          <div className={styles.marqueeWrap}>
+            {/* Row 1: slides left */}
+            <div className={styles.marqueeRow}>
+              <div className={`${styles.marqueeTrack} ${styles.slideLeft}`}>
+                {[...ROW_ONE, ...ROW_ONE, ...ROW_ONE].map((emp, i) => (
+                  <div key={`r1-${i}`} className={styles.employerChip}>
+                    <div className={styles.employerLogo}>
+                      <img src={emp.logo} alt={emp.name} loading="lazy" />
+                    </div>
+                    <span>{emp.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Row 2: slides right */}
+            <div className={styles.marqueeRow}>
+              <div className={`${styles.marqueeTrack} ${styles.slideRight}`}>
+                {[...ROW_TWO, ...ROW_TWO, ...ROW_TWO].map((emp, i) => (
+                  <div key={`r2-${i}`} className={styles.employerChip}>
+                    <div className={styles.employerLogo}>
+                      <img src={emp.logo} alt={emp.name} loading="lazy" />
+                    </div>
+                    <span>{emp.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ================================================================
+            CTA — 4s Slide Up
+            ================================================================ */}
+        <div className={`${styles.ctaWrapper} ${styles.slideUpText} ${marqueeAnim.isVisible ? styles.isVisible : ''}`}>
+          <Button
+            variant="primary"
+            color="gradient"
+            size="lg"
+            href="/about#impact"
+          >
             See Our Full Impact
           </Button>
           <Link to="/alumni" className={styles.secondaryLink}>
             Meet our alumni →
           </Link>
-        </ScrollReveal>
-      </div>
-
-      {/* BOTTOM demarcation */}
-      <div className={styles.demarcationBottom} aria-hidden="true">
-        <div className={styles.demarcationLabel}></div>
-        <svg
-          className={styles.demarcationWave}
-          viewBox="0 0 1440 120"
-          preserveAspectRatio="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z" fill="none" stroke="#F9A825" strokeWidth="3" opacity="0.6" />
-          <path d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z" fill="#ffffff" />
-        </svg>
+        </div>
       </div>
     </section>
   );

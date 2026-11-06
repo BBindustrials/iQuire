@@ -4,7 +4,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ScrollReveal } from '../../components/common/ScrollReveal';
 import { Button } from '../../components/common/Button';
 import {
   fetchPublishedFaqsByCategory,
@@ -21,39 +20,39 @@ import type { Alumni } from '../../types/alumni.types';
 import styles from './HireFromUs.module.css';
 
 // ============================================================================
-// Static content (still hardcoded — informational strips)
+// Static content
 // ============================================================================
 
 interface ValueCard {
-  icon: string;
+  id: string;
   title: string;
   description: string;
 }
 
 const VALUE_CARDS: ValueCard[] = [
   {
-    icon: '✅',
-    title: 'Work-ready, not just qualified',
+    id: 'v1',
+    title: 'Work ready, not just qualified',
     description:
-      'Every IQuire graduate completes hands-on work-readiness training — communication, teamwork, professional conduct, and digital fluency. You get candidates who can start contributing from week one.',
+      'Every iQuire graduate completes hands on work readiness training communication, teamwork, professional conduct, and digital fluency. You get candidates who can start contributing from week one.',
   },
   {
-    icon: '🎯',
-    title: 'Pre-vetted skills',
+    id: 'v2',
+    title: 'Pre vetted skills',
     description:
       'We train across Apprenticeship Preparation, Digital Work Readiness, Tech 360, and AI for Everyone. Every alumni profile shows verified skills and programme outcomes.',
   },
   {
-    icon: '🌍',
-    title: 'Pan-African talent',
+    id: 'v3',
+    title: 'Pan African talent',
     description:
-      'Access a diverse, ambitious talent pool across Nigeria, Ghana, Kenya, and the wider African continent — pre-screened for work ethic and coachability.',
+      'Access a diverse, ambitious talent pool across Nigeria, Ghana, Kenya, and the wider African continent pre screened for work ethic and coachability.',
   },
   {
-    icon: '⚡',
+    id: 'v4',
     title: 'Zero cost to hire',
     description:
-      'Access the IQuire talent directory and candidate profiles at no cost. Post opportunities, shortlist candidates, and connect directly — we do not charge placement fees.',
+      'Access the iQuire talent directory and candidate profiles at no cost. Post opportunities, shortlist candidates, and connect directly. We do not charge placement fees.',
   },
 ];
 
@@ -68,25 +67,25 @@ const STEPS: Step[] = [
     number: '01',
     title: 'Create your recruiter account',
     description:
-      'Sign up in under 2 minutes with your work email and company details. Our team verifies your organisation within 24–48 hours.',
+      'Sign up in under 2 minutes with your work email and company details. Our team verifies your organisation within 24 to 48 hours.',
   },
   {
     number: '02',
     title: 'Browse verified talent',
     description:
-      'Once verified, you get full access to the IQuire talent directory — filter by skills, industry, programme, and location.',
+      'Once verified, you get full access to the iQuire talent directory filter by skills, industry, programme, and location.',
   },
   {
     number: '03',
-    title: 'Shortlist & connect',
+    title: 'Shortlist and connect',
     description:
-      'Save candidates to your shortlist and reach out directly. Every profile shows verified skills, work-readiness, and programme history.',
+      'Save candidates to your shortlist and reach out directly. Every profile shows verified skills, work readiness, and programme history.',
   },
   {
     number: '04',
     title: 'Hire with confidence',
     description:
-      'Walk into every interview knowing the candidate has already been trained on the work-readiness fundamentals. No resume padding, no surprises.',
+      'Walk into every interview knowing the candidate has already been trained on the work readiness fundamentals. No resume padding, no surprises.',
   },
 ];
 
@@ -103,7 +102,7 @@ interface DisplayStat {
 const FALLBACK_STATS: DisplayStat[] = [
   { id: 's1', value: '500+', label: 'Trained graduates' },
   { id: 's2', value: '4', label: 'Flagship programmes' },
-  { id: 's3', value: '90%', label: 'Work-readiness rate' },
+  { id: 's3', value: '90%', label: 'Work readiness rate' },
   { id: 's4', value: '48h', label: 'Verification window' },
 ];
 
@@ -183,7 +182,7 @@ const alumniToDisplay = (a: Alumni): DisplayProfile => ({
   role: a.professional_title,
   programme: a.programme
     ? `${a.programme}${a.cohort ? ` · ${a.cohort}` : ''}`
-    : 'IQuire Programme',
+    : 'iQuire Programme',
   skills: (a.key_skills ?? []).slice(0, 3),
   photoUrl: a.photo_url,
 });
@@ -192,7 +191,7 @@ const alumniToMiniProfile = (a: Alumni): DisplayMiniProfile => ({
   initials: getInitials(a.full_name),
   name: a.full_name,
   role: a.professional_title,
-  programme: a.programme ?? 'IQuire Programme',
+  programme: a.programme ?? 'iQuire Programme',
   skills: (a.key_skills ?? []).slice(0, 3),
 });
 
@@ -201,22 +200,16 @@ const alumniToMiniProfile = (a: Alumni): DisplayMiniProfile => ({
 // ============================================================================
 
 export const HireFromUs: React.FC = () => {
-  // FAQs
   const [faqs, setFaqs] = useState<Faq[]>([]);
   const [isFaqLoading, setIsFaqLoading] = useState(true);
 
-  // Featured profiles grid
   const [profiles, setProfiles] = useState<DisplayProfile[]>(FALLBACK_PROFILES);
   const [isProfilesLoading, setIsProfilesLoading] = useState(true);
 
-  // Hero stats (from impact_metrics — top 4 by display_order)
   const [stats, setStats] = useState<DisplayStat[]>(FALLBACK_STATS);
   const [isStatsLoading, setIsStatsLoading] = useState(true);
 
-  // Hero mini profile (top featured alumnus)
-  const [miniProfile, setMiniProfile] = useState<DisplayMiniProfile>(
-    FALLBACK_MINI_PROFILE
-  );
+  const [miniProfile, setMiniProfile] = useState<DisplayMiniProfile>(FALLBACK_MINI_PROFILE);
   const [isMiniLoading, setIsMiniLoading] = useState(true);
 
   // --------------------------------------------------------------------------
@@ -237,35 +230,25 @@ export const HireFromUs: React.FC = () => {
   }, []);
 
   // --------------------------------------------------------------------------
-  // Load featured alumni (for grid + mini profile, single fetch)
+  // Load featured alumni
   // --------------------------------------------------------------------------
   useEffect(() => {
     let isMounted = true;
 
     const load = async () => {
-      // Fetch 4: 1 for mini + 3 for grid (dedup happens by taking slices)
       const res = await fetchFeaturedAlumni(4);
       if (!isMounted) return;
 
       if (res.success && res.data && res.data.length > 0) {
         const list = res.data;
-
-        // Mini profile = top featured alumnus
         setMiniProfile(alumniToMiniProfile(list[0]));
-
-        // Grid = up to 3 (skip the first one — it's already in the mini profile)
         const forGrid = list.slice(1, 4);
         if (forGrid.length > 0) {
           setProfiles(forGrid.map(alumniToDisplay));
         } else if (list.length === 1) {
-          // Edge case: only 1 featured alumnus exists.
-          // Show them in the grid too so it isn't empty.
           setProfiles([alumniToDisplay(list[0])]);
         }
-        // else: keep fallback profiles
       }
-      // else: keep fallbacks
-
       setIsProfilesLoading(false);
       setIsMiniLoading(false);
     };
@@ -277,7 +260,7 @@ export const HireFromUs: React.FC = () => {
   }, []);
 
   // --------------------------------------------------------------------------
-  // Load hero stats (from impact_metrics — top 4)
+  // Load hero stats
   // --------------------------------------------------------------------------
   useEffect(() => {
     let isMounted = true;
@@ -287,7 +270,6 @@ export const HireFromUs: React.FC = () => {
       if (!isMounted) return;
 
       if (res.success && res.data && res.data.length >= 4) {
-        // Take first 4 published metrics by display_order
         const top4: DisplayStat[] = res.data.slice(0, 4).map((m: ImpactMetric) => ({
           id: m.id,
           value: m.value,
@@ -295,21 +277,17 @@ export const HireFromUs: React.FC = () => {
         }));
         setStats(top4);
       } else if (res.success && res.data && res.data.length > 0) {
-        // Fewer than 4 metrics exist — use what's available
         const available: DisplayStat[] = res.data.map((m: ImpactMetric) => ({
           id: m.id,
           value: m.value,
           label: m.label,
         }));
-        // Pad with fallbacks so the 2×2 layout still looks complete
         const padded = [...available];
         for (let i = available.length; i < 4; i++) {
           padded.push(FALLBACK_STATS[i]);
         }
         setStats(padded.slice(0, 4));
       }
-      // else: keep fallback stats
-
       setIsStatsLoading(false);
     };
 
@@ -324,65 +302,76 @@ export const HireFromUs: React.FC = () => {
   // --------------------------------------------------------------------------
   return (
     <div className={styles.page}>
-      {/* ================================================================
-          HERO
-          ================================================================ */}
+      {/* HERO (Netted Blue) */}
       <section className={styles.hero}>
+        <svg className={styles.netGrid} aria-hidden="true" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1440 900">
+          <defs>
+            <pattern id="hireHeroNet" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+              <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#000000" strokeWidth="1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#hireHeroNet)" />
+        </svg>
+
         <div className={styles.heroBlobOne} aria-hidden="true" />
         <div className={styles.heroBlobTwo} aria-hidden="true" />
 
         <div className="container">
           <div className={styles.heroGrid}>
             {/* Left — copy */}
-            <ScrollReveal animation="left" className={styles.heroContent}>
+            <div className={`${styles.heroContent} ${styles.slideUpText}`}>
               <span className={styles.heroBadge}>
                 <span className={styles.heroBadgeDot} />
                 For Recruiters
               </span>
 
               <h1 className={styles.heroTitle}>
-                Hire work-ready talent —{' '}
+                Hire work ready talent{' '}
                 <span className={styles.heroHighlight}>not risky hires.</span>
               </h1>
 
               <p className={styles.heroSubtitle}>
-                IQuire trains young African professionals on the skills
-                employers actually need — communication, teamwork, digital
-                fluency, and role-specific expertise. Access the talent
+                iQuire trains young African professionals on the skills
+                employers actually need communication, teamwork, digital
+                fluency, and role specific expertise. Access the talent
                 directory at no cost.
               </p>
 
               <div className={styles.heroCtas}>
                 <Button
                   variant="primary"
-                  color="green"
+                  color="gradient"
                   size="lg"
                   href="/register/recruiter"
                 >
                   Register as Recruiter
                 </Button>
                 <Link to="/alumni" className={styles.heroSecondary}>
-                  Browse Public Alumni →
+                  Browse Public Alumni
                 </Link>
               </div>
 
               <div className={styles.heroTrust}>
                 <span className={styles.heroTrustItem}>
-                  ✅ Free for verified recruiters
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                  </svg>
+                  Free for verified recruiters
                 </span>
                 <span className={styles.heroTrustDot}>·</span>
                 <span className={styles.heroTrustItem}>
-                  🔒 Verified organisations only
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  </svg>
+                  Verified organisations only
                 </span>
               </div>
-            </ScrollReveal>
+            </div>
 
             {/* Right — stat cards + mini profile */}
-            <ScrollReveal
-              animation="right"
-              delay={1}
-              className={styles.heroVisual}
-            >
+            <div className={`${styles.heroVisual} ${styles.slideUpText} ${styles['delay-1']}`}>
               <div className={styles.statsCard}>
                 <div className={styles.statRow}>
                   <div className={styles.statBlock}>
@@ -390,7 +379,7 @@ export const HireFromUs: React.FC = () => {
                       {isStatsLoading ? '—' : stats[0]?.value ?? '—'}
                     </span>
                     <span className={styles.statLabel}>
-                      {isStatsLoading ? 'Loading…' : stats[0]?.label ?? ''}
+                      {isStatsLoading ? 'Loading...' : stats[0]?.label ?? ''}
                     </span>
                   </div>
                   <div className={styles.statBlock}>
@@ -398,7 +387,7 @@ export const HireFromUs: React.FC = () => {
                       {isStatsLoading ? '—' : stats[1]?.value ?? '—'}
                     </span>
                     <span className={styles.statLabel}>
-                      {isStatsLoading ? 'Loading…' : stats[1]?.label ?? ''}
+                      {isStatsLoading ? 'Loading...' : stats[1]?.label ?? ''}
                     </span>
                   </div>
                 </div>
@@ -408,7 +397,7 @@ export const HireFromUs: React.FC = () => {
                       {isStatsLoading ? '—' : stats[2]?.value ?? '—'}
                     </span>
                     <span className={styles.statLabel}>
-                      {isStatsLoading ? 'Loading…' : stats[2]?.label ?? ''}
+                      {isStatsLoading ? 'Loading...' : stats[2]?.label ?? ''}
                     </span>
                   </div>
                   <div className={styles.statBlock}>
@@ -416,20 +405,20 @@ export const HireFromUs: React.FC = () => {
                       {isStatsLoading ? '—' : stats[3]?.value ?? '—'}
                     </span>
                     <span className={styles.statLabel}>
-                      {isStatsLoading ? 'Loading…' : stats[3]?.label ?? ''}
+                      {isStatsLoading ? 'Loading...' : stats[3]?.label ?? ''}
                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* Mini profile — top featured alumnus */}
+              {/* Mini profile */}
               <div className={styles.miniProfile}>
                 <div className={styles.miniAvatar}>
                   {isMiniLoading ? '—' : miniProfile.initials}
                 </div>
                 <div className={styles.miniInfo}>
                   <div className={styles.miniName}>
-                    {isMiniLoading ? 'Loading…' : miniProfile.name}
+                    {isMiniLoading ? 'Loading...' : miniProfile.name}
                   </div>
                   <div className={styles.miniRole}>
                     {isMiniLoading
@@ -451,90 +440,84 @@ export const HireFromUs: React.FC = () => {
                   )}
                 </div>
               </div>
-            </ScrollReveal>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ================================================================
-          WHY IQUIRE TALENT
-          ================================================================ */}
+      {/* WHY iQuire TALENT */}
       <section className={styles.section}>
         <div className="container">
-          <ScrollReveal animation="up" className={styles.sectionHeader}>
-            <span className={styles.sectionBadge}>Why IQuire Talent</span>
+          <div className={`${styles.sectionHeader} ${styles.slideUpText} ${styles['delay-1']}`}>
+            <span className={styles.sectionBadge}>Why iQuire Talent</span>
             <h2 className={styles.sectionTitle}>
               The candidates you wish you could find.
             </h2>
             <p className={styles.sectionSubtitle}>
-              Most entry-level candidates look the same on paper. IQuire
+              Most entry level candidates look the same on paper. iQuire
               graduates bring what employers actually need.
             </p>
-          </ScrollReveal>
+          </div>
 
-          <ScrollReveal animation="up" stagger className={styles.valuesGrid}>
+          <div className={`${styles.valuesGrid} ${styles.slideUpText} ${styles['delay-2']}`}>
             {VALUE_CARDS.map((card) => (
-              <div key={card.title} className={styles.valueCard}>
-                <div className={styles.valueIcon}>{card.icon}</div>
+              <div key={card.id} className={styles.valueCard}>
+                <div className={styles.valueIcon}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                  </svg>
+                </div>
                 <h3 className={styles.valueTitle}>{card.title}</h3>
                 <p className={styles.valueDesc}>{card.description}</p>
               </div>
-            ))}
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* ================================================================
-          HOW IT WORKS
-          ================================================================ */}
-      <section className={`${styles.section} ${styles.sectionAlt}`}>
-        <div className="container">
-          <ScrollReveal animation="up" className={styles.sectionHeader}>
-            <span className={styles.sectionBadge}>How It Works</span>
-            <h2 className={styles.sectionTitle}>
-              From sign-up to shortlist in 4 steps.
-            </h2>
-          </ScrollReveal>
-
-          <div className={styles.stepsGrid}>
-            {STEPS.map((step, i) => (
-              <ScrollReveal
-                key={step.number}
-                animation="up"
-                delay={(i < 4 ? i : 0) as 0 | 1 | 2 | 3 | 4}
-                className={styles.stepCard}
-              >
-                <div className={styles.stepNumber}>{step.number}</div>
-                <h3 className={styles.stepTitle}>{step.title}</h3>
-                <p className={styles.stepDesc}>{step.description}</p>
-              </ScrollReveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ================================================================
-          TALENT PREVIEW — DB-driven featured alumni
-          ================================================================ */}
+      {/* HOW IT WORKS */}
+      <section className={`${styles.section} ${styles.sectionAlt}`}>
+        <div className="container">
+          <div className={`${styles.sectionHeader} ${styles.slideUpText} ${styles['delay-1']}`}>
+            <span className={styles.sectionBadge}>How It Works</span>
+            <h2 className={styles.sectionTitle}>
+              From sign up to shortlist in 4 steps.
+            </h2>
+          </div>
+
+          <div className={`${styles.stepsGrid} ${styles.slideUpText} ${styles['delay-2']}`}>
+            {STEPS.map((step) => (
+              <div key={step.number} className={styles.stepCard}>
+                <div className={styles.stepNumber}>{step.number}</div>
+                <h3 className={styles.stepTitle}>{step.title}</h3>
+                <p className={styles.stepDesc}>{step.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TALENT PREVIEW */}
       <section className={styles.section}>
         <div className="container">
-          <ScrollReveal animation="up" className={styles.sectionHeader}>
+          <div className={`${styles.sectionHeader} ${styles.slideUpText} ${styles['delay-1']}`}>
             <span className={styles.sectionBadge}>Preview Talent</span>
             <h2 className={styles.sectionTitle}>
               See who is already in the directory.
             </h2>
             <p className={styles.sectionSubtitle}>
-              A snapshot of IQuire alumni across programmes. Full profiles
+              A snapshot of iQuire alumni across programmes. Full profiles
               (contact details, CVs, extended work history) are available to
               verified recruiters only.
             </p>
-          </ScrollReveal>
+          </div>
 
-          <ScrollReveal animation="up" className={styles.previewCtaRow}>
+          <div className={`${styles.previewCtaRow} ${styles.slideUpText} ${styles['delay-2']}`}>
             <Link to="/alumni" className={styles.previewCta}>
               Browse Public Alumni Profiles →
             </Link>
-          </ScrollReveal>
+          </div>
 
           {isProfilesLoading ? (
             <div className={styles.previewGrid}>
@@ -543,7 +526,7 @@ export const HireFromUs: React.FC = () => {
               ))}
             </div>
           ) : (
-            <ScrollReveal animation="up" stagger className={styles.previewGrid}>
+            <div className={`${styles.previewGrid} ${styles.slideUpText} ${styles['delay-3']}`}>
               {profiles.map((profile) => (
                 <div key={profile.id} className={styles.previewCard}>
                   <div className={styles.previewAvatar}>
@@ -571,24 +554,35 @@ export const HireFromUs: React.FC = () => {
                   )}
                 </div>
               ))}
-            </ScrollReveal>
+            </div>
           )}
         </div>
       </section>
 
-      {/* ================================================================
-          VERIFICATION PROMISE
-          ================================================================ */}
+      {/* VERIFICATION PROMISE (Netted Blue) */}
       <section className={styles.promiseSection}>
         <div className="container">
-          <ScrollReveal animation="up" className={styles.promiseCard}>
-            <div className={styles.promiseIcon}>🛡️</div>
+          <div className={`${styles.promiseCard} ${styles.slideUpText} ${styles['delay-1']}`}>
+            <svg className={styles.netGrid} aria-hidden="true" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1440 900">
+              <defs>
+                <pattern id="promiseNet" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                  <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#000000" strokeWidth="1" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#promiseNet)" />
+            </svg>
+
+            <div className={styles.promiseIcon}>
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+            </div>
             <h2 className={styles.promiseTitle}>
               Verified recruiters, protected talent.
             </h2>
             <p className={styles.promiseText}>
               We verify every recruiter before granting access to the talent
-              directory. In return, our alumni opt in to visibility — so you
+              directory. In return, our alumni opt in to visibility so you
               only see candidates who want to be contacted. No spam, no cold
               outreach, no wasted effort on either side.
             </p>
@@ -606,24 +600,22 @@ export const HireFromUs: React.FC = () => {
                 <span>Placement fees</span>
               </div>
             </div>
-          </ScrollReveal>
+          </div>
         </div>
       </section>
 
-      {/* ================================================================
-          FAQ — DB-driven (category = 'hire-from-us')
-          ================================================================ */}
+      {/* FAQ */}
       {!isFaqLoading && faqs.length > 0 && (
         <section className={styles.section}>
           <div className="container">
-            <ScrollReveal animation="up" className={styles.sectionHeader}>
+            <div className={`${styles.sectionHeader} ${styles.slideUpText} ${styles['delay-1']}`}>
               <span className={styles.sectionBadge}>FAQ</span>
               <h2 className={styles.sectionTitle}>
                 Questions from recruiters.
               </h2>
-            </ScrollReveal>
+            </div>
 
-            <ScrollReveal animation="up" className={styles.faqList}>
+            <div className={`${styles.faqList} ${styles.slideUpText} ${styles['delay-2']}`}>
               {faqs.map((faq) => (
                 <details key={faq.id} className={styles.faqItem}>
                   <summary className={styles.faqQuestion}>
@@ -637,39 +629,47 @@ export const HireFromUs: React.FC = () => {
                   </div>
                 </details>
               ))}
-            </ScrollReveal>
+            </div>
           </div>
         </section>
       )}
 
-      {/* ================================================================
-          FINAL CTA
-          ================================================================ */}
+      {/* FINAL CTA (Netted Blue) */}
       <section className={styles.finalCta}>
+        <svg className={styles.netGrid} aria-hidden="true" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1440 900">
+          <defs>
+            <pattern id="hireCtaNet" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+              <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#000000" strokeWidth="1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#hireCtaNet)" />
+        </svg>
+
         <div className={styles.finalCtaBlob} aria-hidden="true" />
-        <div className="container">
-          <ScrollReveal animation="up" className={styles.finalCtaInner}>
+
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          <div className={`${styles.finalCtaInner} ${styles.slideUpText} ${styles['delay-1']}`}>
             <h2 className={styles.finalCtaTitle}>
               Ready to meet your next hire?
             </h2>
             <p className={styles.finalCtaSubtitle}>
-              Join the recruiters already accessing IQuire's work-ready talent
+              Join the recruiters already accessing iQuire's work ready talent
               pool.
             </p>
             <div className={styles.finalCtaButtons}>
               <Button
                 variant="primary"
-                color="gold"
+                color="gradient"
                 size="lg"
                 href="/register/recruiter"
               >
                 Register as Recruiter
               </Button>
               <Link to="/alumni" className={styles.finalCtaSecondary}>
-                Browse Talent →
+                Browse Talent
               </Link>
             </div>
-          </ScrollReveal>
+          </div>
         </div>
       </section>
     </div>

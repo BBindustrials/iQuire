@@ -506,7 +506,7 @@ export const AdminStudentForm: React.FC = () => {
 
         {/* COHORT TOKEN (create only) */}
         {!isEdit && (
-          <FormSection title="IQuire ID">
+          <FormSection title="iQuire ID">
             <Input
               label="Cohort token"
               name="cohort_token"
@@ -514,7 +514,7 @@ export const AdminStudentForm: React.FC = () => {
               onChange={handleChange}
               required
               placeholder="e.g., 26b, 25a, tech4"
-              helperText="Used to generate the IQuire ID: IQ-{token}-{4 digits}"
+              helperText="Used to generate the iQuire ID: IQ-{token}-{4 digits}"
               error={errors.cohort_token}
             />
           </FormSection>

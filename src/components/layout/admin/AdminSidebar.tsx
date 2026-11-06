@@ -1,11 +1,12 @@
 // ============================================================================
-// iQuire — Admin Sidebar (Phase 12D.4)
+// iQuire — Admin Sidebar (Phase 17.12 - Logo Updated)
 // ============================================================================
 
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './AdminSidebar.module.css';
 import { fetchUnreadMessageCount } from '../../../services/messages.service';
+import iQuireLogo from '../../../assets/logo/iQuire-logo.png';
 
 // ============================================================================
 // Navigation Types
@@ -26,7 +27,6 @@ interface NavGroup {
 // ============================================================================
 // Icons
 // ============================================================================
-
 const Icons = {
   overview: (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -45,18 +45,8 @@ const Icons = {
   ),
   messages: (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M3 6C3 4.9 3.9 4 5 4H19C20.1 4 21 4.9 21 6V16C21 17.1 20.1 18 19 18H8L3 21V6Z"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M7 9H17M7 13H13"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
+      <path d="M3 6C3 4.9 3.9 4 5 4H19C20.1 4 21 4.9 21 6V16C21 17.1 20.1 18 19 18H8L3 21V6Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+      <path d="M7 9H17M7 13H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
     </svg>
   ),
   users: (
@@ -91,25 +81,11 @@ const Icons = {
       <path d="M14 7H21V14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
-  services: (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
-      <path d="M12 7V12L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  ),
   payments: (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
       <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="2" />
       <path d="M2 10H22" stroke="currentColor" strokeWidth="2" />
       <circle cx="6" cy="15" r="1" fill="currentColor" />
-    </svg>
-  ),
-  community: (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-      <path d="M17 11C17 8.24 14.76 6 12 6C9.24 6 7 8.24 7 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      <circle cx="12" cy="4" r="2" stroke="currentColor" strokeWidth="2" />
-      <circle cx="7" cy="17" r="3" stroke="currentColor" strokeWidth="2" />
-      <circle cx="17" cy="17" r="3" stroke="currentColor" strokeWidth="2" />
     </svg>
   ),
   reports: (
@@ -126,32 +102,32 @@ const Icons = {
 };
 
 // ============================================================================
-// Build nav groups (called inside component so it can use unreadCount)
+// Navigation Structure
 // ============================================================================
 
 const buildNavGroups = (unreadCount: number): NavGroup[] => [
   {
     label: 'Main',
     items: [
-      { label: 'Overview', path: '/admin/dashboard', icon: Icons.overview },
+      { label: 'Dashboard', path: '/admin/dashboard', icon: Icons.overview },
     ],
   },
   {
-    label: 'Content',
+    label: 'Public Content',
     items: [
-      { label: 'Messages', path: '/admin/messages', icon: Icons.messages, badge: unreadCount > 0 ? unreadCount : undefined },
       { label: 'About', path: '/admin/about', icon: Icons.content },
-      { label: 'Programs', path: '/admin/programs', icon: Icons.content },
-      { label: 'Blog', path: '/admin/blog', icon: Icons.content },
-      { label: 'Events', path: '/admin/events', icon: Icons.content },
-      { label: 'FAQs', path: '/admin/faqs', icon: Icons.content },
-      { label: 'Scholarships', path: '/admin/scholarships', icon: Icons.content },
-      { label: 'Jobs', path: '/admin/jobs', icon: Icons.content },
       { label: 'Impact', path: '/admin/impact', icon: Icons.content },
+      { label: 'Courses', path: '/admin/programs', icon: Icons.learning },
+      { label: 'Scholarships', path: '/admin/scholarships', icon: Icons.content },
+      { label: 'Alumni', path: '/admin/alumni', icon: Icons.users },
+      { label: 'Jobs', path: '/admin/jobs', icon: Icons.jobs },
+      { label: 'Blog', path: '/admin/blog', icon: Icons.content },
+      { label: 'FAQs', path: '/admin/faqs', icon: Icons.content },
+      { label: 'Messages', path: '/admin/messages', icon: Icons.messages, badge: unreadCount > 0 ? unreadCount : undefined },
     ],
   },
   {
-    label: 'Users',
+    label: 'Users Onboarding',
     items: [
       { label: 'Students', path: '/admin/students', icon: Icons.users },
       { label: 'Recruiters', path: '/admin/recruiters', icon: Icons.users },
@@ -159,53 +135,39 @@ const buildNavGroups = (unreadCount: number): NavGroup[] => [
     ],
   },
   {
-      label: 'Learning',
-      items: [
-        { label: 'Enrollments', path: '/admin/enrollments', icon: Icons.users },
-        { label: 'Cohorts', path: '/admin/cohorts', icon: Icons.content },
-        { label: 'Certificates', path: '/admin/certificates', icon: Icons.content },
-      ],
-    },
+    label: 'Course Management',
+    items: [
+      { label: 'Cohorts', path: '/admin/cohorts', icon: Icons.content },
+      { label: 'Enrollments', path: '/admin/enrollments', icon: Icons.users },
+      { label: 'Course Manager', path: '/admin/content', icon: Icons.learning },
+      { label: 'Resources', path: '/admin/resources', icon: Icons.content },
+      { label: 'Certificates', path: '/admin/certificates', icon: Icons.content },
+      { label: 'Announcements', path: '/admin/community/announcements', icon: Icons.content },
+    ],
+  },
+  {
+    label: 'Career Services',
+    items: [
+      { label: 'Career Quiz', path: '/admin/career/readiness', icon: Icons.career },
+      { label: 'CV Reviews', path: '/admin/services/cv-reviews', icon: Icons.content },
+      { label: 'CV Builder', path: '/admin/services/cv-builder', icon: Icons.content },
+    ],
+  },
   {
     label: 'Talent',
     items: [
       { label: 'Talent Pool', path: '/admin/talent', icon: Icons.talent },
       { label: 'Requests', path: '/admin/talent/requests', icon: Icons.talent },
-    ],
-  },
-  {
-    label: 'Jobs',
-    items: [
+      { label: 'Opportunities', path: '/admin/opportunities', icon: Icons.jobs },
       { label: 'Job Listings', path: '/admin/jobs', icon: Icons.jobs },
       { label: 'Applications', path: '/admin/jobs/applications', icon: Icons.jobs },
     ],
   },
   {
-    label: 'Career',
-    items: [
-      { label: 'Job Readiness', path: '/admin/career/readiness', icon: Icons.career },
-      { label: 'Assessments', path: '/admin/career/assessments', icon: Icons.career },
-    ],
-  },
-  {
-    label: 'Services',
-    items: [
-      { label: 'CV Reviews', path: '/admin/services/cv-reviews', icon: Icons.services },
-      { label: 'CV Builder', path: '/admin/services/cv-builder', icon: Icons.services },
-    ],
-  },
-  {
-    label: 'Payments',
+    label: 'Payments Tracker',
     items: [
       { label: 'Transactions', path: '/admin/payments/transactions', icon: Icons.payments },
       { label: 'Revenue', path: '/admin/payments/revenue', icon: Icons.payments },
-    ],
-  },
-  {
-    label: 'Community',
-    items: [
-      { label: 'Alumni', path: '/admin/alumni', icon: Icons.community },
-      { label: 'Announcements', path: '/admin/community/announcements', icon: Icons.community },
     ],
   },
   {
@@ -218,7 +180,7 @@ const buildNavGroups = (unreadCount: number): NavGroup[] => [
 ];
 
 // ============================================================================
-// Component Props
+// Component
 // ============================================================================
 
 interface AdminSidebarProps {
@@ -226,19 +188,11 @@ interface AdminSidebarProps {
   onClose: () => void;
 }
 
-// ============================================================================
-// Component
-// ============================================================================
-
 export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) => {
   const [unreadCount, setUnreadCount] = useState(0);
 
-  // --------------------------------------------------------------------------
-  // Fetch unread count on mount + every 60s
-  // --------------------------------------------------------------------------
   useEffect(() => {
     let isMounted = true;
-
     const load = async () => {
       const count = await fetchUnreadMessageCount();
       if (isMounted) setUnreadCount(count);
@@ -257,26 +211,17 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
 
   return (
     <>
-      {/* Mobile overlay */}
       {isOpen && (
-        <div
-          className={styles.overlay}
-          onClick={onClose}
-          aria-hidden="true"
-        />
+        <div className={styles.overlay} onClick={onClose} aria-hidden="true" />
       )}
 
       <aside
         className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}
         aria-label="Admin navigation"
       >
-        {/* Brand */}
+        {/* Brand with Image Logo */}
         <div className={styles.brand}>
-          <div className={styles.brandMark}>iQ</div>
-          <div className={styles.brandText}>
-            <span className={styles.brandName}>iQuire</span>
-            <span className={styles.brandRole}>Admin</span>
-          </div>
+          <img src={iQuireLogo} alt="iQuire" className={styles.brandImage} />
         </div>
 
         {/* Navigation */}

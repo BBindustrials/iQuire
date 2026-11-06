@@ -23,10 +23,10 @@ export const streamChatCompletion = async (
   options: StreamChatOptions
 ): Promise<Response> => {
   const apiKey = Deno.env.get('OPENROUTER_API_KEY');
-  const defaultModel = Deno.env.get('AI_MODEL') || 'google/gemini-2.5-flash-lite';
+  const defaultModel = Deno.env.get('AI_MODEL') || 'anthropic/claude-opus-5';
   const defaultMaxTokens = parseInt(Deno.env.get('AI_MAX_TOKENS') || '2000', 10);
   const defaultTemperature = parseFloat(Deno.env.get('AI_TEMPERATURE') || '0.7');
-  const siteUrl = Deno.env.get('AI_SITE_URL') || 'https://iquire.vercel.app';
+  const siteUrl = Deno.env.get('AI_SITE_URL') || 'https://iQuire.io';
   const siteName = Deno.env.get('AI_SITE_NAME') || 'iQuire';
 
   if (!apiKey) {
@@ -75,8 +75,8 @@ export const chatCompletion = async (
   options?: { model?: string; maxTokens?: number; temperature?: number }
 ): Promise<ChatCompletionResult> => {
   const apiKey = Deno.env.get('OPENROUTER_API_KEY');
-  const defaultModel = Deno.env.get('AI_MODEL') || 'google/gemini-2.5-flash-lite';
-  const siteUrl = Deno.env.get('AI_SITE_URL') || 'https://iquire.vercel.app';
+  const defaultModel = Deno.env.get('AI_MODEL') || 'anthropic/claude-opus-5';
+  const siteUrl = Deno.env.get('AI_SITE_URL') || 'https://iQuire.io';
   const siteName = Deno.env.get('AI_SITE_NAME') || 'iQuire';
 
   if (!apiKey) {

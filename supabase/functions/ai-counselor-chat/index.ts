@@ -84,7 +84,7 @@ Deno.serve(async (req: Request) => {
       return errorResponse('Profile not found', 404);
     }
     if (profile.account_type !== 'member') {
-      return errorResponse('Only IQuire students and alumni can use the AI Career Counselor', 403);
+      return errorResponse('Only iQuire students and alumni can use the AI Career Counselor', 403);
     }
     if (profile.account_status !== 'active') {
       return errorResponse('Your account is not active', 403);
@@ -296,7 +296,7 @@ Deno.serve(async (req: Request) => {
               role: 'assistant',
               content: fullAssistantContent,
               completion_tokens: completionTokens || null,
-              model: Deno.env.get('AI_MODEL') || 'google/gemini-2.5-flash-lite',
+              model: Deno.env.get('AI_MODEL') || 'anthropic/claude-opus-5',
             });
 
           if (saveAiMsgError) {

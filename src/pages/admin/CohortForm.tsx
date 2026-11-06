@@ -288,7 +288,7 @@ export const AdminCohortForm: React.FC = () => {
             value={formData.cohort_token}
             onChange={handleChange}
             placeholder="e.g., 26b, 25a, tech4"
-            helperText="Used in IQuire ID generation: IQ-{token}-{4 digits}"
+            helperText="Used in iQuire ID generation: IQ-{token}-{4 digits}"
           />
         </FormSection>
 

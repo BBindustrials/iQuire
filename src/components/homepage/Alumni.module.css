@@ -39,7 +39,7 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  border: 6px solid #FEF3C7;
+  border: 6px solid #e0f7f2;
   opacity: 0.8;
 }
 
@@ -68,15 +68,15 @@
   display: inline-flex;
   align-items: center;
   padding: 0.4rem 1rem;
-  background-color: #F9A825;
-  color: #1A1A2E;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff;
   border-radius: 50px;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  box-shadow: 0 4px 12px rgba(249, 168, 37, 0.25);
+  box-shadow: 0 4px 14px rgba(43, 187, 173, 0.3);
   margin-bottom: 1.25rem;
 }
 
@@ -86,14 +86,17 @@
   font-weight: 800;
   line-height: 1.12;
   letter-spacing: -0.025em;
-  color: #0f172a;
+  color: #000000;
   margin: 0 0 1rem 0;
-  text-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
 }
 
 .highlight {
-  color: #F57F17;
-  text-shadow: 0 2px 8px rgba(245, 127, 23, 0.2);
+  background: linear-gradient(90deg, #2BBBAD 0%, #1E88E5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
 }
 
 .subtitle {
@@ -181,7 +184,7 @@
   font-family: Georgia, serif;
   font-size: 5rem;
   line-height: 0.8;
-  color: #F9A825;
+  color: #2BBBAD;
   opacity: 0.5;
   margin-bottom: -1rem;
   user-select: none;
@@ -192,7 +195,7 @@
   font-size: 1.35rem;
   line-height: 1.5;
   font-weight: 600;
-  color: #0f172a;
+  color: #000000;
   margin: 0;
   letter-spacing: -0.015em;
 }
@@ -230,13 +233,13 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.85rem;
   line-height: 1.4;
-  color: #0f172a;
+  color: #000000;
   font-weight: 600;
 }
 
 .journeyArrow {
   font-size: 1.5rem;
-  color: #F9A825;
+  color: #1E88E5;
   font-weight: 800;
   text-align: center;
 }
@@ -264,39 +267,51 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 1.1rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   letter-spacing: -0.01em;
 }
 
 .featuredRole {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.85rem;
-  color: #64748b;
+  color: #1a1a1a;
   font-weight: 500;
 }
 
-/* LinkedIn button */
+/* ----------------------------------------------------------------------------
+   LinkedIn Button (Locked Colors)
+   ---------------------------------------------------------------------------- */
+
 .linkedinBtn {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.65rem 1.25rem;
-  background-color: #0077b5;
-  color: #ffffff;
+  background-color: #1E88E5;
+  color: #ffffff !important; /* Enforce pure white text */
   font-family: 'Satoshi', sans-serif;
   font-size: 0.82rem;
   font-weight: 700;
   border-radius: 50px;
-  text-decoration: none;
-  transition: all 0.2s ease;
+  text-decoration: none !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
-  box-shadow: 0 6px 16px rgba(0, 119, 181, 0.25);
+  box-shadow: 0 6px 16px rgba(30, 136, 229, 0.25);
+  border: none;
 }
 
-.linkedinBtn:hover {
-  background-color: #005f8e;
+/* Hover & Click: No color change, just slide up and shadow */
+.linkedinBtn:hover,
+.linkedinBtn:active {
+  background-color: #1E88E5 !important;
+  color: #ffffff !important;
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(0, 119, 181, 0.35);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+}
+
+.linkedinBtn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* ----------------------------------------------------------------------------
@@ -336,31 +351,31 @@
 }
 
 .switcherItem:hover {
-  border-color: #F9A825;
+  border-color: #2BBBAD;
   transform: translateY(-3px);
-  box-shadow: 0 12px 24px -8px rgba(249, 168, 37, 0.2);
+  box-shadow: 0 12px 24px -8px rgba(43, 187, 173, 0.2);
 }
 
 .switcherItem:hover img {
-  border-color: #F9A825;
+  border-color: #2BBBAD;
 }
 
 .switcherItemActive {
-  border-color: #F9A825;
-  background-color: #fffbf0;
-  box-shadow: 0 12px 24px -8px rgba(249, 168, 37, 0.25);
+  border-color: #2BBBAD;
+  background-color: #f0fdfb;
+  box-shadow: 0 12px 24px -8px rgba(43, 187, 173, 0.25);
 }
 
 .switcherItemActive img {
-  border-color: #F9A825;
-  box-shadow: 0 0 0 4px rgba(249, 168, 37, 0.2);
+  border-color: #2BBBAD;
+  box-shadow: 0 0 0 4px rgba(43, 187, 173, 0.2);
 }
 
 .switcherName {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.82rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #000000;
   text-align: center;
   letter-spacing: -0.005em;
 }
@@ -368,7 +383,7 @@
 .switcherCourse {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.7rem;
-  color: #64748b;
+  color: #1a1a1a;
   font-weight: 500;
   text-align: center;
 }
@@ -381,18 +396,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
   position: relative;
   z-index: 1;
+}
+
+.ctaWrapper > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem; 
+  flex-wrap: wrap;
 }
 
 .secondaryLink {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
-  color: #1565C0;
-  text-decoration: none;
+  color: #1E88E5 !important;
+  text-decoration: none !important;
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
@@ -400,31 +421,30 @@
 }
 
 .secondaryLink:hover {
-  color: #0D47A1;
+  color: #1E88E5 !important; /* Stop global green */
   gap: 0.5rem;
+}
+
+/* ============================================================================
+   TEXT SLIDE-UP ANIMATION (4 SECONDS)
+   ============================================================================ */
+
+.slideUpText {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.isVisible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ============================================================================
    DEMARCATION
    ============================================================================ */
-
-.demarcationTop {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  line-height: 0;
-  z-index: 3;
-  pointer-events: none;
-}
-
-.demarcationTop .demarcationWave {
-  width: 100%;
-  height: 100px;
-  display: block;
-  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.18))
-    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-}
 
 .demarcationBottom {
   position: absolute;
@@ -445,59 +465,6 @@
   display: block;
   filter: drop-shadow(0 -6px 16px rgba(0, 0, 0, 0.15))
     drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.08));
-}
-
-.demarcationLabel {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.25rem;
-  width: 100%;
-  max-width: 640px;
-  margin: 0 auto 1.5rem;
-  padding: 0 1rem;
-  position: relative;
-  z-index: 5;
-}
-
-.demarcationLine {
-  flex: 1;
-  height: 2px;
-  background: linear-gradient(to right, transparent, #0f172a, #0f172a);
-  border-radius: 2px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-.demarcationLine:last-child {
-  background: linear-gradient(to left, transparent, #0f172a, #0f172a);
-}
-
-.demarcationDot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background-color: #F9A825;
-  box-shadow: 0 0 0 6px rgba(249, 168, 37, 0.25),
-    0 0 0 12px rgba(249, 168, 37, 0.1),
-    0 4px 12px rgba(0, 0, 0, 0.25);
-  position: relative;
-  z-index: 6;
-  flex-shrink: 0;
-}
-
-.demarcationDot::after {
-  content: '';
-  position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  background-color: rgba(249, 168, 37, 0.3);
-  animation: pulseDot 2.5s ease-out infinite;
-  z-index: -1;
-}
-
-@keyframes pulseDot {
-  0% { transform: scale(1); opacity: 0.6; }
-  100% { transform: scale(2.4); opacity: 0; }
 }
 
 /* ============================================================================
@@ -535,11 +502,10 @@
     gap: 1.5rem;
   }
 
-  /* --- 4:3 BOX CONTAINER FIXES --- */
   .featuredImage {
     aspect-ratio: 4 / 3; 
-    overflow: hidden; /* Keeps the image inside the rounded box */
-    border-radius: 16px; /* The box itself has the curve */
+    overflow: hidden; 
+    border-radius: 16px; 
     box-shadow: 0 16px 32px -12px rgba(15, 23, 42, 0.2);
     width: 100%;
   }
@@ -548,10 +514,9 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 20%; /* Centers the face within the box */
+    object-position: center 20%;
   }
 
-  /* --- BADGE MOVED DOWN --- */
   .photoBadge {
     position: relative; 
     bottom: auto;
@@ -560,22 +525,21 @@
     margin-top: 1rem; 
     background: #f8fafc; 
     border: 1.5px solid #e5e7eb; 
-    color: #0f172a; 
+    color: #000000; 
     box-shadow: none;
     padding: 0.5rem 0.75rem; 
   }
 
   .photoBadgeCourse {
-    color: #0f172a;
+    color: #000000;
     font-size: 0.75rem; 
   }
 
   .photoBadgeCohort {
-    color: #64748b;
+    color: #1a1a1a;
     font-size: 0.65rem; 
   }
 
-  /* --- TEXT REDUCTIONS --- */
   .quoteMark {
     font-size: 2.5rem; 
     margin-bottom: -0.5rem;
@@ -656,20 +620,20 @@
     font-size: 0.85rem;
   }
 
-  .demarcationTop .demarcationWave { height: 70px; }
   .demarcationBottom .demarcationWave { height: 90px; }
-  .demarcationLabel { margin-bottom: 1rem; gap: 0.85rem; }
 
   .bgDecor {
     opacity: 0.4;
   }
+  
+  .ctaWrapper > div {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
 }
 
 @media (max-width: 480px) {
-  .demarcationTop .demarcationWave { height: 50px; }
   .demarcationBottom .demarcationWave { height: 70px; }
-  .demarcationDot { width: 12px; height: 12px; }
-  .demarcationLine { height: 1.5px; }
 }
 
 /* ----------------------------------------------------------------------------
@@ -682,7 +646,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
   color: #ffffff;
   font-family: 'Satoshi', sans-serif;
   font-size: 4rem;
@@ -694,7 +658,7 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -708,12 +672,12 @@
 }
 
 .switcherItem:hover .switcherAvatarPlaceholder {
-  border-color: #F9A825;
+  border-color: #2BBBAD;
 }
 
 .switcherItemActive .switcherAvatarPlaceholder {
-  border-color: #F9A825;
-  box-shadow: 0 0 0 4px rgba(249, 168, 37, 0.2);
+  border-color: #2BBBAD;
+  box-shadow: 0 0 0 4px rgba(43, 187, 173, 0.2);
 }
 
 /* Adaptive quote sizes */
@@ -726,4 +690,12 @@
   font-size: 1rem;
   line-height: 1.7;
   font-weight: 500;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slideUpText {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }

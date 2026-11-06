@@ -8,36 +8,46 @@
   background-color: #ffffff;
 }
 
+.netGrid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.08;
+  pointer-events: none;
+}
+
 /* ----------------------------------------------------------------------------
    Breadcrumb
    ---------------------------------------------------------------------------- */
 
 .breadcrumb {
-  padding: 1.5rem 0 0;
-  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  padding: 1.25rem 0 0;
+  background: #d6eaff;
 }
 
 .breadcrumbLink {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #64748b;
+  color: #000000;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .breadcrumbLink:hover {
-  color: #1565C0;
+  color: #1E88E5 !important;
 }
 
 /* ----------------------------------------------------------------------------
-   STAGE 1 — HERO
+   STAGE 1 — HERO (Netted Blue)
    ---------------------------------------------------------------------------- */
 
 .hero {
   position: relative;
   padding: 2rem 0 4rem;
-  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  background: #d6eaff;
   overflow: hidden;
 }
 
@@ -46,13 +56,13 @@
   width: 500px;
   height: 500px;
   border-radius: 50%;
-  background: radial-gradient(circle, #1565C0 0%, transparent 70%);
-  opacity: 0.1;
+  background: radial-gradient(circle, #2BBBAD 0%, transparent 70%);
+  opacity: 0.15;
   filter: blur(120px);
   top: -200px;
   right: -180px;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
 }
 
 .heroInner {
@@ -61,7 +71,7 @@
   gap: 3.5rem;
   align-items: center;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 /* Photo */
@@ -78,14 +88,14 @@
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 24px 48px -20px rgba(15, 23, 42, 0.25);
-  background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+  background: #ffffff;
 }
 
 .heroPhoto {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 5%;  /* ← add this */
+  object-position: 50% 5%;
   display: block;
 }
 
@@ -98,7 +108,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 4rem;
   font-weight: 800;
-  color: #1565C0;
+  color: #1E88E5;
   letter-spacing: 0.02em;
 }
 
@@ -120,23 +130,24 @@
   display: inline-flex;
   align-items: center;
   padding: 0.4rem 0.9rem;
-  background-color: #F9A825;
-  color: #1A1A2E;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff;
   border-radius: 50px;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  box-shadow: 0 4px 12px rgba(249, 168, 37, 0.25);
+  box-shadow: 0 4px 12px rgba(43, 187, 173, 0.3);
 }
 
 .cohortBadge {
   display: inline-flex;
   align-items: center;
   padding: 0.4rem 0.9rem;
-  background-color: #eff6ff;
-  color: #1565C0;
+  background-color: #ffffff;
+  color: #000000;
+  border: 1.5px solid #2BBBAD;
   border-radius: 50px;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.72rem;
@@ -151,7 +162,7 @@
   font-weight: 800;
   line-height: 1.08;
   letter-spacing: -0.03em;
-  color: #0f172a;
+  color: #000000;
   margin: 0;
 }
 
@@ -159,7 +170,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 1.2rem;
   font-weight: 700;
-  color: #1565C0;
+  color: #1E88E5;
   margin: 0;
 }
 
@@ -167,7 +178,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 1.02rem;
   line-height: 1.7;
-  color: #334155;
+  color: #000000;
   margin: 0.5rem 0 0;
   max-width: 620px;
 }
@@ -181,7 +192,6 @@
   background-color: #ffffff;
 }
 
-/* Content layout — main + sidebar */
 .contentLayout {
   display: grid;
   grid-template-columns: 1fr 320px;
@@ -203,7 +213,6 @@
   top: 100px;
 }
 
-/* Block */
 .block {
   display: flex;
   flex-direction: column;
@@ -214,16 +223,15 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 1.35rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   margin: 0;
   letter-spacing: -0.02em;
   padding-bottom: 0.75rem;
-  border-bottom: 2px solid #F9A825;
+  border-bottom: 2px solid #2BBBAD;
   display: inline-block;
   align-self: flex-start;
 }
 
-/* Prose */
 .prose {
   display: flex;
   flex-direction: column;
@@ -234,7 +242,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 1rem;
   line-height: 1.75;
-  color: #334155;
+  color: #000000;
   margin: 0;
 }
 
@@ -249,7 +257,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.75rem;
   font-weight: 800;
-  color: #94a3b8;
+  color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin: 0;
@@ -266,7 +274,7 @@
   align-items: center;
   padding: 0.45rem 0.9rem;
   background-color: #f1f5f9;
-  color: #334155;
+  color: #000000;
   border-radius: 50px;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.82rem;
@@ -275,16 +283,17 @@
 }
 
 .skillTag:hover {
-  background-color: #e0f2fe;
-  color: #1565C0;
+  background-color: #f0fdfb;
+  color: #2BBBAD;
 }
 
 .skillTagPrimary {
   display: inline-flex;
   align-items: center;
   padding: 0.45rem 0.9rem;
-  background-color: #e0f2fe;
-  color: #1565C0;
+  background-color: #f0fdfb;
+  color: #1E88E5;
+  border: 1px solid rgba(43, 187, 173, 0.2);
   border-radius: 50px;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.82rem;
@@ -293,8 +302,9 @@
 }
 
 .skillTagPrimary:hover {
-  background-color: #1565C0;
+  background-color: #1E88E5;
   color: #ffffff;
+  border-color: #1E88E5;
 }
 
 /* Sidebar cards */
@@ -312,7 +322,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.9rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -335,7 +345,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.7rem;
   font-weight: 800;
-  color: #94a3b8;
+  color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -344,12 +354,12 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.92rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #000000;
 }
 
-/* Accent sidebar card (dark) */
+/* Accent sidebar card */
 .sideCardAccent {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
   border-radius: 16px;
   padding: 1.5rem;
   display: flex;
@@ -366,11 +376,7 @@
   right: -30%;
   width: 200px;
   height: 200px;
-  background: radial-gradient(
-    circle,
-    rgba(249, 168, 37, 0.2) 0%,
-    transparent 70%
-  );
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -389,7 +395,7 @@
 .sideCardTextLight {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.9);
   line-height: 1.6;
   margin: 0;
   position: relative;
@@ -401,34 +407,35 @@
   align-items: center;
   justify-content: center;
   padding: 0.7rem 1.25rem;
-  background-color: #F9A825;
-  color: #1A1A2E;
+  background-color: #ffffff;
+  color: #1E88E5 !important;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.82rem;
   font-weight: 700;
   border-radius: 50px;
-  text-decoration: none;
-  transition: all 0.2s ease;
+  text-decoration: none !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   z-index: 1;
   align-self: flex-start;
-  box-shadow: 0 6px 16px rgba(249, 168, 37, 0.35);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
 .sideCardCtaLight:hover {
-  background-color: #F57F17;
+  background-color: #ffffff !important;
+  color: #2BBBAD !important;
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(249, 168, 37, 0.5);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
 }
 
 /* ----------------------------------------------------------------------------
-   STAGE 3 — Feedback (quote section)
+   STAGE 3 — Feedback (Netted Blue)
    ---------------------------------------------------------------------------- */
 
 .feedbackSection {
   position: relative;
   padding: 5rem 0;
-  background: linear-gradient(135deg, #0f172a 0%, #1a2942 100%);
+  background: #d6eaff;
   overflow: hidden;
 }
 
@@ -437,12 +444,13 @@
   width: 500px;
   height: 500px;
   border-radius: 50%;
-  background: radial-gradient(circle, #F9A825 0%, transparent 70%);
+  background: radial-gradient(circle, #2BBBAD 0%, transparent 70%);
   opacity: 0.15;
   filter: blur(120px);
   top: -180px;
   right: -140px;
   pointer-events: none;
+  z-index: 1;
 }
 
 .feedbackInner {
@@ -450,15 +458,15 @@
   margin: 0 auto;
   text-align: center;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .feedbackQuoteMark {
   font-family: Georgia, serif;
   font-size: 5rem;
   line-height: 1;
-  color: #F9A825;
-  opacity: 0.6;
+  color: #2BBBAD;
+  opacity: 0.5;
   margin-bottom: -1.5rem;
   user-select: none;
 }
@@ -468,7 +476,7 @@
   font-size: clamp(1.15rem, 2.4vw, 1.6rem);
   font-weight: 600;
   line-height: 1.5;
-  color: #ffffff;
+  color: #000000;
   margin: 0 0 1.75rem 0;
   letter-spacing: -0.01em;
   font-style: italic;
@@ -484,24 +492,24 @@
 }
 
 .feedbackDash {
-  color: #F9A825;
+  color: #1E88E5;
   font-weight: 800;
 }
 
 .feedbackName {
   font-size: 0.95rem;
   font-weight: 800;
-  color: #ffffff;
+  color: #000000;
 }
 
 .feedbackDot {
-  color: rgba(255, 255, 255, 0.4);
+  color: #64748b;
 }
 
 .feedbackProgramme {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #F9A825;
+  color: #1E88E5;
 }
 
 /* ----------------------------------------------------------------------------
@@ -518,7 +526,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: clamp(1.5rem, 2.5vw, 2rem);
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   margin: 0 0 0.5rem;
   letter-spacing: -0.02em;
 }
@@ -526,7 +534,7 @@
 .viewMoreSubtitle {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.98rem;
-  color: #64748b;
+  color: #000000;
   margin: 0;
   line-height: 1.65;
 }
@@ -553,8 +561,8 @@
 
 .viewMoreCard:hover {
   transform: translateY(-4px);
-  border-color: #F9A825;
-  box-shadow: 0 20px 40px -16px rgba(249, 168, 37, 0.25);
+  border-color: #2BBBAD;
+  box-shadow: 0 20px 40px -16px rgba(43, 187, 173, 0.15);
 }
 
 .viewMoreIconWrapper {
@@ -562,13 +570,12 @@
   width: 52px;
   height: 52px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #F9A825 0%, #F57F17 100%);
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
-  box-shadow: 0 8px 20px -8px rgba(249, 168, 37, 0.4);
+  box-shadow: 0 8px 20px -8px rgba(43, 187, 173, 0.4);
 }
 
 .viewMoreIconLinkedIn {
@@ -588,7 +595,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 1.05rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   margin: 0;
   letter-spacing: -0.01em;
 }
@@ -597,7 +604,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.85rem;
   line-height: 1.55;
-  color: #475569;
+  color: #000000;
   margin: 0;
 }
 
@@ -605,13 +612,13 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.82rem;
   font-weight: 700;
-  color: #F57F17;
+  color: #1E88E5;
   margin-top: 0.35rem;
   transition: all 0.15s ease;
 }
 
 .viewMoreCard:hover .viewMoreCardLink {
-  color: #92400e;
+  color: #2BBBAD;
 }
 
 /* ----------------------------------------------------------------------------
@@ -632,7 +639,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: clamp(1.5rem, 2.5vw, 2rem);
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   margin: 0 0 0.35rem;
   letter-spacing: -0.02em;
 }
@@ -640,7 +647,7 @@
 .moreProfilesSubtitle {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.95rem;
-  color: #64748b;
+  color: #000000;
   margin: 0;
 }
 
@@ -665,7 +672,7 @@
 
 .moreCard:hover {
   transform: translateY(-4px);
-  border-color: #F9A825;
+  border-color: #2BBBAD;
   box-shadow: 0 20px 40px -16px rgba(15, 23, 42, 0.15);
 }
 
@@ -674,13 +681,14 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+  background: linear-gradient(135deg, #e0f7f2 0%, #d6eaff 100%);
 }
 
 .moreCardPhoto img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
   display: block;
 }
 
@@ -693,7 +701,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 2.5rem;
   font-weight: 800;
-  color: #1565C0;
+  color: #1E88E5;
   letter-spacing: 0.02em;
 }
 
@@ -708,7 +716,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 1rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   margin: 0;
   letter-spacing: -0.01em;
   line-height: 1.25;
@@ -718,7 +726,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.8rem;
   font-weight: 700;
-  color: #1565C0;
+  color: #1E88E5;
   margin: 0;
 }
 
@@ -726,20 +734,20 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.68rem;
   font-weight: 700;
-  color: #94a3b8;
+  color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-top: 0.3rem;
 }
 
 /* ----------------------------------------------------------------------------
-   Final CTA
+   Final CTA (Netted Blue)
    ---------------------------------------------------------------------------- */
 
 .finalCta {
   position: relative;
   padding: 5rem 0 6rem;
-  background: linear-gradient(135deg, #0f172a 0%, #1a2942 100%);
+  background: #d6eaff;
   overflow: hidden;
 }
 
@@ -748,12 +756,13 @@
   width: 500px;
   height: 500px;
   border-radius: 50%;
-  background: radial-gradient(circle, #F9A825 0%, transparent 70%);
+  background: radial-gradient(circle, #2BBBAD 0%, transparent 70%);
   opacity: 0.15;
   filter: blur(120px);
   top: -180px;
   right: -140px;
   pointer-events: none;
+  z-index: 1;
 }
 
 .finalCtaInner {
@@ -765,14 +774,14 @@
   align-items: center;
   gap: 1.5rem;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .finalCtaTitle {
   font-family: 'Satoshi', sans-serif;
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 800;
-  color: #ffffff;
+  color: #000000;
   margin: 0;
   letter-spacing: -0.025em;
   line-height: 1.15;
@@ -781,7 +790,7 @@
 .finalCtaSubtitle {
   font-family: 'Satoshi', sans-serif;
   font-size: 1.05rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: #000000;
   margin: 0;
   line-height: 1.7;
 }
@@ -800,29 +809,30 @@
   align-items: center;
   justify-content: center;
   padding: 1rem 2.25rem;
-  background-color: #F9A825;
-  color: #1A1A2E;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff !important;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
   border-radius: 50px;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  box-shadow: 0 12px 28px -8px rgba(249, 168, 37, 0.5);
+  text-decoration: none !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 12px 28px -8px rgba(43, 187, 173, 0.4);
 }
 
 .finalCtaPrimary:hover {
-  background-color: #F57F17;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%) !important;
+  color: #ffffff !important;
   transform: translateY(-2px);
-  box-shadow: 0 16px 32px -8px rgba(249, 168, 37, 0.6);
+  box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.25);
 }
 
 .finalCtaSecondary {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
-  color: #F9A825;
-  text-decoration: none;
+  color: #1E88E5 !important;
+  text-decoration: none !important;
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
@@ -830,7 +840,7 @@
 }
 
 .finalCtaSecondary:hover {
-  color: #ffffff;
+  color: #2BBBAD !important;
   gap: 0.5rem;
 }
 
@@ -853,7 +863,7 @@
   width: 40px;
   height: 40px;
   border: 3px solid #e5e7eb;
-  border-top-color: #1565C0;
+  border-top-color: #2BBBAD;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -870,8 +880,7 @@
 }
 
 .notFoundIcon {
-  font-size: 3.5rem;
-  line-height: 1;
+  color: #94a3b8;
   margin-bottom: 0.5rem;
 }
 
@@ -879,7 +888,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 1.5rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   margin: 0;
   letter-spacing: -0.02em;
 }
@@ -887,7 +896,7 @@
 .notFoundText {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.95rem;
-  color: #64748b;
+  color: #000000;
   margin: 0 0 0.5rem;
   max-width: 420px;
   line-height: 1.65;
@@ -906,34 +915,62 @@
   align-items: center;
   justify-content: center;
   padding: 0.85rem 1.75rem;
-  background-color: #2E7D32;
-  color: #ffffff;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff !important;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.9rem;
   font-weight: 700;
   border-radius: 50px;
-  text-decoration: none;
-  transition: all 0.2s ease;
+  text-decoration: none !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 20px -8px rgba(43, 187, 173, 0.4);
 }
 
 .notFoundPrimary:hover {
-  background-color: #1B5E20;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%) !important;
+  color: #ffffff !important;
   transform: translateY(-1px);
+  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.25);
 }
 
 .notFoundSecondary {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.9rem;
   font-weight: 700;
-  color: #1565C0;
-  text-decoration: none;
+  color: #1E88E5 !important;
+  text-decoration: none !important;
   padding: 0.85rem 1.25rem;
   transition: color 0.15s ease;
 }
 
 .notFoundSecondary:hover {
-  color: #0D47A1;
+  color: #2BBBAD !important;
   text-decoration: underline;
+}
+
+/* ============================================================================
+   TEXT SLIDE-UP ANIMATION (4 SECONDS)
+   ============================================================================ */
+
+.slideUpText {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.isVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slideUpText {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 /* ============================================================================
@@ -1031,5 +1068,41 @@
   .viewMoreCard {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+/* ============================================================================
+   PURE CSS SLIDE-UP ANIMATION (4 SECONDS)
+   ============================================================================ */
+
+.slideUpText {
+  opacity: 0;
+  /* The animation runs automatically when the element appears in the DOM */
+  animation: slideUpFade 4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUpFade {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered delays */
+.delay-1 { animation-delay: 0.15s; }
+.delay-2 { animation-delay: 0.3s; }
+.delay-3 { animation-delay: 0.45s; }
+.delay-4 { animation-delay: 0.6s; }
+.delay-5 { animation-delay: 0.75s; }
+
+/* Accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .slideUpText {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 }

@@ -2,16 +2,16 @@
 
 .footer {
   position: relative;
-  background-color: #000000;
+  background: linear-gradient(180deg, #0A192F 0%, #112240 100%);
   color: #FFFFFF;
-  /* Reduced top padding to move content up */
-  padding: 3rem 0 2rem;
+  /* Tightened padding to pull text up */
+  padding: 2rem 0 1rem;
   margin-top: 0;
   overflow: hidden;
 }
 
 /* ----------------------------------------------------------------------------
-   Background SVG Decorations
+   Background Watermark (Centered between Socials and Copyright)
    ---------------------------------------------------------------------------- */
 
 .bgDecor {
@@ -22,21 +22,16 @@
   overflow: hidden;
 }
 
-.dottedGridRight {
+.watermarkLogo {
   position: absolute;
-  top: 10%;
-  right: 5%;
-  width: 120px;
-  height: 120px;
-}
-
-.leafLeft {
-  position: absolute;
-  bottom: -50px;
-  left: -80px;
-  width: 400px;
-  height: 400px;
-  transform: rotate(15deg);
+  bottom: -1px; 
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px; 
+  height: auto;
+  opacity: 0.03;
+  filter: brightness(0) invert(1);
+  pointer-events: none;
 }
 
 /* ----------------------------------------------------------------------------
@@ -45,9 +40,10 @@
 
 .footerGrid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  /* Widened brand column slightly to prevent text wrap */
+  grid-template-columns: 1.8fr 1fr 1fr 1fr 1fr 1.5fr;
   gap: 2rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   position: relative;
   z-index: 1;
 }
@@ -56,7 +52,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .footerLogo {
@@ -67,9 +63,11 @@
 
 .tagline {
   font-size: 1.125rem;
-  color: #FFB300;
+  color: #2BBBAD;
   font-weight: 600;
   margin-bottom: 0.5rem;
+  /* Prevent wrapping */
+  white-space: nowrap; 
 }
 
 .description {
@@ -94,31 +92,33 @@
 }
 
 .linksGroup ul li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
 }
 
 .linksGroup ul li a {
   color: #FFFFFF;
   transition: color var(--transition-fast);
   font-size: 0.95rem;
+  text-decoration: none;
 }
 
+/* Brighter Lemon Green Hover */
 .linksGroup ul li a:hover {
-  color: #FFB300;
+  color: #A3E635 !important; 
 }
 
-/* Newsletter */
+/* ----------------------------------------------------------------------------
+   Newsletter
+   ---------------------------------------------------------------------------- */
+
 .newsletter {
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  padding-top: 2rem;
-  margin-bottom: 2rem;
   position: relative;
   z-index: 1;
 }
 
 .newsletter h4 {
   color: #FFFFFF;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
   font-size: 1rem;
   font-weight: 700;
 }
@@ -126,7 +126,7 @@
 .newsletterForm {
   display: flex;
   gap: 0.5rem;
-  max-width: 400px;
+  flex-direction: column;
 }
 
 .newsletterInput {
@@ -147,35 +147,45 @@
 
 .newsletterInput:focus {
   outline: none;
-  border-color: #00A878;
+  border-color: #2BBBAD;
   background-color: rgba(255, 255, 255, 0.08);
 }
 
 /* --- BRAND GRADIENT BUTTON --- */
 .newsletterButton {
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #00A878 0%, #0077C8 100%);
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
   background-size: 150% 150%;
   background-position: 0% 0%;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   border: none;
   border-radius: var(--radius-md);
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
 }
 
-.newsletterButton:hover {
-  background-position: 100% 0%;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 119, 200, 0.4);
+.newsletterButton:hover,
+.newsletterButton:active {
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%) !important;
+  color: #FFFFFF !important;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
-/* Bottom Bar */
+.newsletterButton:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ----------------------------------------------------------------------------
+   Bottom Bar
+   ---------------------------------------------------------------------------- */
+
 .bottomBar {
   border-top: 1px solid rgba(255, 255, 255, 0.15);
-  padding-top: 2rem;
+  padding-top: 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -204,11 +214,11 @@
 }
 
 .socialLink:hover {
-  background: linear-gradient(135deg, #00A878 0%, #0077C8 100%);
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
   color: #FFFFFF;
   border-color: transparent;
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 119, 200, 0.4);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 .socialLink[aria-label="LinkedIn"]:hover {
@@ -231,102 +241,14 @@
   border-color: #25D366;
 }
 
-.legal {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.legal a {
-  color: #FFFFFF;
-  font-size: 0.875rem;
-  transition: color var(--transition-fast);
-}
-
-.legal a:hover {
-  color: #FFB300;
-}
-
 .copyright {
   color: #FFFFFF;
   font-size: 0.875rem;
   margin: 0;
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
-  .footerGrid {
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 2rem;
-  }
-
-  .brand {
-    grid-column: span 3;
-  }
-}
-
-@media (max-width: 768px) {
-  .footer {
-    padding: 2.5rem 0 2rem;
-  }
-
-  .footerGrid {
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
-
-  .brand {
-    grid-column: span 2;
-  }
-
-  .newsletterForm {
-    flex-direction: column;
-  }
-
-  .newsletterButton {
-    width: 100%;
-  }
-
-  .bottomBar {
-    flex-direction: column;
-    text-align: center;
-    gap: 1.5rem;
-  }
-
-  .legal {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .socialLinks {
-    justify-content: center;
-  }
-
-  .bgDecor {
-    opacity: 0.5;
-  }
-}
-
-@media (max-width: 480px) {
-  .footerGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .brand {
-    grid-column: span 1;
-  }
-
-  .footerLogo {
-    height: 38px;
-  }
-
-  .socialLink {
-    width: 40px;
-    height: 40px;
-  }
-}
-
 /* ----------------------------------------------------------------------------
-   Address block (brand column)
+   Address block
    ---------------------------------------------------------------------------- */
 
 .address {
@@ -339,21 +261,112 @@
 .addressLine {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.85rem;
   font-weight: 500;
   color: #FFFFFF;
   line-height: 1.5;
+  /* Prevent wrapping */
+  white-space: nowrap; 
 }
 
-.addressIcon {
-  flex-shrink: 0;
-  color: #F9A825;
-  margin-top: 1px;
+/* ----------------------------------------------------------------------------
+   Responsive
+   ---------------------------------------------------------------------------- */
+
+@media (max-width: 1200px) {
+  .footerGrid {
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1.5fr;
+  }
+  .footerGrid > :nth-child(5) {
+    display: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .footerGrid {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2.5rem;
+  }
+
+  .brand {
+    grid-column: span 3;
+  }
+
+  .newsletter {
+    grid-column: span 3;
+  }
+  
+  .footerGrid > :nth-child(5) {
+    display: block; 
+  }
+  
+  .newsletterForm {
+    flex-direction: row; 
+    max-width: 400px;
+  }
+  
+  .watermarkLogo {
+    width: 300px;
+  }
 }
 
 @media (max-width: 768px) {
+  .footer {
+    padding: 2rem 0 1rem;
+  }
+
+  .footerGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .brand, .newsletter {
+    grid-column: span 2;
+  }
+  
+  /* Allow wrapping on small screens */
+  .tagline, .addressLine {
+    white-space: normal; 
+  }
+
+  .bottomBar {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .socialLinks {
+    justify-content: center;
+  }
+  
+  .watermarkLogo {
+    bottom: 5rem; /* Moves up slightly behind the stacked text */
+  }
+}
+
+@media (max-width: 480px) {
+  .footerGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .brand, .newsletter {
+    grid-column: span 1;
+  }
+  
+  .newsletterForm {
+    flex-direction: column;
+  }
+
+  .footerLogo {
+    height: 38px;
+  }
+
+  .socialLink {
+    width: 40px;
+    height: 40px;
+  }
+
   .address {
     margin-top: 0.75rem;
     padding-top: 0.75rem;

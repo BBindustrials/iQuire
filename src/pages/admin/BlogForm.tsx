@@ -2,7 +2,7 @@
 // iQuire — Admin: Blog Editor (Phase 14.13.5)
 // ============================================================================
 // Now uses RichTextEditor (Tiptap) for content and AuthorLinker for the
-// author section. Supports linking a blog post to a real IQuire profile.
+// author section. Supports linking a blog post to a real iQuire profile.
 // ============================================================================
 
 import React, { useEffect, useState, type FormEvent } from 'react';
@@ -504,7 +504,7 @@ export const AdminBlogForm: React.FC = () => {
             <div className={styles.sideCard}>
               <h3 className={styles.sideCardTitle}>Author</h3>
               <p className={styles.sideCardHint}>
-                Link to an IQuire profile (student, alumni, admin) — or enter
+                Link to an iQuire profile (student, alumni, admin) — or enter
                 details manually.
               </p>
 

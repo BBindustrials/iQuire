@@ -80,7 +80,7 @@ export const CredentialCard: React.FC<CredentialCardProps> = ({
           </div>
 
           <div className={styles.credRow}>
-            <div className={styles.credLabel}>IQuire ID</div>
+            <div className={styles.credLabel}>iQuire ID</div>
             <div className={styles.credValue}>
               <code className={styles.credHighlight}>{credentials.iq_id}</code>
               <button

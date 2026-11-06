@@ -59,7 +59,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuToggle }) => {
 
       {/* Center: title area */}
       <div className={styles.headerTitle}>
-        <span className={styles.headerLabel}>IQuire Admin</span>
+        <span className={styles.headerLabel}>iQuire Admin</span>
       </div>
 
       {/* Right: actions + user menu */}

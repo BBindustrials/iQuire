@@ -251,7 +251,7 @@ export const AuthorLinker: React.FC<AuthorLinkerProps> = ({
             >
               <span className={styles.searchIcon}>🔍</span>
               <span className={styles.searchText}>
-                Link to an IQuire profile…
+                Link to an iQuire profile…
               </span>
               <span className={styles.searchChevron}>
                 {isDropdownOpen ? '▲' : '▼'}
@@ -348,7 +348,7 @@ export const AuthorLinker: React.FC<AuthorLinkerProps> = ({
               name="author_role"
               value={value.author_role}
               onChange={handleManualChange('author_role')}
-              placeholder="e.g., Founder, IQuire"
+              placeholder="e.g., Founder, iQuire"
             />
 
             <Input

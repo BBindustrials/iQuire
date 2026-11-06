@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // ============================================================================
-// iQuire — Courses Service (Phase 10D.3)
-// ============================================================================
-// All read/write operations for courses, cohorts, previous cohorts.
+// iQuire — Courses Service (Phase 17.16 — Fee Fix)
 // ============================================================================
 
 import { supabase } from '../integrations/supabase/client';
@@ -16,17 +14,12 @@ import type {
   PreviousCohortInput,
 } from '../types/courses.types';
 
-// ============================================================================
-// Response type
-// ============================================================================
-
 interface ServiceResponse<T> {
   success: boolean;
   data?: T;
   error?: string;
 }
 
-// Re-export all public types used by consumers
 export type {
   Course,
   CourseWithRelations,
@@ -40,42 +33,18 @@ export type {
   CohortStatus,
 } from '../types/courses.types';
 
-
-// ============================================================================
-// Typed table accessors
-// ----------------------------------------------------------------------------
-// The Supabase client is not generated with a `Database` generic, so
-// `.from('cohorts')` / `.from('previous_cohorts')` / `.from('courses')` infer
-// narrow row shapes that are missing columns (e.g. `is_next`), and reject
-// `.insert()` / `.update()` payloads as excess properties. These helpers
-// centralize a single cast per table so the rest of the file stays clean.
-//
-// Replace with generated Supabase types for full type safety:
-//   npx supabase gen types typescript --project-id <id> --schema public \
-//     > src/integrations/supabase/types.ts
-//   then createClient<Database>(...)
-// ============================================================================
-
 const coursesTable = (): any => supabase.from('courses');
 const cohortsTable = (): any => supabase.from('cohorts');
 const previousCohortsTable = (): any => supabase.from('previous_cohorts');
 
-// ============================================================================
-// DEFAULTS — in case DB returns empty JSONB
-// ============================================================================
-
-const DEFAULT_PRICING = {
-  fee: 'TBA',
-  includes: [],
-};
-
+const DEFAULT_PRICING = { fee: 'TBA', includes: [] as string[] };
 const DEFAULT_FINAL_CTA = {
   headline: 'Ready to get started?',
   subheadline: 'Join the next cohort.',
 };
 
 // ============================================================================
-// Normalize a raw course row into a typed Course
+// normalizeCourse — preserves the full pricing object
 // ============================================================================
 
 const normalizeCourse = (raw: any): Course => ({
@@ -94,6 +63,7 @@ const normalizeCourse = (raw: any): Course => ({
   certificate_included: raw.certificate_included ?? true,
   status: raw.status ?? 'draft',
   display_order: raw.display_order ?? 0,
+  featured_on_homepage: raw.featured_on_homepage ?? false,
   why_this_program: raw.why_this_program ?? null,
   challenges: raw.challenges ?? [],
   what_you_learn: raw.what_you_learn ?? [],
@@ -107,10 +77,13 @@ const normalizeCourse = (raw: any): Course => ({
   skills_career: raw.skills_career ?? [],
   curriculum: raw.curriculum ?? [],
   whats_included: raw.whats_included ?? [],
-  pricing:
-    raw.pricing && Object.keys(raw.pricing).length > 0
-      ? raw.pricing
-      : DEFAULT_PRICING,
+  // Preserve pricing as-is, with safe defaults
+  pricing: {
+    fee: raw.pricing?.fee ?? DEFAULT_PRICING.fee,
+    includes: raw.pricing?.includes ?? DEFAULT_PRICING.includes,
+    paymentOptions: raw.pricing?.paymentOptions ?? undefined,
+    financialSupport: raw.pricing?.financialSupport ?? undefined,
+  },
   faqs: raw.faqs ?? [],
   final_cta:
     raw.final_cta && Object.keys(raw.final_cta).length > 0
@@ -124,36 +97,62 @@ const normalizeCourse = (raw: any): Course => ({
 // PUBLIC READ
 // ============================================================================
 
-/**
- * Fetch all published courses (for /courses landing page).
- */
-export const fetchPublishedCourses = async (): Promise<
-  ServiceResponse<Course[]>
-> => {
+export const fetchPublishedCourses = async (): Promise<ServiceResponse<Course[]>> => {
   try {
     const { data, error } = await coursesTable()
       .select('*')
       .eq('status', 'published')
-      .order('display_order', { ascending: true })
-      .order('created_at', { ascending: false });
+      .order('display_order', { ascending: true });
 
     if (error) return { success: false, error: error.message };
-
-    const courses = (data ?? []).map(normalizeCourse);
-    return { success: true, data: courses };
+    return { success: true, data: (data ?? []).map(normalizeCourse) };
   } catch (err) {
     return { success: false, error: String(err) };
   }
 };
 
-/**
- * Fetch one published course + next cohort + previous cohorts (for /courses/:slug).
- */
+// ============================================================================
+// PUBLIC READ — with next cohort fee
+// ============================================================================
+
+export const fetchPublishedCoursesWithFees = async (): Promise<
+  ServiceResponse<Array<Course & { next_cohort_fee: string | null }>>
+> => {
+  try {
+    const { data: courses, error: coursesError } = await coursesTable()
+      .select('*')
+      .eq('status', 'published')
+      .order('display_order', { ascending: true });
+
+    if (coursesError) return { success: false, error: coursesError.message };
+
+    // Fetch all "next" cohort fees in a single query
+    const { data: cohorts, error: cohortsError } = await cohortsTable()
+      .select('course_id, fee')
+      .eq('is_next', true);
+
+    if (cohortsError) return { success: false, error: cohortsError.message };
+
+    const feeByCourse: Record<string, string | null> = {};
+    (cohorts ?? []).forEach((c: any) => {
+      feeByCourse[c.course_id] = c.fee ?? null;
+    });
+
+    const result = (courses ?? []).map((row: any) => ({
+      ...normalizeCourse(row),
+      next_cohort_fee: feeByCourse[row.id] ?? null,
+    }));
+
+    return { success: true, data: result };
+  } catch (err) {
+    return { success: false, error: String(err) };
+  }
+};
+
 export const fetchCourseBySlug = async (
   slug: string
 ): Promise<ServiceResponse<CourseWithRelations>> => {
   try {
-    // 1. Course
     const { data: courseRow, error: courseError } = await coursesTable()
       .select('*')
       .eq('slug', slug)
@@ -165,47 +164,71 @@ export const fetchCourseBySlug = async (
 
     const course = normalizeCourse(courseRow);
 
-    // 2. Next cohort
     const { data: cohortRow } = await cohortsTable()
       .select('*')
       .eq('course_id', course.id)
       .eq('is_next', true)
       .maybeSingle();
 
-    // 3. Previous cohorts
     const { data: previousRows } = await previousCohortsTable()
       .select('*')
       .eq('course_id', course.id)
       .order('display_order', { ascending: true });
 
-    const result: CourseWithRelations = {
-      ...course,
-      next_cohort: (cohortRow as Cohort) ?? null,
-      previous_cohorts: (previousRows as PreviousCohort[]) ?? [],
+    return {
+      success: true,
+      data: {
+        ...course,
+        next_cohort: (cohortRow as Cohort) ?? null,
+        previous_cohorts: (previousRows as PreviousCohort[]) ?? [],
+      },
     };
-
-    return { success: true, data: result };
   } catch (err) {
     return { success: false, error: String(err) };
   }
 };
 
-/**
- * Fetch a course ID by slug (useful for admin + enrollments).
- */
-export const fetchCourseIdBySlug = async (
-  slug: string
-): Promise<ServiceResponse<string>> => {
+// ============================================================================
+// FEATURED COURSES (homepage)
+// ============================================================================
+
+export const fetchFeaturedCourses = async (): Promise<
+  ServiceResponse<Array<Course & { next_cohort: { schedule: string | null; start_date: string | null; fee: string | null } | null }>>
+> => {
   try {
-    const { data, error } = await coursesTable()
-      .select('id')
-      .eq('slug', slug)
-      .maybeSingle();
+    const { data: courses, error: coursesError } = await coursesTable()
+      .select('*')
+      .eq('status', 'published')
+      .eq('featured_on_homepage', true)
+      .order('display_order', { ascending: true });
+      // ← removed .limit(4) so all featured courses appear
 
-    if (error) return { success: false, error: error.message };
-    if (!data) return { success: false, error: 'Course not found' };
+    if (coursesError) return { success: false, error: coursesError.message };
 
-    return { success: true, data: data.id };
+    const courseIds = (courses ?? []).map((c: any) => c.id);
+
+    const { data: cohorts, error: cohortsError } = await cohortsTable()
+      .select('course_id, schedule, start_date, fee')
+      .in('course_id', courseIds)
+      .eq('is_next', true);
+
+    if (cohortsError) return { success: false, error: cohortsError.message };
+
+    const cohortByCourse: Record<string, any> = {};
+    (cohorts ?? []).forEach((c: any) => {
+      cohortByCourse[c.course_id] = {
+        schedule: c.schedule,
+        start_date: c.start_date,
+        fee: c.fee,
+      };
+    });
+
+    const result = (courses ?? []).map((row: any) => ({
+      ...normalizeCourse(row),
+      next_cohort: cohortByCourse[row.id] ?? null,
+    }));
+
+    return { success: true, data: result };
   } catch (err) {
     return { success: false, error: String(err) };
   }
@@ -215,28 +238,56 @@ export const fetchCourseIdBySlug = async (
 // ADMIN READ
 // ============================================================================
 
-/**
- * Fetch ALL courses (including drafts) for admin.
- */
 export const fetchAllCourses = async (): Promise<ServiceResponse<Course[]>> => {
   try {
     const { data, error } = await coursesTable()
       .select('*')
-      .order('display_order', { ascending: true })
-      .order('created_at', { ascending: false });
+      .order('display_order', { ascending: true });
 
     if (error) return { success: false, error: error.message };
-
-    const courses = (data ?? []).map(normalizeCourse);
-    return { success: true, data: courses };
+    return { success: true, data: (data ?? []).map(normalizeCourse) };
   } catch (err) {
     return { success: false, error: String(err) };
   }
 };
 
-/**
- * Fetch one course by ID (admin edit).
- */
+// ============================================================================
+// ADMIN READ — with next cohort fee
+// ============================================================================
+
+export const fetchAllCoursesWithFees = async (): Promise<
+  ServiceResponse<Array<Course & { next_cohort_fee: string | null }>>
+> => {
+  try {
+    const { data: courses, error: coursesError } = await coursesTable()
+      .select('*')
+      .order('display_order', { ascending: true });
+
+    if (coursesError) return { success: false, error: coursesError.message };
+
+    // Fetch all "next" cohorts in one query
+    const { data: cohorts, error: cohortsError } = await cohortsTable()
+      .select('course_id, fee')
+      .eq('is_next', true);
+
+    if (cohortsError) return { success: false, error: cohortsError.message };
+
+    const feeByCourse: Record<string, string | null> = {};
+    (cohorts ?? []).forEach((c: any) => {
+      feeByCourse[c.course_id] = c.fee ?? null;
+    });
+
+    const result = (courses ?? []).map((row: any) => ({
+      ...normalizeCourse(row),
+      next_cohort_fee: feeByCourse[row.id] ?? null,
+    }));
+
+    return { success: true, data: result };
+  } catch (err) {
+    return { success: false, error: String(err) };
+  }
+};
+
 export const fetchCourseById = async (
   id: string
 ): Promise<ServiceResponse<CourseWithRelations>> => {
@@ -301,15 +352,43 @@ export const updateCourse = async (
   input: Partial<CourseInput>
 ): Promise<ServiceResponse<Course>> => {
   try {
+    console.log('[updateCourse] ID:', id);
+    console.log('[updateCourse] Input:', input);
+
+    // Build safe payload
+    const payload: any = { ...input };
+
+    // If pricing is being updated, merge with existing to prevent JSONB data loss
+    if (input.pricing) {
+      const { data: existing, error: fetchErr } = await coursesTable()
+        .select('pricing')
+        .eq('id', id)
+        .single();
+
+      if (!fetchErr && existing?.pricing) {
+        payload.pricing = {
+          ...existing.pricing,
+          ...input.pricing,
+        };
+        console.log('[updateCourse] Merged pricing:', payload.pricing);
+      }
+    }
+
     const { data, error } = await coursesTable()
-      .update(input as any)
+      .update(payload)
       .eq('id', id)
       .select()
       .single();
 
-    if (error) return { success: false, error: error.message };
+    if (error) {
+      console.error('[updateCourse] Supabase error:', error);
+      return { success: false, error: error.message };
+    }
+
+    console.log('[updateCourse] Success. New pricing:', data?.pricing);
     return { success: true, data: normalizeCourse(data) };
   } catch (err) {
+    console.error('[updateCourse] Caught error:', err);
     return { success: false, error: String(err) };
   }
 };
@@ -327,7 +406,7 @@ export const deleteCourse = async (
 };
 
 // ============================================================================
-// COHORT CRUD
+// COHORT CRUD (unchanged — keeping your existing logic)
 // ============================================================================
 
 export const fetchNextCohort = async (
@@ -367,7 +446,6 @@ export const createCohort = async (
   input: CohortInput
 ): Promise<ServiceResponse<Cohort>> => {
   try {
-    // If this is the "next" cohort, unset other next cohorts for this course
     if (input.is_next) {
       await cohortsTable()
         .update({ is_next: false } as any)
@@ -392,7 +470,6 @@ export const updateCohort = async (
   input: Partial<CohortInput>
 ): Promise<ServiceResponse<Cohort>> => {
   try {
-    // If marking as next, unset others
     if (input.is_next && input.course_id) {
       await cohortsTable()
         .update({ is_next: false } as any)
@@ -424,26 +501,6 @@ export const deleteCohort = async (
   } catch (err) {
     return { success: false, error: String(err) };
   }
-};
-// ============================================================================
-// HELPERS — Registration URL
-// ============================================================================
-
-/**
- * Returns true if the cohort is open AND has a registration URL set.
- * Used to decide whether "Apply" opens an external URL or shows interest form.
- */
-export const isRegistrationOpen = (cohort: Cohort | null | undefined): boolean => {
-  if (!cohort) return false;
-  return cohort.status === 'open' && !!cohort.registration_url;
-};
-
-/**
- * Returns the registration URL if valid, otherwise null.
- */
-export const getRegistrationUrl = (cohort: Cohort | null | undefined): string | null => {
-  if (!isRegistrationOpen(cohort)) return null;
-  return cohort!.registration_url;
 };
 
 // ============================================================================
@@ -516,9 +573,16 @@ export const deletePreviousCohort = async (
 // HELPERS
 // ============================================================================
 
-/**
- * Format a date string (ISO) into human-readable form.
- */
+export const isRegistrationOpen = (cohort: Cohort | null | undefined): boolean => {
+  if (!cohort) return false;
+  return cohort.status === 'open' && !!cohort.registration_url;
+};
+
+export const getRegistrationUrl = (cohort: Cohort | null | undefined): string | null => {
+  if (!isRegistrationOpen(cohort)) return null;
+  return cohort!.registration_url;
+};
+
 export const formatCourseDate = (iso: string | null): string => {
   if (!iso || iso === 'TBA') return 'To be announced';
   const d = new Date(iso);
@@ -530,9 +594,6 @@ export const formatCourseDate = (iso: string | null): string => {
   });
 };
 
-/**
- * Short date formatter (e.g., "May 12, 2026").
- */
 export const formatShortDate = (iso: string | null): string => {
   if (!iso || iso === 'TBA') return 'TBA';
   const d = new Date(iso);

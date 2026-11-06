@@ -1,13 +1,12 @@
 // ============================================================================
-// iQuire — Public Contact Page (Phase 12D.3 — Updated)
+// iQuire — Public Contact Page (Phase 12D.3 — Resend Updated)
 // ============================================================================
 
 import React, { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { ScrollReveal } from '../../components/common/ScrollReveal';
 import { Input } from '../../components/common/Input';
 import { Button } from '../../components/common/Button';
-import { notifyAdminContactSubmission } from '../../services/email.service';
+import { notifyAdminContactSubmission } from '../../services/notifications.service';
 import { isValidEmail, normalizeString } from '../../utils/validation';
 import styles from './Contact.module.css';
 
@@ -25,9 +24,7 @@ const submitContactMessage = async (payload: {
   try {
     const response = await fetch('/api/contact', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
 
@@ -40,10 +37,7 @@ const submitContactMessage = async (payload: {
       };
     }
 
-    return {
-      success: true,
-      data,
-    };
+    return { success: true, data };
   } catch (error) {
     console.error('[Contact] submitContactMessage failed:', error);
     return {
@@ -57,9 +51,7 @@ const submitContactMessage = async (payload: {
 // Config
 // ============================================================================
 
-const EMAIL_INFO = 'info@iquire.co';
-const EMAIL_ENQUIRIES = 'enquiries@iquire.co';
-const EMAIL_HELLO = 'hello@iquire.co';
+const EMAIL_HELLO = 'hello@iquire.io';
 
 const PHONE_DISPLAY = '+44 7918 250543';
 const PHONE_TEL = '+447918250543';
@@ -118,27 +110,35 @@ const SocialIcons = {
 };
 
 const SOCIAL_LINKS = [
-  {
-    label: 'LinkedIn',
-    url: 'https://www.linkedin.com/company/iquireco/',
-    icon: SocialIcons.linkedin,
-  },
-  {
-    label: 'Instagram',
-    url: 'https://www.instagram.com/iquire.co',
-    icon: SocialIcons.instagram,
-  },
-  {
-    label: 'Facebook',
-    url: 'https://web.facebook.com/iquire.co',
-    icon: SocialIcons.facebook,
-  },
-  {
-    label: 'WhatsApp',
-    url: 'https://wa.me/447918250543',
-    icon: SocialIcons.whatsapp,
-  },
+  { label: 'LinkedIn', url: 'https://www.linkedin.com/company/iQuireco/', icon: SocialIcons.linkedin },
+  { label: 'Instagram', url: 'https://www.instagram.com/iQuire.co', icon: SocialIcons.instagram },
+  { label: 'Facebook', url: 'https://web.facebook.com/iQuire.co', icon: SocialIcons.facebook },
+  { label: 'WhatsApp', url: 'https://wa.me/447918250543', icon: SocialIcons.whatsapp },
 ];
+
+// ============================================================================
+// Icons for Contact Cards
+// ============================================================================
+
+const Icons = {
+  mail: (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+      <polyline points="22,6 12,13 2,6" />
+    </svg>
+  ),
+  phone: (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+    </svg>
+  ),
+  mapPin: (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+      <circle cx="12" cy="10" r="3" />
+    </svg>
+  ),
+};
 
 // ============================================================================
 // Component
@@ -153,13 +153,9 @@ export const Contact: React.FC = () => {
   // --------------------------------------------------------------------------
   // Handlers
   // --------------------------------------------------------------------------
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-
     setFormData((prev) => ({ ...prev, [name]: value }));
-
     if (errors[name]) {
       setErrors((prev) => {
         const next = { ...prev };
@@ -174,24 +170,12 @@ export const Contact: React.FC = () => {
   // --------------------------------------------------------------------------
   const validateForm = (): FormErrors => {
     const e: FormErrors = {};
-
-    if (!normalizeString(formData.name)) {
-      e.name = 'Your name is required';
-    }
-    if (!formData.email.trim()) {
-      e.email = 'Email is required';
-    } else if (!isValidEmail(formData.email)) {
-      e.email = 'Enter a valid email address';
-    }
-    if (!normalizeString(formData.subject)) {
-      e.subject = 'Subject is required';
-    }
-    if (!normalizeString(formData.message)) {
-      e.message = 'Message is required';
-    } else if (formData.message.trim().length < 10) {
-      e.message = 'Message must be at least 10 characters';
-    }
-
+    if (!normalizeString(formData.name)) e.name = 'Your name is required';
+    if (!formData.email.trim()) e.email = 'Email is required';
+    else if (!isValidEmail(formData.email)) e.email = 'Enter a valid email address';
+    if (!normalizeString(formData.subject)) e.subject = 'Subject is required';
+    if (!normalizeString(formData.message)) e.message = 'Message is required';
+    else if (formData.message.trim().length < 10) e.message = 'Message must be at least 10 characters';
     return e;
   };
 
@@ -213,7 +197,6 @@ export const Contact: React.FC = () => {
     setIsSubmitting(true);
     setErrors({});
 
-    // 1. Save to DB
     const dbResult = await submitContactMessage({
       name: formData.name.trim(),
       email: formData.email.trim().toLowerCase(),
@@ -225,25 +208,18 @@ export const Contact: React.FC = () => {
     setIsSubmitting(false);
 
     if (!dbResult.success) {
-      setErrors({
-        submit: dbResult.error ?? 'Failed to submit. Please try again.',
-      });
+      setErrors({ submit: dbResult.error ?? 'Failed to submit. Please try again.' });
       return;
     }
 
-    // 2. Send admin notification (non-blocking)
-    //    FormSubmit routes to the test inbox until domain is ready.
     notifyAdminContactSubmission({
       name: formData.name.trim(),
       email: formData.email.trim().toLowerCase(),
       phone: formData.phone.trim() || undefined,
       subject: formData.subject.trim(),
       message: formData.message.trim(),
-    }).catch((err) => {
-      console.error('[Contact] Email notification failed:', err);
-    });
+    }).catch((err) => console.error('[Contact] Email notification failed:', err));
 
-    // 3. Show success
     setSubmitSuccess(true);
   };
 
@@ -255,35 +231,27 @@ export const Contact: React.FC = () => {
       <div className={styles.page}>
         <div className={styles.successSection}>
           <div className="container">
-            <ScrollReveal animation="up" className={styles.successCard}>
+            <div className={`${styles.successCard} ${styles.slideUpText}`}>
               <div className={styles.successIcon}>
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
                   <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
-                  <path
-                    d="M8 12L11 15L16 9"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+                  <path d="M8 12L11 15L16 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </div>
-              <h1 className={styles.successTitle}>
-                Thank you, {formData.name.split(' ')[0]}!
-              </h1>
+              <h1 className={styles.successTitle}>Thank you, {formData.name.split(' ')[0]}!</h1>
               <p className={styles.successText}>
                 Your message has been received. Our team will get back to you at{' '}
                 <strong>{formData.email}</strong> within 24–48 hours.
               </p>
               <div className={styles.successActions}>
-                <Button variant="primary" color="green" size="lg" href="/">
+                <Button variant="primary" color="gradient" size="lg" href="/">
                   Back to Home
                 </Button>
                 <Link to="/courses" className={styles.successLink}>
                   Explore Courses →
                 </Link>
               </div>
-            </ScrollReveal>
+            </div>
           </div>
         </div>
       </div>
@@ -295,81 +263,57 @@ export const Contact: React.FC = () => {
   // --------------------------------------------------------------------------
   return (
     <div className={styles.page}>
-      {/* ================================================================
-          HERO
-          ================================================================ */}
+      {/* HERO (Netted Blue) */}
       <section className={styles.hero}>
+        <svg className={styles.netGrid} aria-hidden="true" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1440 900">
+          <defs>
+            <pattern id="contactHeroNet" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+              <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#000000" strokeWidth="1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#contactHeroNet)" />
+        </svg>
+
         <div className={styles.heroBlobOne} aria-hidden="true" />
         <div className={styles.heroBlobTwo} aria-hidden="true" />
 
         <div className="container">
-          <ScrollReveal animation="up" className={styles.heroContent}>
+          <div className={`${styles.heroContent} ${styles.slideUpText}`}>
             <span className={styles.heroBadge}>Contact Us</span>
             <h1 className={styles.heroTitle}>
-              Let&apos;s start a{' '}
-              <span className={styles.heroHighlight}>conversation.</span>
+              Let&apos;s start a <span className={styles.heroHighlight}>conversation.</span>
             </h1>
             <p className={styles.heroSubtitle}>
-              Questions about courses, hiring IQuire talent, partnerships, or
+              Questions about courses, hiring iQuire talent, partnerships, or
               anything else? We&apos;d love to hear from you.
             </p>
-          </ScrollReveal>
+          </div>
         </div>
       </section>
 
-      {/* ================================================================
-          CONTACT CARDS (5 in 3+2 grid)
-          ================================================================ */}
+      {/* CONTACT CARDS (5 in 3+2 grid) */}
       <section className={styles.cardsSection}>
         <div className="container">
-          <ScrollReveal animation="up" stagger className={styles.cardsGrid}>
-            <ContactCard
-              icon="✉️"
-              label="General enquiries"
-              value={EMAIL_INFO}
-              href={`mailto:${EMAIL_INFO}`}
-            />
-            <ContactCard
-              icon="📩"
-              label="Enquiries"
-              value={EMAIL_ENQUIRIES}
-              href={`mailto:${EMAIL_ENQUIRIES}`}
-            />
-            <ContactCard
-              icon="💬"
-              label="Say hello"
-              value={EMAIL_HELLO}
-              href={`mailto:${EMAIL_HELLO}`}
-            />
-            <ContactCard
-              icon="📞"
-              label="Call or WhatsApp"
-              value={PHONE_DISPLAY}
-              href={`tel:${PHONE_TEL}`}
-            />
-            <ContactCard
-              icon="📍"
-              label="Visit us"
-              value={LOCATION}
-            />
-          </ScrollReveal>
+          <div className={`${styles.cardsGrid} ${styles.slideUpText} ${styles['delay-1']}`}>
+            <ContactCard icon={Icons.mail} label="Say hello" value={EMAIL_HELLO} href={`mailto:${EMAIL_HELLO}`} />
+            <ContactCard icon={Icons.phone} label="Call or WhatsApp" value={PHONE_DISPLAY} href={`tel:${PHONE_TEL}`} />
+            <ContactCard icon={Icons.mapPin} label="Visit us" value={LOCATION} />
+          </div>
         </div>
       </section>
 
-      {/* ================================================================
-          FORM
-          ================================================================ */}
+      {/* FORM */}
       <section className={styles.formSection}>
         <div className="container">
           <div className={styles.formGrid}>
             {/* Left — context */}
-            <ScrollReveal animation="left" className={styles.formContext}>
+            <div className={`${styles.formContext} ${styles.slideUpText} ${styles['delay-2']}`}>
               <span className={styles.formBadge}>Send a message</span>
               <h2 className={styles.formTitle}>Tell us how we can help</h2>
               <p className={styles.formText}>
                 Whether you&apos;re a student looking for guidance, a recruiter
-                interested in IQuire talent, or an organization exploring a
-                partnership — fill in the form and we&apos;ll route your
+                interested in iQuire talent, or an organization exploring a
+                partnership fill in the form and we&apos;ll route your
                 message to the right person on our team.
               </p>
 
@@ -405,56 +349,19 @@ export const Contact: React.FC = () => {
                   ))}
                 </div>
               </div>
-            </ScrollReveal>
+            </div>
 
             {/* Right — form */}
-            <ScrollReveal
-              animation="right"
-              delay={1}
-              className={styles.formWrapper}
-            >
+            <div className={`${styles.formWrapper} ${styles.slideUpText} ${styles['delay-3']}`}>
               <form onSubmit={handleSubmit} className={styles.form} noValidate>
                 <div className={styles.twoCol}>
-                  <Input
-                    label="Your name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    placeholder="Enter your full name"
-                    error={errors.name}
-                  />
-                  <Input
-                    label="Email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    placeholder="you@example.com"
-                    error={errors.email}
-                  />
+                  <Input label="Your name" name="name" value={formData.name} onChange={handleChange} required placeholder="Enter your full name" error={errors.name} />
+                  <Input label="Email" name="email" type="email" value={formData.email} onChange={handleChange} required placeholder="you@example.com" error={errors.email} />
                 </div>
 
                 <div className={styles.twoCol}>
-                  <Input
-                    label="Phone"
-                    name="phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    placeholder="+44 7918 250543 (optional)"
-                    error={errors.phone}
-                  />
-                  <Input
-                    label="Subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    required
-                    placeholder="What is this about?"
-                    error={errors.subject}
-                  />
+                  <Input label="Phone" name="phone" type="tel" value={formData.phone} onChange={handleChange} placeholder="+44 7918 250543 (optional)" error={errors.phone} />
+                  <Input label="Subject" name="subject" value={formData.subject} onChange={handleChange} required placeholder="What is this about?" error={errors.subject} />
                 </div>
 
                 <div className={styles.textareaWrapper}>
@@ -467,80 +374,63 @@ export const Contact: React.FC = () => {
                     value={formData.message}
                     onChange={handleChange}
                     rows={6}
-                    className={`${styles.textarea} ${
-                      errors.message ? styles.textareaError : ''
-                    }`}
-                    placeholder="Tell us more…"
+                    className={`${styles.textarea} ${errors.message ? styles.textareaError : ''}`}
+                    placeholder="Tell us more..."
                   />
                   {errors.message ? (
-                    <span className={styles.errorText} role="alert">
-                      {errors.message}
-                    </span>
+                    <span className={styles.errorText} role="alert">{errors.message}</span>
                   ) : (
-                    <span className={styles.helperText}>
-                      {formData.message.length} characters
-                    </span>
+                    <span className={styles.helperText}>{formData.message.length} characters</span>
                   )}
                 </div>
 
                 {errors.submit && (
-                  <div className={styles.submitError} role="alert">
-                    {errors.submit}
-                  </div>
+                  <div className={styles.submitError} role="alert">{errors.submit}</div>
                 )}
 
-                <button
-                  type="submit"
-                  className={styles.submitBtn}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? 'Sending…' : 'Send Message'}
+                <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
 
                 <p className={styles.formHint}>
                   By submitting, you agree to our{' '}
-                  <Link to="/terms" className={styles.formHintLink}>
-                    Terms
-                  </Link>{' '}
-                  and{' '}
-                  <Link to="/privacy" className={styles.formHintLink}>
-                    Privacy Policy
-                  </Link>
-                  .
+                  <Link to="/terms" className={styles.formHintLink}>Terms</Link>{' '}
+                  and <Link to="/privacy" className={styles.formHintLink}>Privacy Policy</Link>.
                 </p>
               </form>
-            </ScrollReveal>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ================================================================
-          FINAL CTA
-          ================================================================ */}
+      {/* FINAL CTA (Netted Blue) */}
       <section className={styles.finalCta}>
+        <svg className={styles.netGrid} aria-hidden="true" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1440 900">
+          <defs>
+            <pattern id="contactCtaNet" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+              <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#000000" strokeWidth="1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#contactCtaNet)" />
+        </svg>
+
         <div className={styles.finalCtaBlob} aria-hidden="true" />
-        <div className="container">
-          <ScrollReveal animation="up" className={styles.finalCtaInner}>
-            <h2 className={styles.finalCtaTitle}>
-              Ready to build your career?
-            </h2>
+
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          <div className={`${styles.finalCtaInner} ${styles.slideUpText} ${styles['delay-4']}`}>
+            <h2 className={styles.finalCtaTitle}>Ready to build your career?</h2>
             <p className={styles.finalCtaSubtitle}>
-              Explore our courses or speak with our team about IQuire training.
+              Explore our courses or speak with our team about iQuire training.
             </p>
             <div className={styles.finalCtaButtons}>
-              <Button
-                variant="primary"
-                color="green"
-                size="lg"
-                href="/courses"
-              >
+              <Button variant="primary" color="gradient" size="lg" href="/courses">
                 Explore Courses
               </Button>
               <Link to="/login" className={styles.finalCtaSecondary}>
                 Sign In →
               </Link>
             </div>
-          </ScrollReveal>
+          </div>
         </div>
       </section>
     </div>
@@ -552,18 +442,13 @@ export const Contact: React.FC = () => {
 // ============================================================================
 
 interface ContactCardProps {
-  icon: string;
+  icon: React.ReactNode;
   label: string;
   value: string;
   href?: string;
 }
 
-const ContactCard: React.FC<ContactCardProps> = ({
-  icon,
-  label,
-  value,
-  href,
-}) => {
+const ContactCard: React.FC<ContactCardProps> = ({ icon, label, value, href }) => {
   const content = (
     <>
       <div className={styles.cardIcon}>{icon}</div>

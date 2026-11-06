@@ -451,7 +451,7 @@ export const BlogPost: React.FC = () => {
                   Want to start your own journey?
                 </h3>
                 <p className={styles.sideCardAccentText}>
-                  Join thousands of learners building their careers with IQuire.
+                  Join thousands of learners building their careers with iQuire.
                 </p>
                 <Link to="/courses" className={styles.sideCardAccentCta}>
                   Get Started Free →
@@ -469,7 +469,7 @@ export const BlogPost: React.FC = () => {
             <ScrollReveal animation="up" className={styles.relatedHeader}>
               <h2 className={styles.relatedTitle}>Related articles</h2>
               <p className={styles.relatedSubtitle}>
-                More from {post.category?.name ?? 'the IQuire blog'}
+                More from {post.category?.name ?? 'the iQuire blog'}
               </p>
             </ScrollReveal>
 
@@ -518,7 +518,7 @@ export const BlogPost: React.FC = () => {
           <ScrollReveal animation="up" className={styles.finalCtaInner}>
             <h2 className={styles.finalCtaTitle}>Found this useful?</h2>
             <p className={styles.finalCtaSubtitle}>
-              Explore more insights, courses, and opportunities on IQuire.
+              Explore more insights, courses, and opportunities on iQuire.
             </p>
             <div className={styles.finalCtaButtons}>
               <Link to="/blog" className={styles.finalCtaPrimary}>

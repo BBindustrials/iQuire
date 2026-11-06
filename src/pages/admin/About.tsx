@@ -204,7 +204,7 @@ export const AdminAbout: React.FC = () => {
               label="Badge"
               value={hero.badge}
               onChange={(e) => setHero({ ...hero, badge: e.target.value })}
-              placeholder="About IQuire"
+              placeholder="About iQuire"
             />
             <div className={styles.twoCol}>
               <Input

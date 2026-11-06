@@ -30,6 +30,18 @@ import { AdminCohorts } from './pages/admin/Cohorts';
 import { AdminCohortForm } from './pages/admin/CohortForm';
 import { AdminAdmins } from './pages/admin/Admins';
 import { AdminAdminForm } from './pages/admin/AdminForm';
+import { MemberCourses } from './pages/member/Courses';
+import { MemberClasses } from './pages/member/Classes';
+import { MemberCourseDetail } from './pages/member/CourseDetail';
+import { MemberCalendar } from './pages/member/Calendar';
+import { MemberAnnouncements } from './pages/member/Announcements';
+import { MemberCertificates } from './pages/member/Certificates';
+import { MemberProfile } from './pages/member/Profile';
+import { MemberSettings } from './pages/member/Settings';
+import { MemberResources } from './pages/member/Resources';
+import { AdminOpportunities } from './pages/admin/AdminOpportunities';
+import { MemberOpportunities } from './pages/member/Opportunities';
+
 
 // ============================================================================
 // Public Auth Pages
@@ -72,6 +84,8 @@ import { AdminLayout } from './components/layout/admin/AdminLayout';
 import { AdminMessages } from './pages/admin/Messages';
 import { AdminMessageDetail } from './pages/admin/MessageDetail';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { AdminContentManager } from './pages/admin/AdminContentManager';
+import { AdminResources } from './pages/admin/AdminResources';
 
 import './styles/globals.css';
 
@@ -88,23 +102,13 @@ const placeholder = (title: string) => () => (
 
 // ============================================================================
 // Member sub-page placeholders
-// ============================================================================
-
-const MemberProfilePage = placeholder('My Profile');
-const MemberCoursesPage = placeholder('My Courses');
-const MemberClassesPage = placeholder('Classes & Live Sessions');
-const MemberCalendarPage = placeholder('Calendar');
-const MemberCertificatesPage = placeholder('Certificates');
+// =========================================================================
 const MemberCareerPage = placeholder('Career Journey');
 const MemberReadinessPage = placeholder('Job Readiness Assessment');
-const MemberOpportunitiesPage = placeholder('Opportunities');
 const MemberCvPage = placeholder('CV Builder');
 const MemberPortfolioPage = placeholder('Portfolio');
 const MemberLinkedInPage = placeholder('LinkedIn Optimization');
-const MemberResourcesPage = placeholder('Career Resources');
 const MemberAlumniPage = placeholder('Alumni Community');
-const MemberAnnouncementsPage = placeholder('Announcements');
-const MemberSettingsPage = placeholder('Settings');
 
 // ============================================================================
 // Recruiter sub-page placeholders (to be built in later phases)
@@ -158,7 +162,10 @@ function App() {
           <Route path="/contact" element={<Layout><Contact /></Layout>} />
           <Route path="/hire-from-us" element={<Layout><HireFromUs /></Layout>} />
           <Route path="/alumni" element={<Layout><Alumni /></Layout>} />
-          <Route path="/alumni/:id" element={<Layout><AlumniProfile /></Layout>} />
+          
+          {/* Alumni Profile — uses slug (not id) */}
+          <Route path="/alumni/:slug" element={<Layout><AlumniProfile /></Layout>} />
+          
           <Route path="/scholarships" element={<Layout><Scholarships /></Layout>} />
           <Route path="/ai-career-counselor" element={<Layout><PublicAiCounselor /></Layout>} />
 
@@ -173,22 +180,28 @@ function App() {
               MEMBER PAGES (protected — account_type = member)
               ================================================================== */}
           <Route path="/dashboard" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberDashboard /></MemberLayout></ProtectedRoute>} />
-          <Route path="/dashboard/profile" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberProfilePage /></MemberLayout></ProtectedRoute>} />
-          <Route path="/dashboard/courses" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberCoursesPage /></MemberLayout></ProtectedRoute>} />
-          <Route path="/dashboard/classes" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberClassesPage /></MemberLayout></ProtectedRoute>} />
-          <Route path="/dashboard/calendar" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberCalendarPage /></MemberLayout></ProtectedRoute>} />
-          <Route path="/dashboard/certificates" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberCertificatesPage /></MemberLayout></ProtectedRoute>} />
+          <Route path="/dashboard/profile" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberProfile /></MemberLayout></ProtectedRoute>} />
+          <Route path="/dashboard/certificates" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberCertificates /></MemberLayout></ProtectedRoute>} />
+          {/* Specific route MUST come before the generic list route */}
+          <Route path="/dashboard/courses/:courseId" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberCourseDetail /></MemberLayout></ProtectedRoute>} />
+          
+          <Route path="/dashboard/courses" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberCourses /></MemberLayout></ProtectedRoute>} />
+          
+          <Route path="/dashboard/classes" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberClasses /></MemberLayout></ProtectedRoute>} />
+          <Route path="/dashboard/calendar" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberCalendar /></MemberLayout></ProtectedRoute>} />
+          <Route path="/dashboard/certificates" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberCertificates /></MemberLayout></ProtectedRoute>} />
           <Route path="/dashboard/career" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberCareerPage /></MemberLayout></ProtectedRoute>} />
           <Route path="/dashboard/readiness" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberReadinessPage /></MemberLayout></ProtectedRoute>} />
-          <Route path="/dashboard/opportunities" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberOpportunitiesPage /></MemberLayout></ProtectedRoute>} />
+          <Route path="/dashboard/opportunities" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberOpportunities /></MemberLayout></ProtectedRoute>} />
           <Route path="/dashboard/cv" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberCvPage /></MemberLayout></ProtectedRoute>} />
           <Route path="/dashboard/portfolio" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberPortfolioPage /></MemberLayout></ProtectedRoute>} />
           <Route path="/dashboard/linkedin" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberLinkedInPage /></MemberLayout></ProtectedRoute>} />
           <Route path="/dashboard/ai-counselor" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberAiCounselor /></MemberLayout></ProtectedRoute>} />
-          <Route path="/dashboard/resources" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberResourcesPage /></MemberLayout></ProtectedRoute>} />
+          <Route path="/dashboard/resources" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberResources /></MemberLayout></ProtectedRoute>} />
           <Route path="/dashboard/alumni" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberAlumniPage /></MemberLayout></ProtectedRoute>} />
-          <Route path="/dashboard/announcements" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberAnnouncementsPage /></MemberLayout></ProtectedRoute>} />
-          <Route path="/dashboard/settings" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberSettingsPage /></MemberLayout></ProtectedRoute>} />
+          <Route path="/dashboard/announcements" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberAnnouncements /></MemberLayout></ProtectedRoute>} />
+          <Route path="/dashboard/announcements/:id" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberAnnouncements /></MemberLayout></ProtectedRoute>} />
+          <Route path="/dashboard/settings" element={<ProtectedRoute requiredAccountType="member"><MemberLayout><MemberSettings /></MemberLayout></ProtectedRoute>} />
 
           {/* ==================================================================
               RECRUITER — GATE PAGES (auth required, no dashboard shell)
@@ -340,6 +353,8 @@ function App() {
               ================================================================== */}
           <Route path="/admin/homepage" element={<ProtectedRoute requiredAccountType="admin"><AdminLayout><AdminHomepagePage /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/about" element={<ProtectedRoute requiredAccountType="admin"><AdminLayout><AdminAbout /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/content" element={<ProtectedRoute requiredAccountType="admin"><AdminLayout><AdminContentManager /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/opportunities" element={<ProtectedRoute requiredAccountType="admin"><AdminLayout><AdminOpportunities /></AdminLayout></ProtectedRoute>} />
 
           {/* Scholarships */}
           <Route path="/admin/scholarships" element={<ProtectedRoute requiredAccountType="admin"><AdminLayout><AdminScholarships /></AdminLayout></ProtectedRoute>} />
@@ -388,6 +403,7 @@ function App() {
           <Route path="/admin/cohorts/new" element={<ProtectedRoute requiredAccountType="admin"><AdminLayout><AdminCohortForm /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/cohorts/:id" element={<ProtectedRoute requiredAccountType="admin"><AdminLayout><AdminCohortForm /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/cohorts/:id/edit" element={<ProtectedRoute requiredAccountType="admin"><AdminLayout><AdminCohortForm /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/resources" element={<ProtectedRoute requiredAccountType="admin"><AdminLayout><AdminResources /></AdminLayout></ProtectedRoute>} />
 
           {/* ==================================================================
               ADMIN — USERS

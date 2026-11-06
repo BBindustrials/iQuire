@@ -1,8 +1,8 @@
 // ============================================================================
 // iQuire — Unified Member Login (Phase 11A.2)
 // ============================================================================
-// Login page for IQuire students and alumni. Public Sign Up removed.
-// Access is reserved for IQuire participants.
+// Login page for iQuire students and alumni. Public Sign Up removed.
+// Access is reserved for iQuire participants.
 // ============================================================================
 
 import React, { useState, useMemo, type FormEvent } from 'react';
@@ -59,9 +59,9 @@ export const Login: React.FC = () => {
 
   const identifierHint = useMemo(() => {
     if (identifierType === 'email') return 'Logging in with email';
-    if (identifierType === 'participant_id') return 'Logging in with IQuire ID';
+    if (identifierType === 'participant_id') return 'Logging in with iQuire ID';
     if (identifierType === 'unknown' && identifier.trim().length > 3) {
-      return 'Enter a valid email or IQuire ID (e.g., swift-panda-1234)';
+      return 'Enter a valid email or iQuire ID (e.g., swift-panda-1234)';
     }
     return undefined;
   }, [identifierType, identifier]);
@@ -102,10 +102,10 @@ export const Login: React.FC = () => {
     const newErrors: FormErrors = {};
 
     if (!normalizeString(identifier)) {
-      newErrors.identifier = 'Email or IQuire ID is required';
+      newErrors.identifier = 'Email or iQuire ID is required';
     } else if (identifierType === 'unknown') {
       newErrors.identifier =
-        'Enter a valid email or IQuire ID (e.g., swift-panda-1234)';
+        'Enter a valid email or iQuire ID (e.g., swift-panda-1234)';
     }
 
     if (!password) {
@@ -152,17 +152,17 @@ export const Login: React.FC = () => {
   return (
     <AuthLayout
       image={loginImg}
-      imageAlt="IQuire student login"
+      imageAlt="iQuire student login"
     >
       <AuthPageTitle
         title="Welcome back"
-        subtitle="Sign in with your IQuire email or IQuire ID."
+        subtitle="Sign in with your iQuire email or iQuire ID."
       />
 
       <form onSubmit={handleSubmit} noValidate>
         <div className={styles.identifierField}>
           <Input
-            label="Email or IQuire ID"
+            label="Email or iQuire ID"
             name="identifier"
             type="text"
             value={identifier}
@@ -186,7 +186,7 @@ export const Login: React.FC = () => {
                 />
                 <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
               </svg>
-              IQuire ID detected
+              iQuire ID detected
             </span>
           )}
         </div>
@@ -239,7 +239,7 @@ export const Login: React.FC = () => {
         </button>
 
         <div className={styles.reservedNotice}>
-          <strong>Access is reserved for IQuire students and alumni.</strong>
+          <strong>Access is reserved for iQuire students and alumni.</strong>
           <p>
             Interested in a course?{' '}
             <Link to="/courses" className={styles.footerLink}>

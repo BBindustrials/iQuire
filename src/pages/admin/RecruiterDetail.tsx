@@ -18,7 +18,7 @@ import {
 import {
   sendRecruiterApprovedEmail,
   sendRecruiterRejectedEmail,
-} from '../../services/email.service';
+} from '../../services/notifications.service';
 import styles from './RecruiterDetail.module.css';
 
 // ============================================================================
@@ -465,7 +465,7 @@ export const AdminRecruiterDetail: React.FC = () => {
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
             <h3 className={styles.modalTitle}>Approve this recruiter?</h3>
             <p className={styles.modalText}>
-              {recruiter.company_name} will get full access to the IQuire talent
+              {recruiter.company_name} will get full access to the iQuire talent
               directory. An approval email will be sent to the admin inbox for
               forwarding.
             </p>

@@ -1,11 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// ============================================================================
+// iQuire — Member Header (Phase 17.2 - Corrected)
+// ============================================================================
+// Removed desktop collapse toggle (moved to sidebar).
+// Robust iQuire ID display (checks iq_id and participant_id).
+// ============================================================================
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import styles from './MemberHeader.module.css';
-
-// ============================================================================
-// Component
-// ============================================================================
 
 interface MemberHeaderProps {
   onMenuToggle: () => void;
@@ -35,15 +39,16 @@ export const MemberHeader: React.FC<MemberHeaderProps> = ({ onMenuToggle }) => {
     ? `${profile.first_name?.[0] ?? ''}${profile.last_name?.[0] ?? ''}`.toUpperCase()
     : 'U';
 
-  // Contextual role label
   const roleLabel = (() => {
     const isStudent = roles.includes('student');
     const isAlumni = roles.includes('alumni');
-
     if (isStudent && isAlumni) return 'Student · Alumni';
     if (isAlumni) return 'Alumni';
     return 'Student';
   })();
+
+  // Robust ID check
+  const iqId = (profile as any)?.iq_id ?? (profile as any)?.participant_id;
 
   const handleSignOut = async () => {
     setMenuOpen(false);
@@ -53,6 +58,7 @@ export const MemberHeader: React.FC<MemberHeaderProps> = ({ onMenuToggle }) => {
 
   return (
     <header className={styles.header}>
+      {/* Mobile Menu Toggle */}
       <button
         className={styles.menuToggle}
         onClick={onMenuToggle}
@@ -68,13 +74,13 @@ export const MemberHeader: React.FC<MemberHeaderProps> = ({ onMenuToggle }) => {
       </div>
 
       <div className={styles.headerActions}>
-        <Link to="/courses" className={styles.browseBtn}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-            <path d="M12 3L2 8L12 13L22 8L12 3Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
-            <path d="M6 10V15C6 15 8.5 17 12 17C15.5 17 18 15 18 15V10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-          </svg>
-          <span>Browse Courses</span>
-        </Link>
+        {/* iQuire ID Display */}
+        {iqId && (
+          <div className={styles.headerIqId}>
+            <span className={styles.iqIdLabel}>ID:</span>
+            <span className={styles.iqIdValue}>{iqId}</span>
+          </div>
+        )}
 
         <div className={styles.userMenu} ref={menuRef}>
           <button
@@ -83,7 +89,11 @@ export const MemberHeader: React.FC<MemberHeaderProps> = ({ onMenuToggle }) => {
             aria-haspopup="menu"
             aria-expanded={menuOpen}
           >
-            <span className={styles.avatar}>{initials}</span>
+            {profile?.avatar_url ? (
+              <img src={profile.avatar_url} alt="Avatar" className={styles.avatarImg} />
+            ) : (
+              <span className={styles.avatar}>{initials}</span>
+            )}    
             <span className={styles.userMeta}>
               <span className={styles.userName}>{displayName}</span>
               <span className={styles.userRole}>{roleLabel}</span>
@@ -98,25 +108,12 @@ export const MemberHeader: React.FC<MemberHeaderProps> = ({ onMenuToggle }) => {
               <div className={styles.dropdownHeader}>
                 <span className={styles.dropdownName}>{displayName}</span>
                 <span className={styles.dropdownEmail}>{profile?.email}</span>
-                {profile?.iq_id && (
-                  <span className={styles.dropdownId}>
-                    IQuire ID: <strong>{profile.iq_id}</strong>
-                  </span>
-                )}
               </div>
               <div className={styles.dropdownDivider} />
-              <Link
-                to="/dashboard/profile"
-                className={styles.dropdownItem}
-                onClick={() => setMenuOpen(false)}
-              >
+              <Link to="/dashboard/profile" className={styles.dropdownItem} onClick={() => setMenuOpen(false)}>
                 My Profile
               </Link>
-              <Link
-                to="/dashboard/settings"
-                className={styles.dropdownItem}
-                onClick={() => setMenuOpen(false)}
-              >
+              <Link to="/dashboard/settings" className={styles.dropdownItem} onClick={() => setMenuOpen(false)}>
                 Settings
               </Link>
               <button onClick={handleSignOut} className={styles.dropdownItem} role="menuitem">
@@ -129,3 +126,4 @@ export const MemberHeader: React.FC<MemberHeaderProps> = ({ onMenuToggle }) => {
     </header>
   );
 };
+

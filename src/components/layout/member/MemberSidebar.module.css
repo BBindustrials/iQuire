@@ -1,7 +1,7 @@
 @import '../../../styles/theme.css';
 
 /* ============================================================================
-   Member Sidebar
+   Member Sidebar — Dark Navy (Strict Overrides)
    ============================================================================ */
 
 .sidebar {
@@ -10,15 +10,19 @@
   left: 0;
   bottom: 0;
   width: 260px;
-  background-color: #FFFFFF;
-  border-right: 1px solid #E5E7EB;
+  background-color: #0f172a;
+  border-right: 1px solid #1e293b;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   z-index: 100;
-  transition: transform 0.25s ease;
+  transition: transform 0.25s ease, width 0.25s ease;
   scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
+  scrollbar-color: #334155 transparent;
+}
+
+.sidebar.collapsed {
+  width: 72px;
 }
 
 .sidebar::-webkit-scrollbar {
@@ -26,91 +30,108 @@
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1;
+  background-color: #334155;
   border-radius: 3px;
 }
 
-/* ----------------------------------------------------------------------------
-   Brand
-   ---------------------------------------------------------------------------- */
+/* Header with Brand and Collapse Toggle */
+.sidebarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.25rem 1rem;
+  flex-shrink: 0;
+}
+
+.collapsed .sidebarHeader {
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem 0.5rem 1rem;
+}
+
+.collapsed .brand {
+  justify-content: center;
+}
 
 .brand {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1.25rem 1.25rem 1rem;
   text-decoration: none;
-  flex-shrink: 0;
 }
 
-.brandMark {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
-  color: #FFFFFF;
+.brandImage {
+  height: 32px;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: brightness(0) invert(1);
+}
+
+/* Collapse Button */
+.collapseBtn {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Satoshi', sans-serif;
-  font-weight: 800;
-  font-size: 0.95rem;
-  letter-spacing: -0.02em;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
   flex-shrink: 0;
+  z-index: 10;
 }
 
-.brandText {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
+.collapseBtn:hover {
+  background-color: #334155;
+  color: #ffffff;
 }
 
-.brandName {
-  font-family: 'Satoshi', sans-serif;
-  font-weight: 700;
-  font-size: 1rem;
-  color: #0f172a;
-  letter-spacing: -0.01em;
-}
-
-.brandRole {
-  font-family: 'Satoshi', sans-serif;
-  font-size: 0.7rem;
-  color: #1565C0;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-/* ----------------------------------------------------------------------------
-   User card
-   ---------------------------------------------------------------------------- */
-
+/* User card */
 .userCard {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1.25rem;
   margin-bottom: 0.5rem;
-  border-top: 1px solid #E5E7EB;
-  border-bottom: 1px solid #E5E7EB;
+  border-top: 1px solid #1e293b;
+  border-bottom: 1px solid #1e293b;
 }
 
+.collapsed .userCard {
+  padding: 0.75rem 1rem;
+  justify-content: center;
+}
+
+/* Brand Gradient Avatar */
 .userAvatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #F9A825 0%, #F57F17 100%);
-  color: #FFFFFF;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Satoshi', sans-serif;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 0.85rem;
   flex-shrink: 0;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+}
+
+.userAvatarImg {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top;
+  flex-shrink: 0;
 }
 
 .userInfo {
@@ -124,7 +145,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #0f172a;
+  color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -133,20 +154,21 @@
 .userRole {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.72rem;
-  color: #64748b;
+  color: #94a3b8;
   font-weight: 500;
 }
 
-/* ----------------------------------------------------------------------------
-   Navigation
-   ---------------------------------------------------------------------------- */
-
+/* Navigation */
 .nav {
   flex: 1;
   padding: 0.5rem 0.75rem 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+}
+
+.collapsed .nav {
+  padding: 0.5rem 0.5rem 1.5rem;
 }
 
 .navGroup {
@@ -157,9 +179,9 @@
 
 .navGroupLabel {
   font-family: 'Satoshi', sans-serif;
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 700;
-  color: #94a3b8;
+  color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   padding: 0.25rem 0.75rem;
@@ -174,14 +196,15 @@
   gap: 0.1rem;
 }
 
+/* 1. Base Link State (Enforced) */
 .navItem {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.55rem 0.75rem;
+  padding: 0.6rem 0.75rem;
   border-radius: 6px;
-  color: #4A4A6A;
-  text-decoration: none;
+  color: #ffffff !important; /* Forces white text */
+  text-decoration: none !important;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.875rem;
   font-weight: 500;
@@ -189,14 +212,25 @@
   position: relative;
 }
 
-.navItem:hover {
-  background-color: #f1f5f9;
-  color: #0f172a;
+.collapsed .navItem {
+  justify-content: center;
+  padding: 0.65rem 0;
 }
 
+/* 2. Hover State (Lemon Green) */
+.navItem:hover {
+  background-color: #1e293b;
+  color: #A3E635 !important; /* Lemon green text */
+}
+
+.navItem:hover .navIcon {
+  color: #A3E635 !important; /* Lemon green icon */
+}
+
+/* 3. Active State */
 .navItem.active {
-  background-color: #e0f2fe;
-  color: #0369a1;
+  background-color: #1e293b;
+  color: #A3E635 !important;
   font-weight: 600;
 }
 
@@ -208,25 +242,22 @@
   transform: translateY(-50%);
   width: 3px;
   height: 60%;
-  background-color: #1565C0;
+  background-color: #A3E635; /* Lemon green border */
   border-radius: 0 3px 3px 0;
 }
 
 .navItem.active .navIcon {
-  color: #1565C0;
+  color: #A3E635 !important;
 }
 
+/* Icons */
 .navIcon {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: #94a3b8;
+  color: #ffffff !important; /* Forces white icon */
   transition: color 0.15s ease;
-}
-
-.navItem:hover .navIcon {
-  color: #1565C0;
 }
 
 .navLabel {
@@ -236,21 +267,19 @@
   text-overflow: ellipsis;
 }
 
+/* 4. Badge */
 .navBadge {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   padding: 0.1rem 0.4rem;
-  background-color: #F9A825;
-  color: #0f172a;
-  font-weight: 700;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff !important;
+  font-weight: 800;
   border-radius: 50px;
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
 
-/* ----------------------------------------------------------------------------
-   Mobile overlay
-   ---------------------------------------------------------------------------- */
-
+/* Mobile overlay */
 .overlay {
   position: fixed;
   inset: 0;
@@ -259,21 +288,23 @@
   display: none;
 }
 
-/* ============================================================================
-   Responsive
-   ============================================================================ */
-
+/* Responsive */
 @media (max-width: 1024px) {
   .sidebar {
     transform: translateX(-100%);
+    width: 260px !important;
   }
 
   .sidebar.open {
     transform: translateX(0);
-    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
   }
 
   .overlay {
     display: block;
+  }
+  
+  .collapseBtn {
+    display: none;
   }
 }

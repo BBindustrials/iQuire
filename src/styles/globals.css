@@ -59,13 +59,17 @@ p {
   margin-bottom: 1rem;
 }
 
-a {
+/* 
+  FIXED: Exclude buttons and elements with role="button" from global link styles.
+  This prevents your <Button> and custom <Link> buttons from inheriting link colors.
+*/
+a:not([class*="button"]):not([class*="Button"]):not([role="button"]) {
   color: var(--color-primary-blue);
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
-a:hover {
+a:not([class*="button"]):not([class*="Button"]):not([role="button"]):hover {
   color: var(--color-primary-green);
 }
 
@@ -95,7 +99,6 @@ a:hover {
   background-color: var(--color-primary-blue);
   color: var(--color-white);
 }
-
 
 /* Gold/Orange accent utility classes */
 .badge-gold {
@@ -197,65 +200,29 @@ a:hover {
   flex-direction: column;
 }
 
-.gap-1 {
-  gap: 0.5rem;
-}
-.gap-2 {
-  gap: 1rem;
-}
-.gap-3 {
-  gap: 1.5rem;
-}
-.gap-4 {
-  gap: 2rem;
-}
+.gap-1 { gap: 0.5rem; }
+.gap-2 { gap: 1rem; }
+.gap-3 { gap: 1.5rem; }
+.gap-4 { gap: 2rem; }
 
 /* Margin utilities */
-.mt-1 {
-  margin-top: 0.5rem;
-}
-.mt-2 {
-  margin-top: 1rem;
-}
-.mt-3 {
-  margin-top: 1.5rem;
-}
-.mt-4 {
-  margin-top: 2rem;
-}
-.mt-5 {
-  margin-top: 3rem;
-}
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+.mt-5 { margin-top: 3rem; }
 
-.mb-1 {
-  margin-bottom: 0.5rem;
-}
-.mb-2 {
-  margin-bottom: 1rem;
-}
-.mb-3 {
-  margin-bottom: 1.5rem;
-}
-.mb-4 {
-  margin-bottom: 2rem;
-}
-.mb-5 {
-  margin-bottom: 3rem;
-}
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+.mb-5 { margin-bottom: 3rem; }
 
 /* Text utilities */
-.text-sm {
-  font-size: 0.875rem;
-}
-.text-md {
-  font-size: 1.125rem;
-}
-.text-lg {
-  font-size: 1.25rem;
-}
-.text-xl {
-  font-size: 1.5rem;
-}
+.text-sm { font-size: 0.875rem; }
+.text-md { font-size: 1.125rem; }
+.text-lg { font-size: 1.25rem; }
+.text-xl { font-size: 1.5rem; }
 
 .text-muted {
   color: var(--color-text-light);

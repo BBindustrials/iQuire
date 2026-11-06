@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs */
 // ============================================================================
 // iQuire — Alumni / Testimonials Section (Phase 9B.1a)
 // ============================================================================
@@ -5,15 +6,39 @@
 // testimonials. Falls back to hardcoded examples when DB has none.
 // ============================================================================
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../common/Button';
-import { ScrollReveal } from '../common/ScrollReveal';
 import {
   fetchFeaturedAlumni,
   type Alumni as AlumniRecord,
 } from '../../services/alumni.service';
 import styles from './Alumni.module.css';
+
+// ============================================================================
+// Custom Hook for 4s Animation
+// ============================================================================
+const useSlideUp = (threshold = 0.1) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold }
+    );
+
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [threshold]);
+
+  return { ref, isVisible };
+};
 
 // ============================================================================
 // Types
@@ -58,7 +83,7 @@ const FALLBACK_ALUMNI: DisplayAlumni[] = [
     course: 'Tech 360',
     cohort: 'Cohort 4',
     quote:
-      'I went from being unsure about my career to landing a product role in three months. The training was practical — not just theory.',
+      'I went from being unsure about my career to landing a product role in three months. The training was practical not just theory.',
     currentRole: 'Junior Product Manager',
     currentOrg: 'TechHub Africa',
     linkedin: 'https://linkedin.com',
@@ -79,7 +104,7 @@ const FALLBACK_ALUMNI: DisplayAlumni[] = [
     currentOrg: 'GreenBuild Co.',
     linkedin: 'https://linkedin.com',
     before: 'Fresh graduate applying with no direction',
-    after: 'Full-time operations role within 6 weeks',
+    after: 'Full time operations role within 6 weeks',
     accent: 'green',
   },
   {
@@ -156,6 +181,11 @@ export const Alumni: React.FC = () => {
   const [alumni, setAlumni] = useState<DisplayAlumni[]>(FALLBACK_ALUMNI);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const headerAnim = useSlideUp();
+  const featuredAnim = useSlideUp();
+  const switcherAnim = useSlideUp();
+  const ctaAnim = useSlideUp();
+
   // --------------------------------------------------------------------------
   // Load featured alumni from DB
   // --------------------------------------------------------------------------
@@ -178,6 +208,19 @@ export const Alumni: React.FC = () => {
     };
   }, []);
 
+  // --------------------------------------------------------------------------
+  // Auto-rotate testimonials every 15 seconds
+  // --------------------------------------------------------------------------
+  useEffect(() => {
+    if (alumni.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setActiveIndex((prevIndex) => (prevIndex + 1) % alumni.length);
+    }, 15000); // 15 seconds
+
+    return () => clearInterval(interval);
+  }, [alumni.length]);
+
   const safeIndex = Math.min(activeIndex, alumni.length - 1);
   const active = alumni[safeIndex];
   if (!active) return null;
@@ -194,7 +237,7 @@ export const Alumni: React.FC = () => {
         <svg className={styles.dottedGridLeft} viewBox="0 0 100 100" fill="none">
           {[...Array(4)].map((_, row) =>
             [...Array(4)].map((_, col) => (
-              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#94a3b8" />
+              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#2BBBAD" />
             ))
           )}
         </svg>
@@ -204,7 +247,13 @@ export const Alumni: React.FC = () => {
 
         {/* Bottom Left Abstract Leaf */}
         <svg className={styles.leafLeft} viewBox="0 0 300 300" fill="none">
-          <path d="M -50 200 C 50 50, 200 0, 250 100 C 300 200, 150 300, 50 300 C -20 300, -100 280, -50 200 Z" fill="#D1FAE5" opacity="0.4" />
+          <defs>
+            <linearGradient id="alumniLeafGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#2BBBAD" />
+              <stop offset="100%" stopColor="#1E88E5" />
+            </linearGradient>
+          </defs>
+          <path d="M -50 200 C 50 50, 200 0, 250 100 C 300 200, 150 300, 50 300 C -20 300, -100 280, -50 200 Z" fill="url(#alumniLeafGrad)" opacity="0.12" />
         </svg>
       </div>
 
@@ -212,159 +261,167 @@ export const Alumni: React.FC = () => {
         {/* ================================================================
             HEADER
             ================================================================ */}
-        <ScrollReveal animation="up" className={styles.header}>
-          <span className={styles.badge}>Alumni Stories</span>
-          <h2 className={styles.title}>
-            Hear from our <span className={styles.highlight}>alumni.</span>
-          </h2>
-          <p className={styles.subtitle}>
-            Real people. Real careers. Verified profiles you can find on
-            LinkedIn.
-          </p>
-        </ScrollReveal>
+        <div ref={headerAnim.ref} className={styles.header}>
+          <div className={`${styles.slideUpText} ${headerAnim.isVisible ? styles.isVisible : ''}`}>
+            <span className={styles.badge}>Alumni Stories</span>
+            <h2 className={styles.title}>
+              Hear from our <span className={styles.highlight}>alumni.</span>
+            </h2>
+            <p className={styles.subtitle}>
+              Real people. Real careers. Verified profiles you can find on
+              LinkedIn.
+            </p>
+          </div>
+        </div>
 
         {/* ================================================================
             FEATURED TESTIMONIAL
             ================================================================ */}
-        <ScrollReveal animation="up" delay={1}>
-          <div className={styles.featured}>
-            {/* Left — Photo */}
-            <div className={styles.featuredImage}>
-              {active.photo ? (
-                <img
-                  src={active.photo}
-                  alt={active.name}
-                  className={styles.photo}
-                />
-              ) : (
-                <div className={styles.photoPlaceholder}>
-                  {initialsOf(active.name)}
-                </div>
-              )}
-
-              {(active.course || active.cohort) && (
-                <div className={styles.photoBadge}>
-                  {active.course && (
-                    <span className={styles.photoBadgeCourse}>
-                      {active.course}
-                    </span>
-                  )}
-                  {active.cohort && (
-                    <span className={styles.photoBadgeCohort}>
-                      {active.cohort}
-                    </span>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Right — Content */}
-            <div className={styles.featuredContent}>
-              <div className={styles.quoteMark}>"</div>
-
-              <p
-                className={`${styles.quote} ${
-                  isLongQuote ? styles.quoteLong : styles.quoteShort
-                }`}
-              >
-                {active.quote}
-              </p>
-
-              {(active.before || active.after) && (
-                <div className={styles.journeyRow}>
-                  <div className={styles.journeyItem}>
-                    <span className={styles.journeyLabel}>Before</span>
-                    <span className={styles.journeyText}>
-                      {active.before ?? '—'}
-                    </span>
+        <div ref={featuredAnim.ref}>
+          <div className={`${styles.slideUpText} ${featuredAnim.isVisible ? styles.isVisible : ''}`} style={{ transitionDelay: '0.15s' }}>
+            <div className={styles.featured}>
+              {/* Left — Photo */}
+              <div className={styles.featuredImage}>
+                {active.photo ? (
+                  <img
+                    src={active.photo}
+                    alt={active.name}
+                    className={styles.photo}
+                  />
+                ) : (
+                  <div className={styles.photoPlaceholder}>
+                    {initialsOf(active.name)}
                   </div>
-                  <div className={styles.journeyArrow}>→</div>
-                  <div className={styles.journeyItem}>
-                    <span className={styles.journeyLabel}>After</span>
-                    <span className={styles.journeyText}>
-                      {active.after ?? '—'}
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              <div className={styles.featuredFooter}>
-                <div className={styles.featuredMeta}>
-                  <strong className={styles.featuredName}>{active.name}</strong>
-                  <span className={styles.featuredRole}>
-                    {active.currentRole}
-                    {active.currentOrg ? ` · ${active.currentOrg}` : ''}
-                  </span>
-                </div>
-
-                {active.linkedin && (
-                  <a
-                    href={active.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.linkedinBtn}
-                    aria-label={`${active.name} on LinkedIn`}
-                  >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                    </svg>
-                    Verify on LinkedIn
-                  </a>
                 )}
+
+                {(active.course || active.cohort) && (
+                  <div className={styles.photoBadge}>
+                    {active.course && (
+                      <span className={styles.photoBadgeCourse}>
+                        {active.course}
+                      </span>
+                    )}
+                    {active.cohort && (
+                      <span className={styles.photoBadgeCohort}>
+                        {active.cohort}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Right — Content */}
+              <div className={styles.featuredContent}>
+                <div className={styles.quoteMark}>"</div>
+
+                <p
+                  className={`${styles.quote} ${
+                    isLongQuote ? styles.quoteLong : styles.quoteShort
+                  }`}
+                >
+                  {active.quote}
+                </p>
+
+                {(active.before || active.after) && (
+                  <div className={styles.journeyRow}>
+                    <div className={styles.journeyItem}>
+                      <span className={styles.journeyLabel}>Before</span>
+                      <span className={styles.journeyText}>
+                        {active.before ?? '—'}
+                      </span>
+                    </div>
+                    <div className={styles.journeyArrow}>→</div>
+                    <div className={styles.journeyItem}>
+                      <span className={styles.journeyLabel}>After</span>
+                      <span className={styles.journeyText}>
+                        {active.after ?? '—'}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                <div className={styles.featuredFooter}>
+                  <div className={styles.featuredMeta}>
+                    <strong className={styles.featuredName}>{active.name}</strong>
+                    <span className={styles.featuredRole}>
+                      {active.currentRole}
+                      {active.currentOrg ? ` · ${active.currentOrg}` : ''}
+                    </span>
+                  </div>
+
+                  {active.linkedin && (
+                    <a
+                      href={active.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.linkedinBtn}
+                      aria-label={`${active.name} on LinkedIn`}
+                    >
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                      </svg>
+                      Verify on LinkedIn
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </ScrollReveal>
+        </div>
 
         {/* ================================================================
             AVATAR SWITCHER
             ================================================================ */}
-        <ScrollReveal animation="up" delay={2}>
-          <div className={styles.switcher} role="tablist">
-            {alumni.map((t, index) => (
-              <button
-                key={t.id}
-                type="button"
-                className={`${styles.switcherItem} ${
-                  index === safeIndex ? styles.switcherItemActive : ''
-                }`}
-                onClick={() => setActiveIndex(index)}
-                aria-label={`View ${t.name}'s story`}
-                aria-selected={index === safeIndex}
-                role="tab"
-              >
-                {t.photo ? (
-                  <img src={t.photo} alt={t.name} />
-                ) : (
-                  <div className={styles.switcherAvatarPlaceholder}>
-                    {initialsOf(t.name)}
-                  </div>
-                )}
-                <span className={styles.switcherName}>{t.name}</span>
-                {t.course && (
-                  <span className={styles.switcherCourse}>{t.course}</span>
-                )}
-              </button>
-            ))}
+        <div ref={switcherAnim.ref}>
+          <div className={`${styles.slideUpText} ${switcherAnim.isVisible ? styles.isVisible : ''}`} style={{ transitionDelay: '0.3s' }}>
+            <div className={styles.switcher} role="tablist">
+              {alumni.map((t, index) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  className={`${styles.switcherItem} ${
+                    index === safeIndex ? styles.switcherItemActive : ''
+                  }`}
+                  onClick={() => setActiveIndex(index)}
+                  aria-label={`View ${t.name}'s story`}
+                  aria-selected={index === safeIndex}
+                  role="tab"
+                >
+                  {t.photo ? (
+                    <img src={t.photo} alt={t.name} />
+                  ) : (
+                    <div className={styles.switcherAvatarPlaceholder}>
+                      {initialsOf(t.name)}
+                    </div>
+                  )}
+                  <span className={styles.switcherName}>{t.name}</span>
+                  {t.course && (
+                    <span className={styles.switcherCourse}>{t.course}</span>
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
-        </ScrollReveal>
+        </div>
 
         {/* ================================================================
             CTA
             ================================================================ */}
-        <ScrollReveal animation="zoom" delay={1} className={styles.ctaWrapper}>
-          <Button variant="primary" color="gradient" size="lg" href="/alumni">
-            Meet More of Our Alumni
-          </Button>
-          <Link to="/hire-from-us" className={styles.secondaryLink}>
-            Hire our alumni →
-          </Link>
-        </ScrollReveal>
+        <div ref={ctaAnim.ref} className={styles.ctaWrapper}>
+          <div className={`${styles.slideUpText} ${ctaAnim.isVisible ? styles.isVisible : ''}`} style={{ transitionDelay: '0.45s' }}>
+            <Button variant="primary" color="gradient" size="lg" href="/alumni">
+              Meet More of Our Alumni
+            </Button>
+            <Link to="/hire-from-us" className={styles.secondaryLink}>
+              Hire our alumni →
+            </Link>
+          </div>
+        </div>
       </div>
 
       {/* BOTTOM demarcation */}
@@ -377,16 +434,22 @@ export const Alumni: React.FC = () => {
           preserveAspectRatio="none"
           xmlns="http://www.w3.org/2000/svg"
         >
+          <defs>
+            <linearGradient id="alumniWaveStroke" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#2BBBAD" />
+              <stop offset="100%" stopColor="#1E88E5" />
+            </linearGradient>
+          </defs>
           <path
             d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z"
             fill="none"
-            stroke="#F9A825"
+            stroke="url(#alumniWaveStroke)"
             strokeWidth="3"
             opacity="0.6"
           />
           <path
             d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z"
-            fill="#ffffff"
+            fill="#f4f9fa"
           />
         </svg>
       </div>

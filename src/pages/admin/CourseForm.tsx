@@ -1,15 +1,16 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // ============================================================================
-// iQuire — Admin: Course Edit/Create Form (Phase 11A.3)
+// iQuire — Admin: Course Edit/Create Form (Phase 11A.3 + Image Upload + Auto-Redirect)
 // ============================================================================
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Input } from '../../components/common/Input';
 import { FormSection } from '../../components/common/FormSection';
 import { JsonArrayEditor } from '../../components/admin/JsonArrayEditor';
+import { uploadCourseImage } from '../../services/storage.service';
 import {
   fetchCourseById,
   createCourse,
@@ -32,7 +33,7 @@ import {
 import styles from './CourseForm.module.css';
 
 // ============================================================================
-// Types
+// Types & Constants
 // ============================================================================
 
 type TabKey = 'basics' | 'content' | 'curriculum' | 'cohort' | 'previous' | 'faq';
@@ -60,11 +61,12 @@ const STATUS_OPTIONS: { value: CourseStatus; label: string }[] = [
 ];
 
 // ============================================================================
-// Component
+// Main Component
 // ============================================================================
 
 export const AdminCourseForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const isEdit = Boolean(id) && id !== 'new';
 
   const [activeTab, setActiveTab] = useState<TabKey>('basics');
@@ -74,12 +76,16 @@ export const AdminCourseForm: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
+  // Image upload state
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   // Cohorts
   const [cohorts, setCohorts] = useState<Cohort[]>([]);
   const [previousCohorts, setPreviousCohorts] = useState<PreviousCohort[]>([]);
 
   // --------------------------------------------------------------------------
-  // Load course for edit
+  // Load course
   // --------------------------------------------------------------------------
   useEffect(() => {
     if (!isEdit || !id) return;
@@ -113,7 +119,7 @@ export const AdminCourseForm: React.FC = () => {
   }, [id, isEdit]);
 
   // --------------------------------------------------------------------------
-  // Handle course field changes
+  // Field updater
   // --------------------------------------------------------------------------
   const updateField = <K extends keyof Course>(field: K, value: Course[K]) => {
     if (!course) return;
@@ -121,7 +127,29 @@ export const AdminCourseForm: React.FC = () => {
   };
 
   // --------------------------------------------------------------------------
-  // Save course
+  // Image upload
+  // --------------------------------------------------------------------------
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    setError(null);
+
+    const res = await uploadCourseImage(file);
+
+    if (res.success && res.url) {
+      updateField('hero_image_url', res.url);
+    } else {
+      setError(res.error ?? 'Failed to upload image.');
+    }
+
+    setIsUploading(false);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  // --------------------------------------------------------------------------
+  // Save + Auto-Redirect
   // --------------------------------------------------------------------------
   const handleSave = async (e: FormEvent) => {
     e.preventDefault();
@@ -131,51 +159,65 @@ export const AdminCourseForm: React.FC = () => {
     setError(null);
     setSuccessMsg(null);
 
-    const input: Partial<CourseInput> = {
-      slug: course.slug,
-      title: course.title,
-      tagline: course.tagline,
-      description: course.description,
-      duration: course.duration,
-      format: course.format,
-      level: course.level,
-      accent: course.accent,
-      emoji: course.emoji,
-      hero_image_url: course.hero_image_url,
-      certificate_included: course.certificate_included,
-      status: course.status,
-      display_order: course.display_order,
-      why_this_program: course.why_this_program,
-      challenges: course.challenges,
-      what_you_learn: course.what_you_learn,
-      week_journey: course.week_journey,
-      experience: course.experience,
-      outcomes: course.outcomes,
-      who_its_for: course.who_its_for,
-      prerequisites: course.prerequisites,
-      skills_professional: course.skills_professional,
-      skills_digital: course.skills_digital,
-      skills_career: course.skills_career,
-      curriculum: course.curriculum,
-      whats_included: course.whats_included,
-      pricing: course.pricing,
-      faqs: course.faqs,
-      final_cta: course.final_cta,
-    };
+    try {
+      // Safe payload — arrays never undefined
+      const input: Partial<CourseInput> = {
+        slug: course.slug || '',
+        title: course.title || '',
+        tagline: course.tagline ?? null,
+        description: course.description ?? null,
+        duration: course.duration ?? null,
+        format: course.format ?? null,
+        level: course.level ?? null,
+        accent: course.accent ?? 'blue',
+        emoji: course.emoji ?? null,
+        hero_image_url: course.hero_image_url ?? null,
+        certificate_included: Boolean(course.certificate_included),
+        status: course.status ?? 'draft',
+        display_order: Number(course.display_order) || 0,
+        why_this_program: course.why_this_program ?? null,
 
-    const result = isEdit
-      ? await updateCourse(course.id, input)
-      : await createCourse(input as CourseInput);
+        challenges: course.challenges ?? [],
+        what_you_learn: course.what_you_learn ?? [],
+        week_journey: course.week_journey ?? [],
+        experience: course.experience ?? [],
+        outcomes: course.outcomes ?? [],
+        who_its_for: course.who_its_for ?? [],
+        prerequisites: course.prerequisites ?? null,
+        skills_professional: course.skills_professional ?? [],
+        skills_digital: course.skills_digital ?? [],
+        skills_career: course.skills_career ?? [],
+        curriculum: course.curriculum ?? [],
+        whats_included: course.whats_included ?? [],
+        faqs: course.faqs ?? [],
+        pricing: course.pricing ?? { fee: '', includes: [] },
+        final_cta: course.final_cta ?? null,
+      };
 
-    setIsSaving(false);
+      console.log('[Save] Payload:', input);
 
-    if (!result.success) {
-      setError(result.error ?? 'Save failed');
-      return;
+      const result = isEdit
+        ? await updateCourse(course.id, input)
+        : await createCourse(input as CourseInput);
+
+      if (!result.success) {
+        console.error('[Save] Supabase error:', result.error);
+        throw new Error(result.error ?? 'Save failed');
+      }
+
+      setSuccessMsg('Saved successfully');
+
+      // Auto-redirect after short delay
+      setTimeout(() => {
+        setSuccessMsg(null);
+        navigate('/admin/courses');
+      }, 1500);
+    } catch (err: any) {
+      console.error('[Save] Caught error:', err);
+      setError(err.message ?? 'An unexpected error occurred while saving.');
+    } finally {
+      setIsSaving(false);
     }
-
-    setSuccessMsg('Saved successfully');
-    setTimeout(() => setSuccessMsg(null), 2500);
   };
 
   // --------------------------------------------------------------------------
@@ -212,7 +254,6 @@ export const AdminCourseForm: React.FC = () => {
   // --------------------------------------------------------------------------
   return (
     <div className={styles.page}>
-      {/* Header */}
       <div className={styles.pageHeader}>
         <div>
           <Link to="/admin/courses" className={styles.breadcrumb}>
@@ -232,12 +273,11 @@ export const AdminCourseForm: React.FC = () => {
             rel="noopener noreferrer"
             className={styles.viewBtn}
           >
-            👁 View Public Page
+            View Public Page
           </a>
         )}
       </div>
 
-      {/* Tabs */}
       <div className={styles.tabs} role="tablist">
         {TABS.map((tab) => (
           <button
@@ -255,7 +295,6 @@ export const AdminCourseForm: React.FC = () => {
         ))}
       </div>
 
-      {/* Status messages */}
       {error && (
         <div className={styles.errorBanner} role="alert">
           {error}
@@ -267,11 +306,8 @@ export const AdminCourseForm: React.FC = () => {
         </div>
       )}
 
-      {/* Form */}
       <form onSubmit={handleSave} className={styles.form} noValidate>
-        {/* ====================================================================
-            TAB: BASICS
-            ==================================================================== */}
+        {/* ============ TAB: BASICS ============ */}
         {activeTab === 'basics' && (
           <>
             <FormSection title="Course Identity">
@@ -361,11 +397,11 @@ export const AdminCourseForm: React.FC = () => {
                   </select>
                 </div>
                 <Input
-                  label="Emoji"
+                  label="Emoji (fallback)"
                   name="emoji"
                   value={course.emoji ?? ''}
                   onChange={(e) => updateField('emoji', e.target.value)}
-                  placeholder="🛠️"
+                  placeholder="Leave blank"
                 />
                 <Input
                   label="Display Order"
@@ -380,19 +416,56 @@ export const AdminCourseForm: React.FC = () => {
             </FormSection>
 
             <FormSection title="Hero Image">
-              <Input
-                label="Hero Image URL"
-                name="hero_image_url"
-                value={course.hero_image_url ?? ''}
-                onChange={(e) => updateField('hero_image_url', e.target.value)}
-                placeholder="https://…"
-                helperText="Paste an image URL. Uploads coming in a later phase."
-              />
-              {course.hero_image_url && (
-                <div className={styles.heroPreview}>
-                  <img src={course.hero_image_url} alt="Preview" />
-                </div>
-              )}
+              <div className={styles.imageUploadContainer}>
+                {course.hero_image_url ? (
+                  <div className={styles.imagePreviewWrapper}>
+                    <img
+                      src={course.hero_image_url}
+                      alt="Course hero"
+                      className={styles.imagePreview}
+                    />
+                    <button
+                      type="button"
+                      className={styles.removeImageBtn}
+                      onClick={() => updateField('hero_image_url', '')}
+                    >
+                      ✕ Remove
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    className={styles.uploadPlaceholder}
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    <div className={styles.uploadIcon}>📸</div>
+                    <p className={styles.uploadText}>
+                      {isUploading ? 'Uploading...' : 'Click to upload an image'}
+                    </p>
+                    <p className={styles.uploadHint}>
+                      Recommended size: 1200x800px (Max 5MB)
+                    </p>
+                  </div>
+                )}
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleImageUpload}
+                  style={{ display: 'none' }}
+                />
+
+                {course.hero_image_url && (
+                  <button
+                    type="button"
+                    className={styles.changeImageBtn}
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isUploading}
+                  >
+                    {isUploading ? 'Uploading...' : 'Change Image'}
+                  </button>
+                )}
+              </div>
             </FormSection>
 
             <FormSection title="Visibility">
@@ -431,16 +504,12 @@ export const AdminCourseForm: React.FC = () => {
           </>
         )}
 
-        {/* ====================================================================
-            TAB: CONTENT
-            ==================================================================== */}
+        {/* ============ TAB: CONTENT ============ */}
         {activeTab === 'content' && (
           <>
             <FormSection title="Why This Programme">
               <div className={styles.textareaWrapper}>
-                <label className={styles.textareaLabel}>
-                  Intro paragraph
-                </label>
+                <label className={styles.textareaLabel}>Intro paragraph</label>
                 <textarea
                   value={course.why_this_program ?? ''}
                   onChange={(e) => updateField('why_this_program', e.target.value)}
@@ -466,7 +535,7 @@ export const AdminCourseForm: React.FC = () => {
                     })
                   )
                 }
-                placeholder="e.g., Interview confidence | Anxiety about interviews."
+                placeholder="Interview confidence | Anxiety about interviews."
                 helperText="Format: Title | Description"
               />
             </FormSection>
@@ -571,92 +640,56 @@ export const AdminCourseForm: React.FC = () => {
               />
             </FormSection>
 
-            <FormSection title="Pricing">
-              <Input
-                label="Fee"
-                name="pricing.fee"
-                value={course.pricing.fee}
-                onChange={(e) =>
-                  updateField('pricing', {
-                    ...course.pricing,
-                    fee: e.target.value,
-                  })
-                }
-                placeholder="₦45,000"
-              />
+<FormSection title="Pricing">
+<div className={styles.infoNote}>
+  <p>
+    <strong>Programme Fee</strong> is managed in the <strong>Next Cohort</strong> tab.
+    Each cohort can have its own fee — this keeps historical cohorts and their pricing
+    intact.
+  </p>
+</div>
 
-              <JsonArrayEditor
-                label="What's included in the fee"
-                value={course.pricing.includes}
-                onChange={(next: any) =>
-                  updateField('pricing', {
-                    ...course.pricing,
-                    includes: next,
-                  })
-                }
-              />
+<JsonArrayEditor
+  label="What's included in the fee"
+  value={course.pricing.includes}
+  onChange={(next: any) =>
+    updateField('pricing', {
+      ...course.pricing,
+      includes: next,
+    })
+  }
+/>
 
-              <Input
-                label="Payment options"
-                name="pricing.paymentOptions"
-                value={course.pricing.paymentOptions ?? ''}
-                onChange={(e) =>
-                  updateField('pricing', {
-                    ...course.pricing,
-                    paymentOptions: e.target.value,
-                  })
-                }
-                placeholder="Full payment or 2-installment plan."
-              />
+<Input
+  label="Payment options"
+  name="pricing.paymentOptions"
+  value={course.pricing.paymentOptions ?? ''}
+  onChange={(e) =>
+    updateField('pricing', {
+      ...course.pricing,
+      paymentOptions: e.target.value,
+    })
+  }
+  placeholder="Full payment or 2-installment plan."
+/>
 
-              <Input
-                label="Financial support"
-                name="pricing.financialSupport"
-                value={course.pricing.financialSupport ?? ''}
-                onChange={(e) =>
-                  updateField('pricing', {
-                    ...course.pricing,
-                    financialSupport: e.target.value,
-                  })
-                }
-                placeholder="Scholarship available for eligible applicants."
-              />
-            </FormSection>
-
-            <FormSection title="Final CTA">
-              <Input
-                label="Headline"
-                name="final_cta.headline"
-                value={course.final_cta?.headline ?? ''}
-                onChange={(e) =>
-                  updateField('final_cta', {
-                    headline: e.target.value,
-                    subheadline: course.final_cta?.subheadline ?? '',
-                  })
-                }
-              />
-
-              <div className={styles.textareaWrapper}>
-                <label className={styles.textareaLabel}>Subheadline</label>
-                <textarea
-                  value={course.final_cta?.subheadline ?? ''}
-                  onChange={(e) =>
-                    updateField('final_cta', {
-                      headline: course.final_cta?.headline ?? '',
-                      subheadline: e.target.value,
-                    })
-                  }
-                  rows={2}
-                  className={styles.textarea}
-                />
-              </div>
-            </FormSection>
+<Input
+  label="Financial support"
+  name="pricing.financialSupport"
+  value={course.pricing.financialSupport ?? ''}
+  onChange={(e) =>
+    updateField('pricing', {
+      ...course.pricing,
+      financialSupport: e.target.value,
+    })
+  }
+  placeholder="Scholarship available for eligible applicants."
+/>
+</FormSection>
           </>
         )}
 
-        {/* ====================================================================
-            TAB: CURRICULUM
-            ==================================================================== */}
+        {/* ============ TAB: CURRICULUM ============ */}
         {activeTab === 'curriculum' && (
           <FormSection title="Curriculum (Accordion)">
             <JsonArrayEditor
@@ -683,9 +716,7 @@ export const AdminCourseForm: React.FC = () => {
           </FormSection>
         )}
 
-        {/* ====================================================================
-            TAB: NEXT COHORT
-            ==================================================================== */}
+        {/* ============ TAB: NEXT COHORT ============ */}
         {activeTab === 'cohort' && (
           <CohortTab
             courseId={course.id}
@@ -695,9 +726,7 @@ export const AdminCourseForm: React.FC = () => {
           />
         )}
 
-        {/* ====================================================================
-            TAB: PREVIOUS COHORTS
-            ==================================================================== */}
+        {/* ============ TAB: PREVIOUS COHORTS ============ */}
         {activeTab === 'previous' && (
           <PreviousCohortsTab
             courseId={course.id}
@@ -707,9 +736,7 @@ export const AdminCourseForm: React.FC = () => {
           />
         )}
 
-        {/* ====================================================================
-            TAB: FAQ
-            ==================================================================== */}
+        {/* ============ TAB: FAQ ============ */}
         {activeTab === 'faq' && (
           <FormSection title="Frequently Asked Questions">
             <JsonArrayEditor
@@ -734,15 +761,17 @@ export const AdminCourseForm: React.FC = () => {
           </FormSection>
         )}
 
-        {/* ====================================================================
-            Save bar
-            ==================================================================== */}
+        {/* ============ SAVE BAR ============ */}
         {activeTab !== 'cohort' && activeTab !== 'previous' && (
           <div className={styles.actions}>
             <Link to="/admin/courses" className={styles.cancelBtn}>
               Cancel
             </Link>
-            <button type="submit" className={styles.submitBtn} disabled={isSaving}>
+            <button
+              type="submit"
+              className={styles.submitBtn}
+              disabled={isSaving || isUploading}
+            >
               {isSaving ? 'Saving…' : isEdit ? 'Save Changes' : 'Create Course'}
             </button>
           </div>
@@ -852,7 +881,7 @@ const CohortTab: React.FC<CohortTabProps> = ({
             className={styles.deleteCohortBtn}
             onClick={handleDelete}
           >
-            🗑 Remove
+            Remove
           </button>
         )}
       </div>
@@ -916,7 +945,7 @@ const CohortTab: React.FC<CohortTabProps> = ({
         placeholder="https://forms.gle/your-form-id"
         helperText={
           form.status === 'open'
-            ? 'When set, the public "Apply for This Cohort" button opens this URL. Leave blank to show the interest form instead.'
+            ? 'When set, the public "Apply for This Cohort" button opens this URL.'
             : 'This URL will only be used when the cohort status is set to "Open".'
         }
       />
@@ -926,7 +955,7 @@ const CohortTab: React.FC<CohortTabProps> = ({
           label="Fee"
           value={form.fee ?? ''}
           onChange={(e) => setField('fee', e.target.value)}
-          placeholder="₦45,000"
+          placeholder="£250"
         />
         <Input
           label="Capacity"
@@ -1049,7 +1078,7 @@ const PreviousCohortsTab: React.FC<PreviousCohortsTabProps> = ({
         <div>
           <h3 className={styles.cohortTitle}>Previous Cohorts</h3>
           <p className={styles.cohortSubtitle}>
-            Shown on the course page as "programme history" — proof that this course has run before.
+            Shown on the course page as "programme history."
           </p>
         </div>
         {!isAdding && (

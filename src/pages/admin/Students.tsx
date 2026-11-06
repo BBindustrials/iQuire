@@ -169,7 +169,7 @@ export const AdminStudents: React.FC = () => {
           </svg>
           <input
             type="text"
-            placeholder="Search by name, email, or IQuire ID…"
+            placeholder="Search by name, email, or iQuire ID…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className={styles.searchInput}
@@ -203,7 +203,7 @@ export const AdminStudents: React.FC = () => {
             <thead>
               <tr>
                 <th>Student</th>
-                <th>IQuire ID</th>
+                <th>iQuire ID</th>
                 <th>Contact</th>
                 <th>Status</th>
                 <th>Created</th>

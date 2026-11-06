@@ -1,18 +1,18 @@
 @import '../../../styles/theme.css';
 
 /* ============================================================================
-   Member Header
+   Member Header — Phase 17.2 (Corrected)
    ============================================================================ */
 
 .header {
   height: 64px;
-  background-color: #FFFFFF;
-  border-bottom: 1px solid #E5E7EB;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 1.5rem;
-  gap: 1rem;
+  gap: 0.75rem;
   position: sticky;
   top: 0;
   z-index: 50;
@@ -25,15 +25,10 @@
   width: 38px;
   height: 38px;
   border-radius: 8px;
-  border: 1px solid #E5E7EB;
-  background-color: #FFFFFF;
+  border: 1px solid #e5e7eb;
+  background-color: #ffffff;
   color: #0f172a;
   cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.menuToggle:hover {
-  background-color: #f8fafc;
 }
 
 .headerTitle {
@@ -45,7 +40,6 @@
   font-size: 0.875rem;
   font-weight: 600;
   color: #64748b;
-  letter-spacing: 0.02em;
 }
 
 .headerActions {
@@ -54,35 +48,30 @@
   gap: 0.75rem;
 }
 
-/* ----------------------------------------------------------------------------
-   Browse Courses button
-   ---------------------------------------------------------------------------- */
-
-.browseBtn {
-  display: inline-flex;
+/* iQuire ID in Header */
+.headerIqId {
+  display: flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.5rem 0.85rem;
-  background-color: #f1f5f9;
-  border: 1px solid #E5E7EB;
+  gap: 0.25rem;
+  padding: 0.35rem 0.75rem;
+  background-color: #0f172a; /* Dark Navy */
   border-radius: 6px;
-  color: #0f172a;
   font-family: 'Satoshi', sans-serif;
-  font-size: 0.8rem;
+}
+
+.iqIdLabel {
+  font-size: 0.7rem;
+  color: #94a3b8; /* Light gray for label */
   font-weight: 600;
-  text-decoration: none;
-  transition: all 0.15s ease;
 }
 
-.browseBtn:hover {
-  background-color: #e0f2fe;
-  border-color: #1565C0;
-  color: #1565C0;
+.iqIdValue {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #F9A825; /* Gold accent */
+  letter-spacing: 0.02em;
 }
-
-/* ----------------------------------------------------------------------------
-   User menu
-   ---------------------------------------------------------------------------- */
 
 .userMenu {
   position: relative;
@@ -97,21 +86,21 @@
   background-color: transparent;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: all 0.15s ease;
   color: #0f172a;
+  transition: all 0.15s ease;
 }
 
 .userButton:hover {
   background-color: #f8fafc;
-  border-color: #E5E7EB;
+  border-color: #e5e7eb;
 }
 
 .avatar {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
-  color: #FFFFFF;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #F9A825;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -119,7 +108,7 @@
   font-weight: 700;
   font-size: 0.78rem;
   letter-spacing: 0.02em;
-  flex-shrink: 0;
+  text-transform: uppercase;
 }
 
 .userMeta {
@@ -136,40 +125,23 @@
   color: #0f172a;
 }
 
-.userId {
+.userRole {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.68rem;
   color: #94a3b8;
-  font-weight: 500;
 }
-
-/* ----------------------------------------------------------------------------
-   Dropdown
-   ---------------------------------------------------------------------------- */
 
 .dropdown {
   position: absolute;
   top: calc(100% + 0.5rem);
   right: 0;
-  min-width: 260px;
-  background-color: #FFFFFF;
-  border: 1px solid #E5E7EB;
+  min-width: 240px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   padding: 0.5rem;
   z-index: 100;
-  animation: dropdownIn 0.15s ease;
-}
-
-@keyframes dropdownIn {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .dropdownHeader {
@@ -195,21 +167,9 @@
   white-space: nowrap;
 }
 
-.dropdownId {
-  font-family: 'Satoshi', sans-serif;
-  font-size: 0.72rem;
-  color: #64748b;
-  margin-top: 0.15rem;
-}
-
-.dropdownId strong {
-  color: #1565C0;
-  font-weight: 700;
-}
-
 .dropdownDivider {
   height: 1px;
-  background-color: #E5E7EB;
+  background-color: #e5e7eb;
   margin: 0.35rem 0;
 }
 
@@ -222,7 +182,7 @@
   border-radius: 6px;
   background-color: transparent;
   border: none;
-  color: #4A4A6A;
+  color: #4a4a6a;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.85rem;
   font-weight: 500;
@@ -237,13 +197,13 @@
   color: #0f172a;
 }
 
-/* ----------------------------------------------------------------------------
-   Responsive
-   ---------------------------------------------------------------------------- */
-
+/* Responsive */
 @media (max-width: 1024px) {
   .menuToggle {
     display: flex;
+  }
+  .headerIqId {
+    display: none; /* Hide ID on mobile to save space */
   }
 }
 
@@ -251,12 +211,15 @@
   .header {
     padding: 0 1rem;
   }
-
-  .browseBtn span {
-    display: none;
-  }
-
   .userMeta {
     display: none;
   }
+}
+
+.avatarImg {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top; /* <-- Add this */
 }

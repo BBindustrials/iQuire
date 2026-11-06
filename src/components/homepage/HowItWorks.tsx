@@ -2,31 +2,32 @@
 // iQuire — How It Works (Phase 7C.6 — Fixed connectors + logo hub)
 // ============================================================================
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../common/Button';
-import { ScrollReveal } from '../common/ScrollReveal';
 import styles from './HowItWorks.module.css';
 
 // ============================================================================
 // IMAGE SOURCES
 // ============================================================================
 
-import logo from '../../assets/logo/iquire-logo.png';
+import logo from '../../assets/logo/iQuire-logo.png';
+
+// Using the same avatars as the Problem section
+import avatar1 from '../../assets/images/avatar-1.jpeg';
+import avatar2 from '../../assets/images/avatar-2.jpeg';
+import avatar3 from '../../assets/images/avatar-3.jpeg';
+import avatar4 from '../../assets/images/avatar-4.png';
 
 const stepImages = {
-  join:
-    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop&crop=face',
-  learn:
-    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face',
-  build:
-    'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop&crop=face',
-  hired:
-    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300&fit=crop&crop=face',
+  join: avatar1,
+  learn: avatar2,
+  build: avatar3,
+  hired: avatar4,
 };
 
 // ============================================================================
-// Step data (Reduced to 4 steps)
+// Step data
 // ============================================================================
 
 interface Step {
@@ -43,9 +44,9 @@ const STEPS: Step[] = [
     id: 'join',
     number: '01',
     title: 'Join',
-    description: 'Create your IQuire profile based on your career goals.',
+    description: 'Create your iQuire profile based on your career goals.',
     image: stepImages.join,
-    imageAlt: 'Young person creating their IQuire profile',
+    imageAlt: 'Young person creating their iQuire profile',
   },
   {
     id: 'learn',
@@ -59,7 +60,7 @@ const STEPS: Step[] = [
     id: 'build',
     number: '03',
     title: 'Build',
-    description: 'Improve your CV, portfolio, and professional identity.',
+    description: 'Improve your CV, portfolio, and get work experience.',
     image: stepImages.build,
     imageAlt: 'Person building their CV and portfolio',
   },
@@ -67,7 +68,7 @@ const STEPS: Step[] = [
     id: 'hired',
     number: '04',
     title: 'Get Hired',
-    description: 'Connect with employers looking for work-ready talent.',
+    description: 'Connect with employers looking for work ready talent.',
     image: stepImages.hired,
     imageAlt: 'Person celebrating getting hired',
   },
@@ -77,7 +78,6 @@ const STEPS: Step[] = [
 // Radial helpers
 // ============================================================================
 
-// 4 evenly spaced angles, starting at top (12 o'clock)
 const NODE_ANGLES_DEG = [0, 90, 180, 270];
 
 const angleToPosition = (angleDeg: number, radiusPercent = 42) => {
@@ -92,18 +92,33 @@ const angleToPosition = (angleDeg: number, radiusPercent = 42) => {
 // ============================================================================
 
 export const HowItWorks: React.FC = () => {
-  // Position of each node as percentage (0-100) inside the circle
   const nodePositions = NODE_ANGLES_DEG.map((deg) => angleToPosition(deg, 42));
 
-  // Build a single continuous circle path with SVG arcs connecting all 4 nodes
-  const radius = 42; // must match angleToPosition's radiusPercent
+  const radius = 42;
   const circumferencePath = `M 50 ${50 - radius} ` +
     NODE_ANGLES_DEG.slice(1).map((_, idx) => {
-      // Draw an arc to the next node position
       const nextPos = nodePositions[(idx + 1) % nodePositions.length];
       return `A ${radius} ${radius} 0 0 1 ${nextPos.x} ${nextPos.y}`;
     }).join(' ') +
-    ' A 42 42 0 0 1 50 8 Z'; // close the circle back to top
+    ' A 42 42 0 0 1 50 8 Z';
+
+  // Header Scroll Observer
+  const headerRef = useRef<HTMLDivElement>(null);
+  const [headerVisible, setHeaderVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHeaderVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    if (headerRef.current) observer.observe(headerRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section className={styles.howItWorks}>
@@ -111,65 +126,66 @@ export const HowItWorks: React.FC = () => {
           BACKGROUND SVG DECORATIONS
           ==================================================================== */}
       <div className={styles.bgDecor} aria-hidden="true">
-        {/* Top-Left: Dotted Grid & Floating Cross */}
         <svg className={styles.dottedGridLeft} viewBox="0 0 100 100" fill="none">
           {[...Array(4)].map((_, row) =>
             [...Array(4)].map((_, col) => (
-              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#94a3b8" />
+              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#2BBBAD" />
             ))
           )}
         </svg>
         <svg className={styles.crossTopLeft} viewBox="0 0 24 24" fill="none">
-          <path d="M12 4V20M4 12H20" stroke="#F9A825" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
+          <path d="M12 4V20M4 12H20" stroke="#2BBBAD" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
         </svg>
 
-        {/* Top-Right: Abstract Leaf & Sweeping Ring */}
         <svg className={styles.sweepingRing} viewBox="0 0 200 200" fill="none">
-          <ellipse cx="100" cy="100" rx="90" ry="60" transform="rotate(-30 100 100)" stroke="#00A878" strokeWidth="2" opacity="0.2" strokeDasharray="8 8" />
+          <ellipse cx="100" cy="100" rx="90" ry="60" transform="rotate(-30 100 100)" stroke="#1E88E5" strokeWidth="2" opacity="0.2" strokeDasharray="8 8" />
         </svg>
 
-        {/* Bottom-Left: Green Leaf */}
         <svg className={styles.leafBottomLeft} viewBox="0 0 300 300" fill="none">
-          <path d="M -50 200 C 50 50, 200 0, 250 100 C 300 200, 150 300, 50 300 C -20 300, -100 280, -50 200 Z" fill="#D1FAE5" opacity="0.5" />
+          <defs>
+            <linearGradient id="howItWorksLeafGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#2BBBAD" />
+              <stop offset="100%" stopColor="#1E88E5" />
+            </linearGradient>
+          </defs>
+          <path d="M -50 200 C 50 50, 200 0, 250 100 C 300 200, 150 300, 50 300 C -20 300, -100 280, -50 200 Z" fill="url(#howItWorksLeafGrad)" opacity="0.12" />
         </svg>
         
-        {/* Bottom-Right: Floating Circle & Dotted Grid */}
         <div className={styles.circleBottomRight} />
         <svg className={styles.dottedGridRight} viewBox="0 0 100 100" fill="none">
           {[...Array(3)].map((_, row) =>
             [...Array(3)].map((_, col) => (
-              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#94a3b8" />
+              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#2BBBAD" />
             ))
           )}
         </svg>
       </div>
 
       <div className={styles.container}>
-        {/* ================================================================
-            HEADER
-            ================================================================ */}
-        <ScrollReveal animation="up" className={styles.header}>
+        {/* HEADER */}
+        <div
+          ref={headerRef}
+          className={`${styles.header} ${headerVisible ? styles.headerVisible : ''}`}
+        >
           <span className={styles.badge}>How It Works</span>
           <h2 className={styles.title}>
             Four clear paths.{' '}
             <span className={styles.highlight}>One destination.</span>
           </h2>
           <p className={styles.description}>
-            Your journey from learning to landing meaningful opportunities —
-            in four simple steps.
+            Your journey from learning to landing meaningful opportunities in four simple steps.
           </p>
-        </ScrollReveal>
+        </div>
 
-        {/* ================================================================
-            RADIAL CIRCLE
-            ================================================================ */}
-        <ScrollReveal animation="zoom" className={styles.circleWrapper}>
+        {/* RADIAL CIRCLE */}
+        <div className={styles.circleWrapper}>
           <div className={styles.circle}>
-            {/* Decorative rings */}
-            <div className={`${styles.ring} ${styles.ringOuter}`} aria-hidden="true" />
+            {/* Outer faint animated ring (larger circumference) */}
+            <div className={styles.outerFaintRing} aria-hidden="true" />
+
             <div className={`${styles.ring} ${styles.ringInner}`} aria-hidden="true" />
 
-            {/* Single continuous gold dashed circle path */}
+            {/* Main continuous dashed circle path */}
             <svg
               className={styles.connectors}
               viewBox="0 0 100 100"
@@ -177,21 +193,21 @@ export const HowItWorks: React.FC = () => {
               aria-hidden="true"
             >
               <defs>
-                <linearGradient id="goldGradient" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#F9A825" />
-                  <stop offset="50%" stopColor="#F57F17" />
-                  <stop offset="100%" stopColor="#F9A825" />
+                <linearGradient id="brandGradient" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="#2BBBAD" />
+                  <stop offset="50%" stopColor="#1E88E5" />
+                  <stop offset="100%" stopColor="#2BBBAD" />
                 </linearGradient>
               </defs>
 
-              {/* One continuous dashed path — connects all 4 nodes in order */}
               <path
                 d={circumferencePath}
                 fill="none"
-                stroke="url(#goldGradient)"
+                stroke="url(#brandGradient)"
                 strokeWidth="0.6"
                 strokeDasharray="2 1.5"
                 strokeLinecap="round"
+                className={styles.animatedDash}
               />
             </svg>
 
@@ -200,7 +216,7 @@ export const HowItWorks: React.FC = () => {
               <div className={styles.hubInner}>
                 <img
                   src={logo}
-                  alt="IQuire"
+                  alt="iQuire"
                   className={styles.hubLogo}
                 />
               </div>
@@ -231,11 +247,9 @@ export const HowItWorks: React.FC = () => {
               );
             })}
           </div>
-        </ScrollReveal>
+        </div>
 
-        {/* ================================================================
-            MOBILE TIMELINE
-            ================================================================ */}
+        {/* MOBILE TIMELINE */}
         <div className={styles.mobileTimeline}>
           {STEPS.map((step, idx) => (
             <div key={step.id} className={styles.mobileStep}>
@@ -258,22 +272,18 @@ export const HowItWorks: React.FC = () => {
           ))}
         </div>
 
-        {/* ================================================================
-            CTA
-            ================================================================ */}
-        <ScrollReveal animation="up" delay={3} className={styles.ctaWrapper}>
-        <Button variant="primary" color="gradient" size="lg" href="/courses">
+        {/* CTA */}
+        <div className={styles.ctaWrapper}>
+          <Button variant="primary" color="gradient" size="lg" href="/courses">
             Start Your Journey
           </Button>
           <Link to="/courses" className={styles.secondaryLink}>
             Explore Courses →
           </Link>
-        </ScrollReveal>
+        </div>
       </div>
 
-      {/* ================================================================
-          BOTTOM demarcation — wave + gold outline only (Fill unchanged)
-          ================================================================ */}
+      {/* BOTTOM demarcation */}
       <div className={styles.demarcationBottom} aria-hidden="true">
         <svg
           className={styles.demarcationWave}
@@ -281,17 +291,22 @@ export const HowItWorks: React.FC = () => {
           preserveAspectRatio="none"
           xmlns="http://www.w3.org/2000/svg"
         >
+          <defs>
+            <linearGradient id="howItWorksWaveStroke" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#2BBBAD" />
+              <stop offset="100%" stopColor="#1E88E5" />
+            </linearGradient>
+          </defs>
           <path
             d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z"
             fill="none"
-            stroke="#F9A825"
+            stroke="url(#howItWorksWaveStroke)"
             strokeWidth="3"
             opacity="0.6"
           />
-          {/* Fill kept as #0f172a */}
           <path
             d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z"
-            fill="#0f172a"
+            fill="#d6eaff"
           />
         </svg>
       </div>

@@ -28,6 +28,11 @@ export interface NigerianState {
 // ============================================================================
 // Profile
 // ============================================================================
+export interface EducationEntry {
+  institution: string;
+  degree: string;
+  year: string;
+}
 
 export interface Profile {
   id: string;
@@ -42,7 +47,7 @@ export interface Profile {
   first_name: string;
   middle_name: string | null;
   last_name: string;
-  gender: Gender | null;
+  gender: 'male' | 'female' | 'other' | 'prefer-not-to-say' | null;
   email: string;
   phone: string | null;
   country: string | null;
@@ -55,6 +60,9 @@ export interface Profile {
   marketing_opt_in: boolean;
   created_at: string;
   updated_at: string;
+  education: EducationEntry[] | null;
+  skills: string[] | null;
+  career_goals: string | null;
 }
 // ============================================================================
 // User Roles (additive)

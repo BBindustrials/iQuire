@@ -1,210 +1,169 @@
 // ============================================================================
-// iQuire — Courses Section (Phase 7C.3)
-// Export name kept as `Programs` for backward compatibility.
+// iQuire — Programs (Homepage Course Section) — Phase 17.20 (Full-Bleed)
 // ============================================================================
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../common/Button';
+import {
+  fetchFeaturedCourses,
+  formatCourseDate,
+  type Course,
+} from '../../services/courses.service';
 import styles from './Programs.module.css';
 
-// ============================================================================
-// IMAGE SOURCES (placeholders — swap to local imports when ready)
-// ============================================================================
-
-const course1Img =
-  'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&h=600&fit=crop';
-
-const course2Img =
-  'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&h=600&fit=crop';
-
-const course3Img =
-  'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&h=600&fit=crop';
-
-const course4Img =
-  'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&h=600&fit=crop';
-
-// ============================================================================
-// Course data
-// ============================================================================
-
-interface Course {
-  id: string;
-  slug: string;
-  name: string;
-  tagline: string;
-  description: string;
-  audience: string[];
-  duration: string;
-  image: string;
-  accent: 'blue' | 'gradient' | 'purple' | 'orange';
-  ctaTo: string;
-}
-
-const COURSES: Course[] = [
-  {
-    id: 'apprenticeship',
-    slug: 'apprenticeship-preparation',
-    name: 'Apprenticeship Preparation',
-    tagline: 'Get apprenticeship-ready.',
-    description:
-      'Practical training for students and fresh graduates preparing to step into paid apprenticeships. Build the skills, confidence, and readiness employers expect.',
-    audience: ['Students', 'Fresh graduates', 'School leavers'],
-    duration: 'Self-paced · 6 weeks',
-    image: course1Img,
-    accent: 'blue',
-    ctaTo: '/courses/apprenticeship-preparation',
-  },
-  {
-    id: 'digital-work',
-    slug: 'digital-work-readiness',
-    name: 'Digital Work Readiness',
-    tagline: 'Ready for your first real job.',
-    description:
-      'Everything you need to function effectively in a modern workplace — from digital tools to professional communication and workplace etiquette.',
-    audience: ['Entry-level job seekers', 'Interns', 'Graduates'],
-    duration: 'Self-paced · 8 weeks',
-    image: course2Img,
-    accent: 'gradient',
-    ctaTo: '/courses/digital-work-readiness',
-  },
-  {
-    id: 'tech360',
-    slug: 'tech-360',
-    name: 'Tech 360',
-    tagline: 'Break into tech — without a CS degree.',
-    description:
-      'Comprehensive no-code technology training covering product management, project management, and modern digital tools. Your entry point into a tech career.',
-    audience: ['Career switchers', 'Students', 'Non-tech professionals'],
-    duration: 'Live cohorts · 12 weeks',
-    image: course3Img,
-    accent: 'purple',
-    ctaTo: '/courses/tech-360',
-  },
-  {
-    id: 'ai-everyone',
-    slug: 'ai-for-everyone',
-    name: 'AI for Everyone',
-    tagline: 'Learn to work with AI — not fear it.',
-    description:
-      'Practical AI training for professionals at any stage. Understand and apply AI tools in your daily work — whether you\'re an employee, entrepreneur, or student.',
-    audience: ['Professionals', 'Employees', 'Entrepreneurs', 'Students'],
-    duration: 'Self-paced · 4 weeks',
-    image: course4Img,
-    accent: 'orange',
-    ctaTo: '/courses/ai-for-everyone',
-  },
-];
+type FeaturedCourse = Course & {
+  next_cohort: {
+    schedule: string | null;
+    start_date: string | null;
+    fee: string | null;
+  } | null;
+};
 
 // ============================================================================
 // Component
 // ============================================================================
 
 export const Programs: React.FC = () => {
+  const headerRef = useRef<HTMLDivElement>(null);
+  const [headerVisible, setHeaderVisible] = useState(false);
+
+  const [courses, setCourses] = useState<FeaturedCourse[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const load = async () => {
+      const result = await fetchFeaturedCourses();
+      if (!isMounted) return;
+
+      if (!result.success) {
+        setError(result.error ?? 'Failed to load courses');
+      } else {
+        setCourses((result.data ?? []) as FeaturedCourse[]);
+      }
+      setIsLoading(false);
+    };
+    load();
+    return () => { isMounted = false; };
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHeaderVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    if (headerRef.current) observer.observe(headerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section className={styles.programs}>
-      {/* ====================================================================
-          BACKGROUND SVG DECORATIONS
-          ==================================================================== */}
-      <div className={styles.bgDecor} aria-hidden="true">
-        
-        {/* Top-Left Decor: Dotted Grid & Circle */}
-        <svg className={styles.dottedGridLeft} viewBox="0 0 100 100" fill="none">
-          {[...Array(4)].map((_, row) =>
-            [...Array(4)].map((_, col) => (
-              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#94a3b8" />
-            ))
-          )}
-        </svg>
-        <div className={styles.circleTopLeft} />
+      {/* Net grid background */}
+      <svg
+        className={styles.netGrid}
+        aria-hidden="true"
+        preserveAspectRatio="xMidYMid slice"
+        viewBox="0 0 1440 900"
+      >
+        <defs>
+          <pattern
+            id="programsNetPattern"
+            x="0"
+            y="0"
+            width="80"
+            height="80"
+            patternUnits="userSpaceOnUse"
+          >
+            <path
+              d="M 80 0 L 0 0 0 80"
+              fill="none"
+              stroke="#000000"
+              strokeWidth="1"
+            />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#programsNetPattern)" />
+      </svg>
 
-        {/* Top-Right Decor: Leaf & Rings */}
-        <svg className={styles.ringsTopRight} viewBox="0 0 200 200" fill="none">
-          <circle cx="100" cy="100" r="80" stroke="#D1FAE5" strokeWidth="20" opacity="0.4" />
-          <circle cx="100" cy="100" r="50" stroke="#F9A825" strokeWidth="2" opacity="0.3" strokeDasharray="6 6" />
-        </svg>
+      <div className={styles.concaveTop} aria-hidden="true" />
 
-        {/* Bottom-Left Decor: Leaf & Floating Circle */}
-        <svg className={styles.leafBottomLeft} viewBox="0 0 300 300" fill="none">
-          <path d="M -50 200 C 50 50, 200 0, 250 100 C 300 200, 150 300, 50 300 C -20 300, -100 280, -50 200 Z" fill="#D1FAE5" opacity="0.5" />
-        </svg>
-        <div className={styles.circleBottomLeft} />
-
-        {/* Bottom-Right Decor: Dotted Grid & Blob */}
-        <svg className={styles.dottedGridRight} viewBox="0 0 100 100" fill="none">
-          {[...Array(4)].map((_, row) =>
-            [...Array(4)].map((_, col) => (
-              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#94a3b8" />
-            ))
-          )}
-        </svg>
-        <div className={styles.blobBottomRight} />
-      </div>
-
-      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-        {/* ================================================================
-            Header
-            ================================================================ */}
-        <div className={styles.header}>
+      {/* HEADER */}
+      <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+        <div
+          ref={headerRef}
+          className={`${styles.header} ${headerVisible ? styles.headerVisible : ''}`}
+        >
           <span className={styles.badge}>Our Courses</span>
           <h2 className={styles.title}>
             Build the skills.{' '}
-            <span className={styles.highlight}>Land the Job!</span>
+            <span className={styles.highlight}>Land the job.</span>
           </h2>
           <p className={styles.subtitle}>
             Whether you're leaving school, starting your first job, pivoting into
-            tech, or learning to use AI — there's a course built for exactly where
+            tech, or learning to use AI, there's a course built for exactly where
             you are.
           </p>
         </div>
+      </div>
 
-        {/* ================================================================
-            Course grid
-            ================================================================ */}
-        <div className={styles.grid}>
-          {COURSES.map((course) => (
-            <article
-              key={course.id}
-              className={`${styles.card} ${styles[`accent-${course.accent}`]}`}
-            >
-              <div className={styles.cardImage}>
-                <img src={course.image} alt={course.name} loading="lazy" />
-                <span className={styles.durationBadge}>{course.duration}</span>
-              </div>
-
-              <div className={styles.cardBody}>
-                <h3 className={styles.cardName}>{course.name}</h3>
-                <p className={styles.cardTagline}>{course.tagline}</p>
-                <p className={styles.cardDescription}>{course.description}</p>
-
-                <div className={styles.audienceRow}>
-                  {course.audience.map((group) => (
-                    <span key={group} className={styles.audiencePill}>
-                      {group}
-                    </span>
-                  ))}
-                </div>
-
-                <Link to={course.ctaTo} className={styles.readMore}>
-                  Read More
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </Link>
-              </div>
-            </article>
+      {/* MARQUEE ROW — FULL BLEED */}
+      {isLoading && (
+        <div className={styles.loadingRowFull}>
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className={styles.skeletonCard} />
           ))}
         </div>
+      )}
 
-        {/* ================================================================
-            Scholarship note
-            ================================================================ */}
+      {!isLoading && error && (
+        <div className="container">
+          <div className={styles.errorBox}>
+            <p>Could not load courses. Please try again later.</p>
+          </div>
+        </div>
+      )}
+
+      {!isLoading && !error && courses.length === 0 && (
+        <div className="container">
+          <div className={styles.emptyBox}>
+            <p>No courses available right now. Check back soon.</p>
+          </div>
+        </div>
+      )}
+
+      {!isLoading && !error && courses.length > 0 && (
+        <div className={styles.marqueeWrapper}>
+          <div className={styles.marqueeTrack}>
+            {courses.map((course) => (
+              <CourseCard key={`a-${course.id}`} course={course} />
+            ))}
+            {courses.map((course) => (
+              <CourseCard key={`b-${course.id}`} course={course} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* REST OF CONTENT */}
+      <div className="container" style={{ position: 'relative', zIndex: 2 }}>
         <div className={styles.scholarshipNote}>
-          <span className={styles.scholarshipIcon}>🎓</span>
+          <span className={styles.scholarshipIcon} aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <path d="M12 3L2 8L12 13L22 8L12 3Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+              <path d="M6 10V15C6 15 8.5 17 12 17C15.5 17 18 15 18 15V10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </span>
           <div className={styles.scholarshipText}>
             <strong>Scholarship opportunities available</strong>
             <span>
-              For eligible participants in select programs — including national
+              For eligible participants in select programs, including national
               service members and African graduates.
             </span>
           </div>
@@ -213,39 +172,121 @@ export const Programs: React.FC = () => {
           </Link>
         </div>
 
-        {/* ================================================================
-            Section CTA
-            ================================================================ */}
         <div className={styles.ctaWrapper}>
           <Button variant="primary" color="gradient" size="lg" href="/courses">
             Explore All Courses
           </Button>
         </div>
       </div>
-
-      {/* ================================================================
-          BOTTOM demarcation only (no top wave)
-          ================================================================ */}
-      <div className={styles.demarcationBottom} aria-hidden="true">
-        <svg
-          className={styles.demarcationWave}
-          viewBox="0 0 1440 120"
-          preserveAspectRatio="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z"
-            fill="none"
-            stroke="#F9A825"
-            strokeWidth="3"
-            opacity="0.6"
-          />
-          <path
-            d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z"
-            fill="#f1f5f9"
-          />
-        </svg>
-      </div>
     </section>
+  );
+};
+
+// ============================================================================
+// Course Card
+// ============================================================================
+
+interface CourseCardProps {
+  course: FeaturedCourse;
+}
+
+const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
+  const image = course.hero_image_url ?? course.thumbnail_url ?? null;
+  const nextCohort = course.next_cohort;
+
+  const cohortDate = nextCohort?.start_date
+    ? formatCourseDate(nextCohort.start_date)
+    : 'TBA';
+
+  const fee = nextCohort?.fee ?? 'TBA';
+
+  const shortDescription = course.description
+    ? course.description.length > 100
+      ? `${course.description.slice(0, 100)}...`
+      : course.description
+    : null;
+
+  const forList = course.who_its_for ?? [];
+
+  return (
+    <article className={styles.card}>
+      {/* LEFT: Image + For list */}
+      <div className={styles.cardLeft}>
+        {image && (
+          <img
+            src={image}
+            alt={course.title}
+            className={styles.cardLeftImage}
+            loading="lazy"
+          />
+        )}
+
+        {/* Glassmorphism overlay */}
+        <div className={styles.cardLeftOverlay} />
+
+        <div className={styles.cardLeftContent}>
+          <div className={styles.cardLeftFor}>
+            <span className={styles.cardLeftForLabel}>For</span>
+            <ul className={styles.cardLeftForList}>
+              {forList.slice(0, 3).map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* RIGHT: Content */}
+      <div className={styles.cardRight}>
+        <h3 className={styles.cardName}>{course.title}</h3>
+
+        {shortDescription && (
+          <p className={styles.cardDescription}>{shortDescription}</p>
+        )}
+
+        <div className={styles.cardMetaStrip}>
+          <div className={styles.cardMetaItem}>
+            <span className={styles.cardMetaLabel}>Duration</span>
+            <span className={styles.cardMetaValue}>{course.duration ?? 'TBA'}</span>
+          </div>
+          <div className={styles.cardMetaDivider} />
+          <div className={styles.cardMetaItem}>
+            <span className={styles.cardMetaLabel}>Format</span>
+            <span className={styles.cardMetaValue}>Fully online</span>
+          </div>
+          <div className={styles.cardMetaDivider} />
+          <div className={styles.cardMetaItem}>
+            <span className={styles.cardMetaLabel}>Schedule</span>
+            <span className={styles.cardMetaValue}>Evenings</span>
+          </div>
+        </div>
+
+        <div className={styles.cardCohortStrip}>
+          <span className={styles.cardCohortLabel}>Next cohort</span>
+          <span className={styles.cardCohortValue}>{cohortDate}</span>
+        </div>
+
+        <div className={styles.cardBottomRow}>
+          <div className={styles.cardTuitionBlock}>
+            <span className={styles.cardTuitionLabel}>Tuition</span>
+            <span className={styles.cardTuitionValue}>{fee}</span>
+            <span className={styles.cardTuitionNote}>Payment plan available</span>
+          </div>
+
+          <Link to={`/courses/${course.slug}`} className={styles.cardCta}>
+            View program
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M7 17L17 7M17 7H8M17 7V16"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </Link>
+        </div>
+      </div>
+    </article>
   );
 };

@@ -51,7 +51,7 @@ export const AdminCredentialCard: React.FC<AdminCredentialCardProps> = ({
         <h2 className={styles.title}>Admin Account Created</h2>
         <p className={styles.subtitle}>
           <strong>{credentials.full_name}</strong> has been added to the
-          IQuire admin team.
+          iQuire admin team.
         </p>
       </div>
 

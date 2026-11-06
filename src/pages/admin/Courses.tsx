@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/set-state-in-effect */
 // ============================================================================
-// iQuire — Admin: Courses List (Phase 10D.4)
+// iQuire — Admin: Courses List (Phase 17.16 — Cohort Fee Master)
 // ============================================================================
 
 import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  fetchAllCourses,
+  fetchAllCoursesWithFees,
   updateCourse,
   deleteCourse,
   type Course,
@@ -14,18 +15,22 @@ import {
 } from '../../services/courses.service';
 import styles from './Courses.module.css';
 
+// Extend Course locally to include the cohort fee
+type CourseWithCohortFee = Course & { next_cohort_fee: string | null };
+
 // ============================================================================
 // Component
 // ============================================================================
 
 export const AdminCourses: React.FC = () => {
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<CourseWithCohortFee[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Filters
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | CourseStatus>('all');
+  const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
 
   // Delete confirmation
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
@@ -36,7 +41,7 @@ export const AdminCourses: React.FC = () => {
   const load = async () => {
     setIsLoading(true);
     setError(null);
-    const result = await fetchAllCourses();
+    const result = await fetchAllCoursesWithFees();
     if (!result.success) {
       setError(result.error ?? 'Failed to load courses');
       setIsLoading(false);
@@ -70,28 +75,55 @@ export const AdminCourses: React.FC = () => {
       list = list.filter((c) => c.status === statusFilter);
     }
 
+    if (showFeaturedOnly) {
+      list = list.filter((c) => c.featured_on_homepage);
+    }
+
     return list;
-  }, [courses, search, statusFilter]);
+  }, [courses, search, statusFilter, showFeaturedOnly]);
 
   // --------------------------------------------------------------------------
-  // Quick actions
+  // Actions
   // --------------------------------------------------------------------------
-  const handleToggleStatus = async (course: Course) => {
+  const handleToggleStatus = async (course: CourseWithCohortFee) => {
     const nextStatus: CourseStatus =
       course.status === 'published' ? 'draft' : 'published';
 
-    // Optimistic update
     setCourses((prev) =>
       prev.map((c) => (c.id === course.id ? { ...c, status: nextStatus } : c))
     );
 
     const res = await updateCourse(course.id, { status: nextStatus });
     if (!res.success) {
-      // Revert
       setCourses((prev) =>
         prev.map((c) => (c.id === course.id ? { ...c, status: course.status } : c))
       );
       setError(res.error ?? 'Failed to update course');
+    }
+  };
+
+  const handleToggleFeatured = async (course: CourseWithCohortFee) => {
+    const nextFeatured = !course.featured_on_homepage;
+
+    setCourses((prev) =>
+      prev.map((c) =>
+        c.id === course.id ? { ...c, featured_on_homepage: nextFeatured } : c
+      )
+    );
+
+    const res = await updateCourse(course.id, {
+      featured_on_homepage: nextFeatured,
+    } as any);
+
+    if (!res.success) {
+      setCourses((prev) =>
+        prev.map((c) =>
+          c.id === course.id
+            ? { ...c, featured_on_homepage: course.featured_on_homepage }
+            : c
+        )
+      );
+      setError(res.error ?? 'Failed to update featured status');
     }
   };
 
@@ -114,6 +146,7 @@ export const AdminCourses: React.FC = () => {
       total: courses.length,
       published: courses.filter((c) => c.status === 'published').length,
       draft: courses.filter((c) => c.status === 'draft').length,
+      featured: courses.filter((c) => c.featured_on_homepage).length,
     }),
     [courses]
   );
@@ -128,18 +161,23 @@ export const AdminCourses: React.FC = () => {
         <div>
           <h1 className={styles.pageTitle}>Courses</h1>
           <p className={styles.pageSubtitle}>
-            Manage your courses, cohorts, and programme content.
+            Manage your courses, cohorts, and homepage features.
           </p>
         </div>
         <Link to="/admin/courses/new" className={styles.addButton}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <path
+              d="M12 5V19M5 12H19"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
           </svg>
           Add Course
         </Link>
       </div>
 
-      {/* Error banner */}
+      {/* Error */}
       {error && (
         <div className={styles.errorBanner} role="alert">
           <span>{error}</span>
@@ -158,6 +196,7 @@ export const AdminCourses: React.FC = () => {
         <StatPill label="Total" value={stats.total} accent="blue" />
         <StatPill label="Published" value={stats.published} accent="green" />
         <StatPill label="Drafts" value={stats.draft} accent="gray" />
+        <StatPill label="Featured" value={stats.featured} accent="gold" />
       </div>
 
       {/* Filters */}
@@ -169,7 +208,7 @@ export const AdminCourses: React.FC = () => {
           </svg>
           <input
             type="text"
-            placeholder="Search courses by title, slug, or tagline…"
+            placeholder="Search courses…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className={styles.searchInput}
@@ -186,9 +225,18 @@ export const AdminCourses: React.FC = () => {
           <option value="draft">Draft</option>
           <option value="archived">Archived</option>
         </select>
+
+        <label className={styles.featuredToggle}>
+          <input
+            type="checkbox"
+            checked={showFeaturedOnly}
+            onChange={(e) => setShowFeaturedOnly(e.target.checked)}
+          />
+          <span>Featured only</span>
+        </label>
       </div>
 
-      {/* Loading */}
+      {/* Grid */}
       {isLoading ? (
         <div className={styles.grid}>
           {[...Array(4)].map((_, i) => (
@@ -199,115 +247,114 @@ export const AdminCourses: React.FC = () => {
         <EmptyState hasCourses={courses.length > 0} />
       ) : (
         <div className={styles.grid}>
-          {filtered.map((course) => (
-            <article key={course.id} className={styles.card}>
-              {/* Image */}
-              <div className={styles.cardImage}>
-                {course.hero_image_url ? (
-                  <img
-                    src={course.hero_image_url}
-                    alt={course.title}
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className={styles.cardImagePlaceholder}>
-                    {course.emoji ?? '📚'}
-                  </div>
-                )}
+          {filtered.map((course) => {
+            // Cohort fee is master, with pricing.fee fallback
+            const displayFee = course.next_cohort_fee ?? course.pricing?.fee;
 
-                {/* Status badge */}
-                <span
-                  className={`${styles.statusBadge} ${styles[`status-${course.status}`]}`}
-                >
-                  {course.status}
-                </span>
-              </div>
+            return (
+              <article key={course.id} className={styles.card}>
+                {/* Image */}
+                <div className={styles.cardImage}>
+                  {course.hero_image_url ? (
+                    <img src={course.hero_image_url} alt={course.title} loading="lazy" />
+                  ) : (
+                    <div className={styles.cardImagePlaceholder}>
+                      {course.title.charAt(0)}
+                    </div>
+                  )}
 
-              {/* Body */}
-              <div className={styles.cardBody}>
-                <div className={styles.cardHeader}>
-                  <span className={styles.cardEmoji}>{course.emoji ?? '📚'}</span>
+                  {course.featured_on_homepage && (
+                    <span className={styles.featuredBadge}>Featured</span>
+                  )}
+
+                  <span
+                    className={`${styles.statusBadge} ${styles[`status-${course.status}`]}`}
+                  >
+                    {course.status}
+                  </span>
+                </div>
+
+                {/* Body */}
+                <div className={styles.cardBody}>
                   <h3 className={styles.cardTitle}>{course.title}</h3>
-                </div>
 
-                {course.tagline && (
-                  <p className={styles.cardTagline}>{course.tagline}</p>
-                )}
+                  {course.tagline && (
+                    <p className={styles.cardTagline}>{course.tagline}</p>
+                  )}
 
-                <div className={styles.cardMeta}>
-                  {course.duration && (
-                    <span className={styles.metaPill}>
-                      ⏱ {course.duration}
-                    </span>
-                  )}
-                  {course.format && (
-                    <span className={styles.metaPill}>
-                      🌐 {course.format}
-                    </span>
-                  )}
-                  {course.level && (
-                    <span className={styles.metaPill}>
-                      📊 {course.level}
-                    </span>
-                  )}
-                </div>
-
-                {course.pricing?.fee && (
-                  <div className={styles.cardFee}>
-                    <span className={styles.cardFeeLabel}>Fee</span>
-                    <span className={styles.cardFeeValue}>
-                      {course.pricing.fee}
-                    </span>
+                  <div className={styles.cardMeta}>
+                    {course.duration && (
+                      <span className={styles.metaPill}>{course.duration}</span>
+                    )}
+                    {course.format && (
+                      <span className={styles.metaPill}>{course.format}</span>
+                    )}
+                    {course.level && (
+                      <span className={styles.metaPill}>{course.level}</span>
+                    )}
                   </div>
-                )}
 
-                <p className={styles.cardSlug}>/{course.slug}</p>
-              </div>
+                  {displayFee && (
+                    <div className={styles.cardFee}>
+                      <span className={styles.cardFeeLabel}>Fee</span>
+                      <span className={styles.cardFeeValue}>{displayFee}</span>
+                    </div>
+                  )}
 
-              {/* Actions */}
-              <div className={styles.cardActions}>
-                <Link
-                  to={`/admin/courses/${course.id}`}
-                  className={styles.actionBtn}
-                  title="Edit course"
-                >
-                  ✏️ Edit
-                </Link>
+                  <p className={styles.cardSlug}>/{course.slug}</p>
+                </div>
 
-                <button
-                  type="button"
-                  className={styles.actionBtn}
-                  onClick={() => handleToggleStatus(course)}
-                  title="Toggle published/draft"
-                >
-                  {course.status === 'published' ? '⏸ Unpublish' : '▶ Publish'}
-                </button>
+                {/* Actions */}
+                <div className={styles.cardActions}>
+                  <Link
+                    to={`/admin/courses/${course.id}`}
+                    className={styles.actionBtn}
+                  >
+                    Edit
+                  </Link>
 
-                <a
-                  href={`/courses/${course.slug}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.actionBtn}
-                  title="View public page"
-                >
-                  👁 View
-                </a>
+                  <button
+                    type="button"
+                    className={styles.actionBtn}
+                    onClick={() => handleToggleStatus(course)}
+                  >
+                    {course.status === 'published' ? 'Unpublish' : 'Publish'}
+                  </button>
 
-                <button
-                  type="button"
-                  className={`${styles.actionBtn} ${styles.actionDanger}`}
-                  onClick={() => setDeleteConfirmId(course.id)}
-                  title="Delete course"
-                >
-                  🗑
-                </button>
-              </div>
-            </article>
-          ))}
+                  <button
+                    type="button"
+                    className={`${styles.actionBtn} ${
+                      course.featured_on_homepage ? styles.actionFeatured : ''
+                    }`}
+                    onClick={() => handleToggleFeatured(course)}
+                  >
+                    {course.featured_on_homepage ? 'Unfeature' : 'Feature'}
+                  </button>
+
+                  <a
+                    href={`/courses/${course.slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.actionBtn}
+                  >
+                    View
+                  </a>
+
+                  <button
+                    type="button"
+                    className={`${styles.actionBtn} ${styles.actionDanger}`}
+                    onClick={() => setDeleteConfirmId(course.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </article>
+            );
+          })}
         </div>
       )}
 
-      {/* Delete confirmation modal */}
+      {/* Delete modal */}
       {deleteConfirmId && (
         <div
           className={styles.modalOverlay}

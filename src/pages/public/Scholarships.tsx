@@ -159,7 +159,7 @@ export const Scholarships: React.FC = () => {
               <span className={styles.heroHighlight}>open doors.</span>
             </h1>
             <p className={styles.heroSubtitle}>
-              Financial support for IQuire programmes. Whether you're a
+              Financial support for iQuire programmes. Whether you're a
               career switcher, a recent graduate, or an NYSC corps member —
               there may be a scholarship for you.
             </p>
@@ -273,7 +273,7 @@ export const Scholarships: React.FC = () => {
                 Explore Courses
               </Button>
               <Link to="/contact" className={styles.finalCtaSecondary}>
-                Contact Us →
+                Contact Us
               </Link>
             </div>
           </ScrollReveal>
@@ -391,7 +391,7 @@ const ScholarshipCard: React.FC<ScholarshipCardProps> = ({ scholarship }) => {
           </button>
         ) : (
           <Link to="/contact" className={styles.applyBtn}>
-            Contact Us →
+            Contact Us
           </Link>
         )}
       </div>

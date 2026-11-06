@@ -20,7 +20,7 @@ export const welcomeEmailHtml = (data: WelcomeEmailData): string => `
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to IQuire</title>
+  <title>Welcome to iQuire</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #f8fafc;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f8fafc; padding: 40px 20px;">
@@ -39,10 +39,10 @@ export const welcomeEmailHtml = (data: WelcomeEmailData): string => `
           <tr>
             <td style="padding: 40px;">
               <h2 style="margin: 0 0 16px; color: #0f172a; font-size: 22px; font-weight: 800; letter-spacing: -0.01em;">
-                Welcome to IQuire, ${data.firstName}!
+                Welcome to iQuire, ${data.firstName}!
               </h2>
               <p style="margin: 0 0 24px; color: #475569; font-size: 16px; line-height: 1.6;">
-                Your IQuire account has been created. Below are your login credentials. Please keep them safe — you'll use them to access your student dashboard.
+                Your iQuire account has been created. Below are your login credentials. Please keep them safe — you'll use them to access your student dashboard.
               </p>
 
               <!-- Credentials box -->
@@ -61,10 +61,10 @@ export const welcomeEmailHtml = (data: WelcomeEmailData): string => `
                       </tr>
                     </table>
 
-                    <!-- IQuire ID -->
+                    <!-- iQuire ID -->
                     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 12px;">
                       <tr>
-                        <td width="130" style="font-size: 13px; color: #64748b; font-weight: 600; vertical-align: top;">IQuire ID</td>
+                        <td width="130" style="font-size: 13px; color: #64748b; font-weight: 600; vertical-align: top;">iQuire ID</td>
                         <td style="font-size: 15px; color: #F57F17; font-weight: 800; font-family: 'Courier New', monospace;">${data.iqId}</td>
                       </tr>
                     </table>
@@ -103,7 +103,7 @@ export const welcomeEmailHtml = (data: WelcomeEmailData): string => `
               </table>
 
               <p style="margin: 0; color: #64748b; font-size: 14px; line-height: 1.6;">
-                You can log in with either your <strong>email</strong> or your <strong>IQuire ID</strong>.
+                You can log in with either your <strong>email</strong> or your <strong>iQuire ID</strong>.
               </p>
             </td>
           </tr>
@@ -113,10 +113,10 @@ export const welcomeEmailHtml = (data: WelcomeEmailData): string => `
             <td style="padding: 24px 40px; background-color: #f8fafc; border-top: 1px solid #e5e7eb; text-align: center;">
               <p style="margin: 0 0 8px; color: #64748b; font-size: 13px; line-height: 1.6;">
                 Need help? Reply to this email or contact us at
-                <a href="mailto:hello@iquire.co" style="color: #1565C0; text-decoration: none; font-weight: 600;">hello@iquire.co</a>
+                <a href="mailto:hello@iquire.io" style="color: #1565C0; text-decoration: none; font-weight: 600;">hello@iquire.io</a>
               </p>
               <p style="margin: 0; color: #94a3b8; font-size: 12px;">
-                © ${new Date().getFullYear()} IQuire. All rights reserved.
+                © ${new Date().getFullYear()} iQuire. All rights reserved.
               </p>
             </td>
           </tr>
@@ -147,7 +147,7 @@ export const adminWelcomeEmailHtml = (data: AdminWelcomeEmailData): string => `
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to the IQuire Admin Team</title>
+  <title>Welcome to the iQuire Admin Team</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #f8fafc;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f8fafc; padding: 40px 20px;">
@@ -166,10 +166,10 @@ export const adminWelcomeEmailHtml = (data: AdminWelcomeEmailData): string => `
           <tr>
             <td style="padding: 40px;">
               <h2 style="margin: 0 0 16px; color: #0f172a; font-size: 22px; font-weight: 800; letter-spacing: -0.01em;">
-                Welcome to the IQuire team, ${data.firstName}!
+                Welcome to the iQuire team, ${data.firstName}!
               </h2>
               <p style="margin: 0 0 24px; color: #475569; font-size: 16px; line-height: 1.6;">
-                Your admin account has been created. You now have full access to the IQuire admin dashboard, where you can manage students, courses, alumni, blog posts, and more.
+                Your admin account has been created. You now have full access to the iQuire admin dashboard, where you can manage students, courses, alumni, blog posts, and more.
               </p>
 
               ${data.bioTitle ? `<p style="margin: 0 0 24px; color: #475569; font-size: 15px; line-height: 1.6;">Your role: <strong>${data.bioTitle}</strong></p>` : ''}
@@ -231,7 +231,7 @@ export const adminWelcomeEmailHtml = (data: AdminWelcomeEmailData): string => `
           <tr>
             <td style="padding: 24px 40px; background-color: #f8fafc; border-top: 1px solid #e5e7eb; text-align: center;">
               <p style="margin: 0; color: #94a3b8; font-size: 12px;">
-                © ${new Date().getFullYear()} IQuire. Confidential — for internal use only.
+                © ${new Date().getFullYear()} iQuire. Confidential — for internal use only.
               </p>
             </td>
           </tr>

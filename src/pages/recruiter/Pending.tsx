@@ -149,7 +149,7 @@ export const RecruiterPending: React.FC = () => {
         <h1 className={styles.title}>Your account is under review</h1>
 
         <p className={styles.subtitle}>
-          Welcome to IQuire, {profile?.first_name}. We&apos;ve received your
+          Welcome to iQuire, {profile?.first_name}. We&apos;ve received your
           registration
           {companyName && (
             <>
@@ -178,7 +178,7 @@ export const RecruiterPending: React.FC = () => {
           <TimelineStep
             icon="🚀"
             label="Full access"
-            description="Access the IQuire talent directory"
+            description="Access the iQuire talent directory"
             status="pending"
           />
         </div>

@@ -41,4 +41,6 @@ export interface AlumniInput {
   featured?: boolean;
   display_order?: number;
   status?: 'draft' | 'published' | 'archived';
+  cv_url?: string | null;          // NEW
+  portfolio_url?: string | null;   // NEW
 }

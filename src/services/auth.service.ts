@@ -71,7 +71,7 @@ export const loginMember = async (data: LoginMemberData): Promise<AuthResponse> 
       if (lookupError || !profile) {
         return {
           success: false,
-          message: 'No account found with that IQuire ID.',
+          message: 'No account found with that iQuire ID.',
         };
       }
 
@@ -86,7 +86,7 @@ export const loginMember = async (data: LoginMemberData): Promise<AuthResponse> 
     } else if (!isEmail(identifier)) {
       return {
         success: false,
-        message: 'Enter a valid email or IQuire ID (e.g., swift-panda-1234).',
+        message: 'Enter a valid email or iQuire ID (e.g., swift-panda-1234).',
       };
     }
 

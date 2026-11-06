@@ -72,7 +72,7 @@ export const AdminDashboard: React.FC = () => {
         <div>
           <h1 className={styles.pageTitle}>Welcome back, {firstName}</h1>
           <p className={styles.pageSubtitle}>
-            Here's a snapshot of what's happening on the IQuire platform today.
+            Here's a snapshot of what's happening on the iQuire platform today.
           </p>
         </div>
       </div>

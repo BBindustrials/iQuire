@@ -200,7 +200,7 @@ export const AdminAdmins: React.FC = () => {
         <div>
           <h1 className={styles.pageTitle}>Admins</h1>
           <p className={styles.pageSubtitle}>
-            Manage IQuire administrator accounts. Admins have full access to
+            Manage iQuire administrator accounts. Admins have full access to
             the platform.
           </p>
         </div>
@@ -462,7 +462,7 @@ const EmptyState: React.FC<{ hasAdmins: boolean }> = ({ hasAdmins }) => (
     <p className={styles.emptyText}>
       {hasAdmins
         ? 'Try adjusting your search or filters.'
-        : 'Create your first admin account to add a teammate to the IQuire admin team.'}
+        : 'Create your first admin account to add a teammate to the iQuire admin team.'}
     </p>
     {!hasAdmins && (
       <Link to="/admin/users/admins/new" className={styles.emptyCta}>

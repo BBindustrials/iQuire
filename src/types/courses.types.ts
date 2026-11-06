@@ -91,6 +91,7 @@ export interface Course {
   pricing: CoursePricing;
   faqs: CourseFaq[];
   final_cta: CourseFinalCta | null;
+  featured_on_homepage: boolean; 
 
   // Timestamps
   created_at: string;
@@ -162,6 +163,7 @@ export interface CourseInput {
   certificate_included?: boolean;
   status?: CourseStatus;
   display_order?: number;
+  featured_on_homepage?: boolean; 
 
   why_this_program?: string | null;
   challenges?: CourseChallenge[];

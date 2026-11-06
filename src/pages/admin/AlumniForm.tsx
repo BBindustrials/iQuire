@@ -1,5 +1,5 @@
 // ============================================================================
-// iQuire — Admin: Alumni Create/Edit Form (Phase 9B.1a)
+// iQuire — Admin: Alumni Create/Edit Form (Phase 17.21 — CV/Portfolio)
 // ============================================================================
 
 import React, { useEffect, useState, type FormEvent } from 'react';
@@ -38,6 +38,8 @@ interface FormData {
   feedback: string;
   trustpilot_url: string;
   linkedin_url: string;
+  cv_url: string;
+  portfolio_url: string;
   featured: boolean;
   display_order: number;
   status: AlumniStatus;
@@ -68,6 +70,8 @@ const initialFormData: FormData = {
   feedback: '',
   trustpilot_url: '',
   linkedin_url: '',
+  cv_url: '',
+  portfolio_url: '',
   featured: false,
   display_order: 0,
   status: 'draft',
@@ -126,6 +130,8 @@ export const AdminAlumniForm: React.FC = () => {
         feedback: a.feedback ?? '',
         trustpilot_url: a.trustpilot_url ?? '',
         linkedin_url: a.linkedin_url ?? '',
+        cv_url: a.cv_url ?? '',
+        portfolio_url: a.portfolio_url ?? '',
         featured: a.featured,
         display_order: a.display_order,
         status: a.status,
@@ -215,6 +221,20 @@ export const AdminAlumniForm: React.FC = () => {
       newErrors.trustpilot_url = 'Enter a valid URL.';
     }
 
+    if (
+      formData.cv_url &&
+      !/^https?:\/\/.+\..+/.test(formData.cv_url.trim())
+    ) {
+      newErrors.cv_url = 'Enter a valid URL.';
+    }
+
+    if (
+      formData.portfolio_url &&
+      !/^https?:\/\/.+\..+/.test(formData.portfolio_url.trim())
+    ) {
+      newErrors.portfolio_url = 'Enter a valid URL.';
+    }
+
     return newErrors;
   };
 
@@ -253,6 +273,8 @@ export const AdminAlumniForm: React.FC = () => {
       feedback: formData.feedback || null,
       trustpilot_url: formData.trustpilot_url || null,
       linkedin_url: formData.linkedin_url || null,
+      cv_url: formData.cv_url || null,
+      portfolio_url: formData.portfolio_url || null,
       featured: formData.featured,
       display_order: formData.display_order,
       status: formData.status,
@@ -325,9 +347,7 @@ export const AdminAlumniForm: React.FC = () => {
       </div>
 
       <form onSubmit={handleSubmit} className={styles.form} noValidate>
-        {/* ================================================================
-            IDENTITY
-            ================================================================ */}
+        {/* IDENTITY */}
         <FormSection title="Identity">
           <div className={styles.photoRow}>
             <ImageUploader
@@ -374,9 +394,7 @@ export const AdminAlumniForm: React.FC = () => {
           </div>
         </FormSection>
 
-        {/* ================================================================
-            PROGRAMME
-            ================================================================ */}
+        {/* PROGRAMME */}
         <FormSection title="Programme">
           <div className={styles.twoCol}>
             <Input
@@ -398,9 +416,7 @@ export const AdminAlumniForm: React.FC = () => {
           </div>
         </FormSection>
 
-        {/* ================================================================
-            SUMMARIES
-            ================================================================ */}
+        {/* SUMMARIES */}
         <FormSection title="Summaries">
           <Input
             label="Short summary"
@@ -432,9 +448,7 @@ export const AdminAlumniForm: React.FC = () => {
           </div>
         </FormSection>
 
-        {/* ================================================================
-            JOURNEY (Before → After)
-            ================================================================ */}
+        {/* JOURNEY */}
         <FormSection title="Journey">
           <p className={styles.sectionHint}>
             Optional — shown as a Before → After row on the featured card.
@@ -457,9 +471,7 @@ export const AdminAlumniForm: React.FC = () => {
           </div>
         </FormSection>
 
-        {/* ================================================================
-            SKILLS & EXPERIENCE
-            ================================================================ */}
+        {/* SKILLS & EXPERIENCE */}
         <FormSection title="Skills & Experience">
           <div className={styles.twoCol}>
             <Input
@@ -497,13 +509,11 @@ export const AdminAlumniForm: React.FC = () => {
           </div>
         </FormSection>
 
-        {/* ================================================================
-            TESTIMONIAL
-            ================================================================ */}
+        {/* TESTIMONIAL */}
         <FormSection title="Testimonial">
           <div className={styles.textareaWrapper}>
             <label htmlFor="feedback" className={styles.textareaLabel}>
-              Alumni feedback about IQuire
+              Alumni feedback about iQuire
             </label>
             <textarea
               id="feedback"
@@ -512,7 +522,7 @@ export const AdminAlumniForm: React.FC = () => {
               onChange={handleChange}
               rows={5}
               className={styles.textarea}
-              placeholder="What did they say about their experience with IQuire? Short or long — the card adapts."
+              placeholder="What did they say about their experience with iQuire? Short or long — the card adapts."
             />
             <span className={styles.textareaHelper}>
               Shown as the main quote on the featured card. Short = big text. Long = smaller text.
@@ -520,9 +530,7 @@ export const AdminAlumniForm: React.FC = () => {
           </div>
         </FormSection>
 
-        {/* ================================================================
-            EXTERNAL LINKS
-            ================================================================ */}
+        {/* EXTERNAL LINKS */}
         <FormSection title="External Links">
           <div className={styles.twoCol}>
             <Input
@@ -544,11 +552,32 @@ export const AdminAlumniForm: React.FC = () => {
               error={errors.trustpilot_url}
             />
           </div>
+
+          <div className={styles.twoCol}>
+            <Input
+              label="CV URL"
+              name="cv_url"
+              type="url"
+              value={formData.cv_url}
+              onChange={handleChange}
+              placeholder="https://drive.google.com/file/... or https://example.com/cv.pdf"
+              helperText="Link to their CV (Google Drive, Dropbox, personal site)."
+              error={errors.cv_url}
+            />
+            <Input
+              label="Portfolio URL"
+              name="portfolio_url"
+              type="url"
+              value={formData.portfolio_url}
+              onChange={handleChange}
+              placeholder="https://their-portfolio.com"
+              helperText="Link to their portfolio, personal site, or Behance/Dribbble."
+              error={errors.portfolio_url}
+            />
+          </div>
         </FormSection>
 
-        {/* ================================================================
-            VISIBILITY
-            ================================================================ */}
+        {/* VISIBILITY */}
         <FormSection title="Visibility">
           <div className={styles.twoCol}>
             <div className={styles.selectWrapper}>
@@ -595,9 +624,7 @@ export const AdminAlumniForm: React.FC = () => {
           </div>
         </FormSection>
 
-        {/* ================================================================
-            Submit
-            ================================================================ */}
+        {/* Submit */}
         {errors.submit && (
           <div className={styles.submitError} role="alert">
             {errors.submit}

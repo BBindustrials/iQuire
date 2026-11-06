@@ -222,7 +222,7 @@ export const LoginRecruiter: React.FC = () => {
         </button>
 
         <p className={styles.footer}>
-          Want to hire IQuire talent?{' '}
+          Want to hire iQuire talent?{' '}
           <Link to="/hire-from-us" className={styles.footerLink}>
             Learn more →
           </Link>
@@ -237,7 +237,7 @@ export const LoginRecruiter: React.FC = () => {
 
         <p className={styles.backHome}>
           <Link to="/hire-from-us" className={styles.backHomeLink}>
-            Learn more about hiring IQuire talent
+            Learn more about hiring iQuire talent
           </Link>
         </p>
       </form>

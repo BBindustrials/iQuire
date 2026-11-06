@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './AuthHeader.module.css';
-import logo from '../../assets/logo/iquire-logo.png';
+import logo from '../../assets/logo/iQuire-logo.png';
 
 export const AuthHeader: React.FC = () => {
   return (
@@ -9,7 +9,7 @@ export const AuthHeader: React.FC = () => {
       <div className={styles.headerInner}>
         {/* Left: Logo */}
         <Link to="/" className={styles.logo}>
-          <img src={logo} alt="IQuire Logo" className={styles.logoImage} />
+          <img src={logo} alt="iQuire Logo" className={styles.logoImage} />
         </Link>
 
         {/* Center: Categories badge + Nav links */}

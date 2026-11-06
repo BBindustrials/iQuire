@@ -89,6 +89,162 @@ export type Database = {
         }
         Relationships: []
       }
+      announcements: {
+        Row: {
+          auto_generated: boolean
+          auto_type: string | null
+          body: string
+          cohort_id: string | null
+          course_id: string | null
+          created_at: string
+          created_by: string | null
+          expires_at: string | null
+          id: string
+          priority: 'low' | 'normal' | 'high' | 'urgent'
+          published: boolean
+          published_at: string
+          target_account_type: 'member' | 'recruiter' | 'admin' | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          auto_generated?: boolean
+          auto_type?: string | null
+          body: string
+          cohort_id?: string | null
+          course_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          priority?: 'low' | 'normal' | 'high' | 'urgent'
+          published?: boolean
+          published_at?: string
+          target_account_type?: 'member' | 'recruiter' | 'admin' | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          auto_generated?: boolean
+          auto_type?: string | null
+          body?: string
+          cohort_id?: string | null
+          course_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          priority?: 'low' | 'normal' | 'high' | 'urgent'
+          published?: boolean
+          published_at?: string
+          target_account_type?: 'member' | 'recruiter' | 'admin' | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      assignment_submissions: {
+        Row: {
+          assignment_id: string
+          created_at: string
+          feedback: string | null
+          file_url: string | null
+          graded_at: string | null
+          graded_by: string | null
+          id: string
+          score: number | null
+          status: 'submitted' | 'graded' | 'returned' | 'resubmission-requested'
+          submission_text: string | null
+          submission_url: string | null
+          submitted_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assignment_id: string
+          created_at?: string
+          feedback?: string | null
+          file_url?: string | null
+          graded_at?: string | null
+          graded_by?: string | null
+          id?: string
+          score?: number | null
+          status?: 'submitted' | 'graded' | 'returned' | 'resubmission-requested'
+          submission_text?: string | null
+          submission_url?: string | null
+          submitted_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assignment_id?: string
+          created_at?: string
+          feedback?: string | null
+          file_url?: string | null
+          graded_at?: string | null
+          graded_by?: string | null
+          id?: string
+          score?: number | null
+          status?: 'submitted' | 'graded' | 'returned' | 'resubmission-requested'
+          submission_text?: string | null
+          submission_url?: string | null
+          submitted_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      assignments: {
+        Row: {
+          cohort_id: string
+          course_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          display_order: number
+          due_date: string | null
+          id: string
+          instructions: string | null
+          max_score: number | null
+          published: boolean
+          submission_type: 'link' | 'text' | 'file'
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          cohort_id: string
+          course_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          display_order?: number
+          due_date?: string | null
+          id?: string
+          instructions?: string | null
+          max_score?: number | null
+          published?: boolean
+          submission_type?: 'link' | 'text' | 'file'
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          cohort_id?: string
+          course_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          display_order?: number
+          due_date?: string | null
+          id?: string
+          instructions?: string | null
+          max_score?: number | null
+          published?: boolean
+          submission_type?: 'link' | 'text' | 'file'
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       blog_categories: {
         Row: {
           created_at: string
@@ -413,6 +569,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      cohort_sessions: {
+        Row: {
+          cohort_id: string
+          course_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          display_order: number
+          duration_minutes: number
+          id: string
+          meeting_platform: string | null
+          meeting_url: string | null
+          recording_url: string | null
+          session_date: string
+          status: 'scheduled' | 'live' | 'completed' | 'cancelled'
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          cohort_id: string
+          course_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          display_order?: number
+          duration_minutes?: number
+          id?: string
+          meeting_platform?: string | null
+          meeting_url?: string | null
+          recording_url?: string | null
+          session_date: string
+          status?: 'scheduled' | 'live' | 'completed' | 'cancelled'
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          cohort_id?: string
+          course_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          display_order?: number
+          duration_minutes?: number
+          id?: string
+          meeting_platform?: string | null
+          meeting_url?: string | null
+          recording_url?: string | null
+          session_date?: string
+          status?: 'scheduled' | 'live' | 'completed' | 'cancelled'
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       cohorts: {
         Row: {
@@ -926,6 +1136,105 @@ export type Database = {
           },
         ]
       }
+      lessons: {
+        Row: {
+          body: string | null
+          cohort_id: string
+          content_type: 'video' | 'pdf' | 'text' | 'link' | 'mixed'
+          course_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          display_order: number
+          external_links: Json | null
+          id: string
+          module_number: number | null
+          pdf_url: string | null
+          published: boolean
+          title: string
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          body?: string | null
+          cohort_id: string
+          content_type?: 'video' | 'pdf' | 'text' | 'link' | 'mixed'
+          course_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          display_order?: number
+          external_links?: Json | null
+          id?: string
+          module_number?: number | null
+          pdf_url?: string | null
+          published?: boolean
+          title: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          body?: string | null
+          cohort_id?: string
+          content_type?: 'video' | 'pdf' | 'text' | 'link' | 'mixed'
+          course_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          display_order?: number
+          external_links?: Json | null
+          id?: string
+          module_number?: number | null
+          pdf_url?: string | null
+          published?: boolean
+          title?: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
+      materials: {
+        Row: {
+          course_id: string
+          created_at: string
+          description: string | null
+          display_order: number
+          external_url: string | null
+          file_url: string | null
+          id: string
+          material_type: 'pdf' | 'doc' | 'link' | 'video' | 'other'
+          published: boolean
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          external_url?: string | null
+          file_url?: string | null
+          id?: string
+          material_type?: 'pdf' | 'doc' | 'link' | 'video' | 'other'
+          published?: boolean
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          external_url?: string | null
+          file_url?: string | null
+          id?: string
+          material_type?: 'pdf' | 'doc' | 'link' | 'video' | 'other'
+          published?: boolean
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       nysc_details: {
         Row: {
           cohort_batch: string
@@ -1023,6 +1332,7 @@ export type Database = {
           country: string | null
           created_at: string
           created_by_admin: string | null
+          cv_data: Json | null
           email: string
           first_name: string
           gender: Database["public"]["Enums"]["gender_type"] | null
@@ -1036,6 +1346,7 @@ export type Database = {
           participant_id: string | null
           phone: string | null
           profile_completion: number
+          readiness_assessment: Json | null
           role: Database["public"]["Enums"]["user_role"]
           state: string | null
           tier: Database["public"]["Enums"]["account_tier"]
@@ -1050,6 +1361,7 @@ export type Database = {
           country?: string | null
           created_at?: string
           created_by_admin?: string | null
+          cv_data?: Json | null
           email: string
           first_name?: string
           gender?: Database["public"]["Enums"]["gender_type"] | null
@@ -1063,6 +1375,7 @@ export type Database = {
           participant_id?: string | null
           phone?: string | null
           profile_completion?: number
+          readiness_assessment?: Json | null
           role?: Database["public"]["Enums"]["user_role"]
           state?: string | null
           tier?: Database["public"]["Enums"]["account_tier"]
@@ -1077,6 +1390,7 @@ export type Database = {
           country?: string | null
           created_at?: string
           created_by_admin?: string | null
+          cv_data?: Json | null
           email?: string
           first_name?: string
           gender?: Database["public"]["Enums"]["gender_type"] | null
@@ -1090,6 +1404,7 @@ export type Database = {
           participant_id?: string | null
           phone?: string | null
           profile_completion?: number
+          readiness_assessment?: Json | null
           role?: Database["public"]["Enums"]["user_role"]
           state?: string | null
           tier?: Database["public"]["Enums"]["account_tier"]

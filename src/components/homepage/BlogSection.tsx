@@ -1,16 +1,44 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/refs */
 // ============================================================================
 // iQuire — Blog Section (Phase 14.6 — DB-driven)
 // ============================================================================
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ScrollReveal } from '../common/ScrollReveal';
 import {
   fetchPublishedPosts,
   formatBlogDate,
   type BlogPostWithCategory,
 } from '../../services/blog.service';
 import styles from './BlogSection.module.css';
+
+// ============================================================================
+// Custom Hook for 4s Animation
+// ============================================================================
+const useSlideUp = (threshold = 0.1, dependency: any = null) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold }
+    );
+
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [threshold, dependency]);
+
+  return { ref, isVisible };
+};
 
 // ============================================================================
 // Fallback posts (used only if DB has zero published posts)
@@ -30,9 +58,9 @@ interface FallbackPost {
 const FALLBACK_POSTS: FallbackPost[] = [
   {
     id: 1,
-    title: '5 Skills Every Entry-Level Professional Needs in 2026',
+    title: '5 Skills Every Entry Level Professional Needs in 2026',
     excerpt:
-      "Discover the essential skills that employers are actively looking for in today's competitive global job market — and how to build them.",
+      "Discover the essential skills that employers are actively looking for in today's competitive global job market and how to build them.",
     category: 'Career Tips',
     date: 'March 15, 2026',
     readTime: '5 min read',
@@ -44,7 +72,7 @@ const FALLBACK_POSTS: FallbackPost[] = [
     id: 2,
     title: 'How AI is Transforming the Global Workplace',
     excerpt:
-      'Explore how artificial intelligence is creating new opportunities — and changing how we work, learn, and grow professionally.',
+      'Explore how artificial intelligence is creating new opportunities and changing how we work, learn, and grow professionally.',
     category: 'AI & Work',
     date: 'March 10, 2026',
     readTime: '7 min read',
@@ -54,9 +82,9 @@ const FALLBACK_POSTS: FallbackPost[] = [
   },
   {
     id: 3,
-    title: 'From Graduate to Professional: My IQuire Journey',
+    title: 'From Graduate to Professional: My iQuire Journey',
     excerpt:
-      'A real graduate shares how the IQuire Entry-Level Employability Skills Program transformed their career trajectory.',
+      'A real graduate shares how the iQuire Entry Level Employability Skills Program transformed their career trajectory.',
     category: 'Alumni Stories',
     date: 'March 5, 2026',
     readTime: '4 min read',
@@ -127,6 +155,10 @@ export const BlogSection: React.FC = () => {
   );
   const [isLoading, setIsLoading] = useState(true);
 
+  const headerAnim = useSlideUp();
+  const gridAnim = useSlideUp(0.1, posts.length);
+  const ctaAnim = useSlideUp();
+
   // --------------------------------------------------------------------------
   // Load posts
   // --------------------------------------------------------------------------
@@ -139,11 +171,8 @@ export const BlogSection: React.FC = () => {
 
       if (res.success && res.data && res.data.length > 0) {
         const allPosts = res.data;
-
-        // 1. Featured posts first (up to 3)
         const featured = allPosts.filter((p) => p.featured).slice(0, 3);
 
-        // 2. If we don't have 3 featured yet, top up with most recent
         let selected = featured;
         if (selected.length < 3) {
           const featuredIds = new Set(featured.map((p) => p.id));
@@ -172,46 +201,51 @@ export const BlogSection: React.FC = () => {
   return (
     <section className={styles.blog}>
       {/* ====================================================================
-          BACKGROUND SVG DECORATIONS
+          SVG NET GRID BACKGROUND
           ==================================================================== */}
-      <div className={styles.bgDecor} aria-hidden="true">
-        {/* Top Left Dotted Grid */}
-        <svg className={styles.dottedGridLeft} viewBox="0 0 100 100" fill="none">
-          {[...Array(4)].map((_, row) =>
-            [...Array(4)].map((_, col) => (
-              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#94a3b8" />
-            ))
-          )}
-        </svg>
-
-        {/* Top Right Floating Ring */}
-        <div className={styles.ringRight} />
-
-        {/* Bottom Left Abstract Leaf */}
-        <svg className={styles.leafLeft} viewBox="0 0 300 300" fill="none">
-          <path d="M -50 200 C 50 50, 200 0, 250 100 C 300 200, 150 300, 50 300 C -20 300, -100 280, -50 200 Z" fill="#D1FAE5" opacity="0.4" />
-        </svg>
-      </div>
-
-      {/* Background accents (Blur rings) */}
-      <div className={styles.bgAccentOne} aria-hidden="true" />
-      <div className={styles.bgAccentTwo} aria-hidden="true" />
+      <svg
+        className={styles.netGrid}
+        aria-hidden="true"
+        preserveAspectRatio="xMidYMid slice"
+        viewBox="0 0 1440 900"
+      >
+        <defs>
+          <pattern
+            id="blogNetPattern"
+            x="0"
+            y="0"
+            width="80"
+            height="80"
+            patternUnits="userSpaceOnUse"
+          >
+            <path
+              d="M 80 0 L 0 0 0 80"
+              fill="none"
+              stroke="#000000"
+              strokeWidth="1"
+            />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#blogNetPattern)" />
+      </svg>
 
       <div className={styles.container}>
         {/* ================================================================
             HEADER
             ================================================================ */}
-        <ScrollReveal animation="up" className={styles.header}>
-          <span className={styles.badge}>Insights</span>
-          <h2 className={styles.title}>
-            Insights for the{' '}
-            <span className={styles.highlight}>Modern Workforce</span>
-          </h2>
-          <p className={styles.description}>
-            Career tips, industry insights, and real stories from the IQuire
-            community — helping you stay ahead.
-          </p>
-        </ScrollReveal>
+        <div ref={headerAnim.ref} className={styles.header}>
+          <div className={`${styles.slideUpText} ${headerAnim.isVisible ? styles.isVisible : ''}`}>
+            <span className={styles.badge}>Blogs</span>
+            <h2 className={styles.title}>
+              Insights for the{' '}
+              <span className={styles.highlight}>Modern Workforce</span>
+            </h2>
+            <p className={styles.description}>
+              Career tips, industry insights, and real stories from the iQuire
+              community helping you stay ahead.
+            </p>
+          </div>
+        </div>
 
         {/* ================================================================
             POSTS GRID
@@ -223,90 +257,86 @@ export const BlogSection: React.FC = () => {
             ))}
           </div>
         ) : (
-          <ScrollReveal animation="up" stagger className={styles.grid}>
-            {posts.map((post) => {
-              const postHref = post.slug ? `/blog/${post.slug}` : '/blog';
+          <div ref={gridAnim.ref}>
+            <div className={`${styles.grid} ${styles.slideUpText} ${gridAnim.isVisible ? styles.isVisible : ''}`} style={{ transitionDelay: '0.15s' }}>
+              {posts.map((post) => {
+                const postHref = post.slug ? `/blog/${post.slug}` : '/blog';
 
-              return (
-                <article
-                  key={post.id}
-                  className={`${styles.postCard} ${
-                    styles[`accent-${post.accent}`]
-                  }`}
-                >
-                  <Link to={postHref} className={styles.postLink}>
-                    {/* Image */}
-                    <div className={styles.postImage}>
-                      {post.image ? (
-                        <img
-                          src={post.image}
-                          alt={post.title}
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className={styles.postImagePlaceholder}>📝</div>
-                      )}
-                      <span className={styles.postCategory}>
-                        {post.category}
-                      </span>
-                    </div>
-
-                    {/* Content */}
-                    <div className={styles.postContent}>
-                      <div className={styles.postMeta}>
-                        <span>{post.date}</span>
-                        <span className={styles.postMetaDot}>·</span>
-                        <span>{post.readTime}</span>
+                return (
+                  <article
+                    key={post.id}
+                    className={`${styles.postCard} ${
+                      styles[`accent-${post.accent}`]
+                    }`}
+                  >
+                    <Link to={postHref} className={styles.postLink}>
+                      {/* Image */}
+                      <div className={styles.postImage}>
+                        {post.image ? (
+                          <img
+                            src={post.image}
+                            alt={post.title}
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className={styles.postImagePlaceholder}>📝</div>
+                        )}
+                        <span className={styles.postCategory}>
+                          {post.category}
+                        </span>
                       </div>
 
-                      <h3 className={styles.postTitle}>{post.title}</h3>
+                      {/* Content */}
+                      <div className={styles.postContent}>
+                        <div className={styles.postMeta}>
+                          <span>{post.date}</span>
+                          <span className={styles.postMetaDot}>·</span>
+                          <span>{post.readTime}</span>
+                        </div>
 
-                      {post.excerpt && (
-                        <p className={styles.postExcerpt}>{post.excerpt}</p>
-                      )}
+                        <h3 className={styles.postTitle}>{post.title}</h3>
 
-                      <span className={styles.postCta}>
-                        Read more
-                        <svg
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                        >
-                          <path
-                            d="M5 12H19M19 12L12 5M19 12L12 19"
-                            stroke="currentColor"
-                            strokeWidth="2.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </span>
-                    </div>
-                  </Link>
-                </article>
-              );
-            })}
-          </ScrollReveal>
+                        {post.excerpt && (
+                          <p className={styles.postExcerpt}>{post.excerpt}</p>
+                        )}
+
+                        <span className={styles.postCta}>
+                          Read more
+                          <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                          >
+                            <path
+                              d="M5 12H19M19 12L12 5M19 12L12 19"
+                              stroke="currentColor"
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </span>
+                      </div>
+                    </Link>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
         )}
 
         {/* ================================================================
             FOOTER CTA
             ================================================================ */}
-        <ScrollReveal animation="zoom" delay={2} className={styles.footerCta}>
-          <Link to="/blog" className={styles.footerCtaButton}>
-            Read More Insights
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M5 12H19M19 12L12 5M19 12L12 19"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Link>
-        </ScrollReveal>
+        <div ref={ctaAnim.ref} className={styles.footerCta}>
+          <div className={`${styles.slideUpText} ${ctaAnim.isVisible ? styles.isVisible : ''}`} style={{ transitionDelay: '0.3s' }}>
+            <Link to="/blog" className={styles.footerCtaButton}>
+              Read More Insights
+
+            </Link>
+          </div>
+        </div>
       </div>
 
       {/* ================================================================
@@ -320,16 +350,22 @@ export const BlogSection: React.FC = () => {
           preserveAspectRatio="none"
           xmlns="http://www.w3.org/2000/svg"
         >
+          <defs>
+            <linearGradient id="blogWaveStroke" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#2BBBAD" />
+              <stop offset="100%" stopColor="#1E88E5" />
+            </linearGradient>
+          </defs>
           <path
             d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z"
             fill="none"
-            stroke="#F9A825"
+            stroke="url(#blogWaveStroke)"
             strokeWidth="3"
             opacity="0.6"
           />
           <path
             d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z"
-            fill="#0A192F"
+            fill="#d6eaff"
           />
         </svg>
       </div>

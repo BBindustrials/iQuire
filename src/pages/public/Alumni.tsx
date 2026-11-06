@@ -1,5 +1,5 @@
 // ============================================================================
-// iQuire — Public Alumni Directory (Phase 9B.2)
+// iQuire — Public Alumni Directory (Phase 17.21 — Slug routing)
 // ============================================================================
 // Full listing page with search, filter, and pagination-ready grid.
 // ============================================================================
@@ -124,9 +124,7 @@ export const Alumni: React.FC = () => {
   // --------------------------------------------------------------------------
   return (
     <div className={styles.alumniPage}>
-      {/* ================================================================
-          HERO
-          ================================================================ */}
+      {/* HERO */}
       <section className={styles.hero}>
         <div className={styles.heroBgBlobOne} aria-hidden="true" />
         <div className={styles.heroBgBlobTwo} aria-hidden="true" />
@@ -135,11 +133,10 @@ export const Alumni: React.FC = () => {
           <ScrollReveal animation="up" className={styles.heroContent}>
             <span className={styles.badge}>Alumni Directory</span>
             <h1 className={styles.heroTitle}>
-              Meet our{' '}
-              <span className={styles.highlight}>alumni.</span>
+              Meet our <span className={styles.highlight}>alumni.</span>
             </h1>
             <p className={styles.heroSubtitle}>
-              Explore the professionals who've grown through IQuire programmes.
+              Explore the professionals who've grown through iQuire programmes.
               Filter by programme or area of expertise to find the right
               candidate for your team — or the right mentor for your journey.
             </p>
@@ -147,9 +144,7 @@ export const Alumni: React.FC = () => {
         </div>
       </section>
 
-      {/* ================================================================
-          SEARCH + FILTERS
-          ================================================================ */}
+      {/* SEARCH + FILTERS */}
       <section className={styles.filterSection}>
         <div className="container">
           <ScrollReveal animation="up" className={styles.filterBar}>
@@ -226,9 +221,7 @@ export const Alumni: React.FC = () => {
         </div>
       </section>
 
-      {/* ================================================================
-          GRID
-          ================================================================ */}
+      {/* GRID */}
       <section className={styles.gridSection}>
         <div className="container">
           {isLoading ? (
@@ -244,16 +237,9 @@ export const Alumni: React.FC = () => {
               <p className={styles.errorText}>{error}</p>
             </div>
           ) : filtered.length === 0 ? (
-            <EmptyState
-              hasAlumni={alumni.length > 0}
-              onClear={clearFilters}
-            />
+            <EmptyState hasAlumni={alumni.length > 0} onClear={clearFilters} />
           ) : (
-            <ScrollReveal
-              animation="up"
-              stagger
-              className={styles.grid}
-            >
+            <ScrollReveal animation="up" stagger className={styles.grid}>
               {filtered.map((a) => (
                 <AlumniCard key={a.id} alumni={a} />
               ))}
@@ -262,19 +248,17 @@ export const Alumni: React.FC = () => {
         </div>
       </section>
 
-      {/* ================================================================
-          CTA — Hire / Recruit
-          ================================================================ */}
+      {/* CTA */}
       <section className={styles.ctaSection}>
         <div className="container">
           <ScrollReveal animation="up" className={styles.ctaCard}>
             <div className={styles.ctaIcon}>💼</div>
             <div className={styles.ctaContent}>
               <h2 className={styles.ctaTitle}>
-                Looking to hire IQuire-trained talent?
+                Looking to hire iQuire-trained talent?
               </h2>
               <p className={styles.ctaText}>
-                Register as a recruiter to access the full IQuire talent
+                Register as a recruiter to access the full iQuire talent
                 directory — filter by skills, location, and availability.
               </p>
             </div>
@@ -306,6 +290,9 @@ const AlumniCard: React.FC<AlumniCardProps> = ({ alumni }) => {
 
   // Show up to 3 expertise tags
   const topExpertise = (alumni.areas_of_expertise ?? []).slice(0, 3);
+
+  // Prefer slug, fallback to id for legacy records
+  const profileHref = `/alumni/${alumni.slug ?? alumni.id}`;
 
   return (
     <article className={styles.card}>
@@ -350,7 +337,7 @@ const AlumniCard: React.FC<AlumniCardProps> = ({ alumni }) => {
           </div>
         )}
 
-        <Link to={`/alumni/${alumni.id}`} className={styles.cardLink}>
+        <Link to={profileHref} className={styles.cardLink}>
           View Profile
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
             <path
@@ -384,11 +371,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({ hasAlumni, onClear }) => (
         : 'Alumni profiles will appear here as our community grows.'}
     </p>
     {hasAlumni && (
-      <button
-        type="button"
-        className={styles.emptyCta}
-        onClick={onClear}
-      >
+      <button type="button" className={styles.emptyCta} onClick={onClear}>
         Clear filters
       </button>
     )}

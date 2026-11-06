@@ -341,7 +341,7 @@ useEffect(() => {
             )}
             {!presetStudentId && !selectedUser && !errors.user_id && (
               <span className={styles.helperText}>
-                Start typing a name, email, or IQuire ID to search.
+                Start typing a name, email, or iQuire ID to search.
               </span>
             )}
           </div>

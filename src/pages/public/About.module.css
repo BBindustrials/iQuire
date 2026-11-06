@@ -8,20 +8,31 @@
   background-color: #ffffff;
 }
 
+/* Net Grid Overlay */
+.netGrid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.08;
+  pointer-events: none;
+}
+
 /* Common section utilities */
 .sectionBadge {
   display: inline-flex;
   align-items: center;
   padding: 0.4rem 1rem;
-  background-color: #F9A825;
-  color: #1A1A2E;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff;
   border-radius: 50px;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  box-shadow: 0 4px 12px rgba(249, 168, 37, 0.25);
+  box-shadow: 0 4px 14px rgba(43, 187, 173, 0.3);
   margin-bottom: 1.25rem;
 }
 
@@ -29,15 +40,15 @@
   display: inline-flex;
   align-items: center;
   padding: 0.4rem 1rem;
-  background-color: #F9A825;
-  color: #1A1A2E;
+  background: #ffffff;
+  color: #000000;
+  border: 1.5px solid #1E88E5;
   border-radius: 50px;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  box-shadow: 0 4px 12px rgba(249, 168, 37, 0.35);
   margin-bottom: 1.25rem;
 }
 
@@ -47,7 +58,7 @@
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -0.02em;
-  color: #0f172a;
+  color: #000000;
   margin: 0 0 1.5rem 0;
 }
 
@@ -57,13 +68,17 @@
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -0.02em;
-  color: #ffffff;
+  color: #000000;
   margin: 0 0 1.5rem 0;
 }
 
 .highlight {
-  color: #F57F17;
-  text-shadow: 0 2px 8px rgba(245, 127, 23, 0.2);
+  background: linear-gradient(90deg, #2BBBAD 0%, #1E88E5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
 }
 
 .sectionHeader {
@@ -79,7 +94,7 @@
 .hero {
   position: relative;
   padding: 6rem 0 5rem;
-  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  background: #d6eaff; /* Netted Blue Background */
   overflow: hidden;
 }
 
@@ -89,14 +104,14 @@
   border-radius: 50%;
   filter: blur(100px);
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
 }
 
 .heroBgBlobOne {
   width: 480px;
   height: 480px;
-  background: radial-gradient(circle, #1565C0 0%, transparent 70%);
-  opacity: 0.12;
+  background: radial-gradient(circle, #2BBBAD 0%, transparent 70%);
+  opacity: 0.15;
   top: -180px;
   right: -120px;
 }
@@ -104,15 +119,15 @@
 .heroBgBlobTwo {
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, #F9A825 0%, transparent 70%);
-  opacity: 0.1;
+  background: radial-gradient(circle, #1E88E5 0%, transparent 70%);
+  opacity: 0.15;
   bottom: -120px;
   left: -140px;
 }
 
 .heroContent {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   text-align: center;
   max-width: 900px;
   margin: 0 auto;
@@ -122,15 +137,15 @@
   display: inline-flex;
   align-items: center;
   padding: 0.4rem 1rem;
-  background-color: #F9A825;
-  color: #1A1A2E;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff;
   border-radius: 50px;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  box-shadow: 0 4px 12px rgba(249, 168, 37, 0.25);
+  box-shadow: 0 4px 14px rgba(43, 187, 173, 0.3);
   margin-bottom: 1.5rem;
 }
 
@@ -140,9 +155,8 @@
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.03em;
-  color: #0f172a;
+  color: #000000;
   margin: 0 0 1.5rem 0;
-  text-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
 }
 
 .heroSubtitle {
@@ -183,16 +197,16 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 1.02rem;
   line-height: 1.75;
-  color: #334155;
+  color: #000000;
   margin: 0;
 }
 
 .storyConclusion {
   font-weight: 700;
-  color: #0f172a !important;
+  color: #000000 !important;
   padding: 1.25rem 1.5rem;
-  background-color: #f0f9ff;
-  border-left: 4px solid #1565C0;
+  background-color: #f0fdfb;
+  border-left: 4px solid #2BBBAD;
   border-radius: 8px;
   margin-top: 0.5rem !important;
 }
@@ -219,19 +233,35 @@
   display: block;
 }
 
+.storyImagePlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  color: #64748b;
+  gap: 0.5rem;
+}
+
 /* ----------------------------------------------------------------------------
-   MISSION & VISION
+   MISSION & VISION (Netted Grey)
    ---------------------------------------------------------------------------- */
 
 .missionVision {
+  position: relative;
   padding: 6rem 0;
   background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  overflow: hidden;
 }
 
 .missionGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
+  position: relative;
+  z-index: 2;
 }
 
 .missionCard {
@@ -255,26 +285,33 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #1565C0 0%, #2E7D32 100%);
+  background: linear-gradient(90deg, #2BBBAD 0%, #1E88E5 100%);
 }
 
 .missionCard:hover {
   transform: translateY(-6px);
-  border-color: #F9A825;
+  border-color: #2BBBAD;
   box-shadow: 0 24px 48px -12px rgba(15, 23, 42, 0.15);
 }
 
 .missionIcon {
-  font-size: 2.5rem;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff;
   margin-bottom: 0.25rem;
+  box-shadow: 0 6px 16px -4px rgba(43, 187, 173, 0.4);
 }
 
 .missionTitle {
   font-family: 'Satoshi', sans-serif;
   font-size: 1.4rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   margin: 0;
   letter-spacing: -0.015em;
 }
@@ -283,7 +320,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.98rem;
   line-height: 1.75;
-  color: #475569;
+  color: #000000;
   margin: 0;
 }
 
@@ -319,7 +356,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #F9A825 0%, #F57F17 100%);
+  background: linear-gradient(90deg, #2BBBAD 0%, #1E88E5 100%);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.3s ease;
@@ -331,7 +368,7 @@
 
 .commitmentCard:hover {
   transform: translateY(-6px);
-  border-color: #F9A825;
+  border-color: #2BBBAD;
   box-shadow: 0 24px 48px -12px rgba(15, 23, 42, 0.12);
 }
 
@@ -350,14 +387,14 @@
 }
 
 .commitmentCard:hover .commitmentNumber {
-  color: #fef3c7;
+  color: #e0f7f2;
 }
 
 .commitmentTitle {
   font-family: 'Satoshi', sans-serif;
   font-size: 1.2rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   margin: 0 0 0.85rem 0;
   letter-spacing: -0.01em;
   position: relative;
@@ -369,77 +406,73 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.95rem;
   line-height: 1.7;
-  color: #475569;
+  color: #000000;
   margin: 0;
   position: relative;
   z-index: 1;
 }
 
 /* ----------------------------------------------------------------------------
-   IMPACT SNAPSHOT
+   IMPACT SNAPSHOT (Netted Light Blue + Flexes)
    ---------------------------------------------------------------------------- */
 
 .impactSnapshot {
   position: relative;
   padding: 6rem 0;
-  background: linear-gradient(135deg, #0f172a 0%, #1a2942 100%);
+  background: #d6eaff; 
   overflow: hidden;
 }
 
-.impactBgBlob {
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #F9A825 0%, transparent 70%);
-  opacity: 0.15;
-  filter: blur(120px);
-  top: -180px;
-  right: -140px;
-  pointer-events: none;
-}
-
 .impactGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
   position: relative;
   z-index: 1;
 }
 
+/* Capsule style flexes */
 .impactItem {
-  text-align: center;
-  padding: 2rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1.25rem;
+  background: #ffffff;
+  border: 1.5px solid rgba(43, 187, 173, 0.2);
+  border-radius: 50px;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
 }
 
 .impactItem:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(249, 168, 37, 0.4);
-  transform: translateY(-4px);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px -8px rgba(43, 187, 173, 0.3);
+  border-color: #2BBBAD;
 }
 
 .impactValue {
   font-family: 'Satoshi', sans-serif;
-  font-size: 2.75rem;
+  font-size: 0.95rem;
   font-weight: 800;
-  color: #F9A825;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  margin-bottom: 0.5rem;
-  text-shadow: 0 4px 12px rgba(249, 168, 37, 0.4);
+  letter-spacing: -0.01em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 50px;
+  color: #ffffff;
 }
+
+/* Accent colors matching the new system */
+.accent-teal { background: #2BBBAD; }
+.accent-gradient { background: linear-gradient(135deg, #2BBBAD, #1E88E5); }
+.accent-blue { background: #1E88E5; }
+.accent-cyan { background: #1a9c91; }
 
 .impactLabel {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.9rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.85);
-  letter-spacing: 0.01em;
+  font-weight: 700;
+  color: #000000;
+  white-space: nowrap;
 }
 
 /* ----------------------------------------------------------------------------
@@ -474,7 +507,7 @@
 .founderImageOffset {
   position: absolute;
   inset: 0;
-  background: #F9A825;
+  background: #2BBBAD;
   border-radius: 28px;
   transform: translate(-14px, 14px);
   z-index: 0;
@@ -488,14 +521,42 @@
   overflow: hidden;
   z-index: 1;
   box-shadow: 0 30px 60px -20px rgba(15, 23, 42, 0.25);
+  background-color: #f1f5f9;
 }
 
 .founderImageCard img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 5%;  /* ← anchors crop at face level for portraits */
+  object-position: 50% 5%; 
   display: block;
+}
+
+.founderImagePlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e0f7f2 0%, #d6eaff 100%);
+  color: #1E88E5;
+  gap: 0.5rem;
+}
+
+.founderImagePlaceholderIcon {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 4rem;
+  font-weight: 800;
+  opacity: 0.5;
+}
+
+.founderImagePlaceholderHint {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #000000;
+  opacity: 0.5;
 }
 
 .founderContent {
@@ -508,7 +569,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   margin: 0;
   letter-spacing: -0.02em;
   line-height: 1.15;
@@ -518,7 +579,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
-  color: #F57F17;
+  color: #2BBBAD;
   margin: 0;
   letter-spacing: 0.03em;
 }
@@ -527,7 +588,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.9rem;
   font-weight: 500;
-  color: #64748b;
+  color: #000000;
   margin: 0 0 1rem 0;
   letter-spacing: 0.01em;
 }
@@ -542,7 +603,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.98rem;
   line-height: 1.75;
-  color: #475569;
+  color: #000000;
   margin: 0;
 }
 
@@ -552,31 +613,35 @@
   gap: 0.5rem;
   align-self: flex-start;
   padding: 0.75rem 1.35rem;
-  background-color: #0077b5;
-  color: #ffffff;
+  background-color: #1E88E5;
+  color: #ffffff !important;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.88rem;
   font-weight: 700;
   border-radius: 50px;
-  text-decoration: none;
-  transition: all 0.2s ease;
+  text-decoration: none !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   margin-top: 0.75rem;
-  box-shadow: 0 6px 16px rgba(0, 119, 181, 0.25);
+  box-shadow: 0 6px 16px rgba(30, 136, 229, 0.25);
+  border: none;
 }
 
 .founderLinkedIn:hover {
-  background-color: #005f8e;
+  background-color: #1E88E5 !important;
+  color: #ffffff !important;
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(0, 119, 181, 0.35);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
 }
 
 /* ----------------------------------------------------------------------------
-   FINAL CTA
+   FINAL CTA (Netted Light Blue)
    ---------------------------------------------------------------------------- */
 
 .cta {
-  padding: 5rem 0 6rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  position: relative;
+  padding: 6rem 0;
+  background: #d6eaff;
+  overflow: hidden;
 }
 
 .ctaInner {
@@ -593,7 +658,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   margin: 0;
   letter-spacing: -0.02em;
   line-height: 1.15;
@@ -602,9 +667,10 @@
 .ctaSubtitle {
   font-family: 'Satoshi', sans-serif;
   font-size: 1.05rem;
-  color: #475569;
+  color: #000000;
   margin: 0;
   line-height: 1.7;
+  font-weight: 500;
 }
 
 .ctaButtons {
@@ -613,14 +679,15 @@
   gap: 1.5rem;
   flex-wrap: wrap;
   justify-content: center;
+  margin-top: 1rem;
 }
 
 .ctaSecondary {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
-  color: #1565C0;
-  text-decoration: none;
+  color: #1E88E5 !important;
+  text-decoration: none !important;
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
@@ -628,7 +695,7 @@
 }
 
 .ctaSecondary:hover {
-  color: #0D47A1;
+  color: #2BBBAD !important;
   gap: 0.5rem;
 }
 
@@ -652,10 +719,6 @@
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-
-  .impactGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 @media (max-width: 768px) {
@@ -664,7 +727,8 @@
   .missionVision,
   .commitment,
   .impactSnapshot,
-  .founder { padding: 4rem 0; }
+  .founder,
+  .cta { padding: 4rem 0; }
 
   .heroTitle { font-size: 2rem; }
   .heroSubtitle { font-size: 1rem; }
@@ -674,7 +738,9 @@
 
   .sectionHeader { margin-bottom: 2.5rem; }
 
-  .impactValue { font-size: 2rem; }
+  .impactGrid {
+    gap: 0.75rem;
+  }
 
   .ctaButtons {
     flex-direction: column;
@@ -684,13 +750,14 @@
 
 @media (max-width: 480px) {
   .impactGrid {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
+    flex-direction: column;
+    width: 100%;
   }
 
-  .impactItem { padding: 1.5rem 0.75rem; }
-  .impactValue { font-size: 1.75rem; }
-  .impactLabel { font-size: 0.8rem; }
+  .impactItem {
+    width: 100%;
+    justify-content: space-between;
+  }
 
   .missionCard { padding: 1.75rem 1.25rem; }
   .commitmentCard { padding: 2rem 1.25rem 1.5rem; }
@@ -702,4 +769,29 @@
     border-radius: 20px;
   }
   .founderImageCard { border-radius: 20px; }
+}
+
+/* ============================================================================
+   TEXT SLIDE-UP ANIMATION (4 SECONDS)
+   ============================================================================ */
+
+.slideUpText {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.isVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slideUpText {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }

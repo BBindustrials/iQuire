@@ -1,11 +1,11 @@
+/* eslint-disable react-hooks/refs */
 // ============================================================================
 // iQuire — Hire From Us Section (Phase 14.7 — DB-driven)
 // ============================================================================
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../common/Button';
-import { ScrollReveal } from '../common/ScrollReveal';
 import {
   fetchFeaturedAlumni,
   type Alumni,
@@ -13,28 +13,27 @@ import {
 import styles from './RecruiterSection.module.css';
 
 // ============================================================================
-// Talent categories (still hardcoded — this is a static informational strip)
+// Talent categories
 // ============================================================================
 
 interface TalentNeed {
   id: string;
-  emoji: string;
   label: string;
 }
 
 const TALENT_NEEDS: TalentNeed[] = [
-  { id: 'interns', emoji: '🎓', label: 'Interns' },
-  { id: 'apprentices', emoji: '🛠️', label: 'Apprentices' },
-  { id: 'entry-level', emoji: '🚀', label: 'Entry-Level' },
-  { id: 'full-time', emoji: '⏱️', label: 'Full-Time' },
-  { id: 'part-time', emoji: '📅', label: 'Part-Time' },
-  { id: 'volunteers', emoji: '🤝', label: 'Volunteers' },
-  { id: 'freelancers', emoji: '💻', label: 'Freelancers' },
-  { id: 'tech', emoji: '⚡', label: 'Tech Talent' },
+  { id: 'interns', label: 'Interns' },
+  { id: 'apprentices', label: 'Apprentices' },
+  { id: 'entry-level', label: 'Entry Level' },
+  { id: 'full-time', label: 'Full Time' },
+  { id: 'part-time', label: 'Part Time' },
+  { id: 'volunteers', label: 'Volunteers' },
+  { id: 'freelancers', label: 'Freelancers' },
+  { id: 'tech', label: 'Tech Talent' },
 ];
 
 // ============================================================================
-// Fallback candidate (used only if DB has 0 featured + 0 published alumni)
+// Fallback candidate
 // ============================================================================
 
 interface DisplayCandidate {
@@ -44,7 +43,7 @@ interface DisplayCandidate {
   careerArea: string;
   skills: string[];
   summary: string;
-  iquireTraining: string;
+  iQuireTraining: string;
   linkedin: string;
   photoUrl: string | null;
 }
@@ -56,8 +55,8 @@ const FALLBACK_CANDIDATE: DisplayCandidate = {
   careerArea: 'Product & Technology',
   skills: ['Product Management', 'Agile', 'User Research', 'Data Analysis'],
   summary:
-    'Tech 360 graduate with a background in business analysis. Built 3 real product case studies during training. Looking for entry-level PM roles.',
-  iquireTraining: 'Tech 360 · Cohort 4',
+    'Tech 360 graduate with a background in business analysis. Built 3 real product case studies during training. Looking for entry level PM roles.',
+  iQuireTraining: 'Tech 360 · Cohort 4',
   linkedin: '#',
   photoUrl: null,
 };
@@ -82,12 +81,37 @@ const alumniToDisplay = (a: Alumni): DisplayCandidate => ({
   careerArea: a.areas_of_expertise?.[0] ?? 'Professional',
   skills: (a.key_skills ?? []).slice(0, 4),
   summary: a.short_summary ?? '',
-  iquireTraining: a.programme
+  iQuireTraining: a.programme
     ? `${a.programme}${a.cohort ? ` · ${a.cohort}` : ''}`
-    : 'IQuire Programme',
+    : 'iQuire Programme',
   linkedin: a.linkedin_url ?? '#',
   photoUrl: a.photo_url,
 });
+
+// ============================================================================
+// Custom Hook for 4s Animation
+// ============================================================================
+const useSlideUp = (threshold = 0.1) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold }
+    );
+
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [threshold]);
+
+  return { ref, isVisible };
+};
 
 // ============================================================================
 // Component
@@ -97,9 +121,10 @@ export const RecruiterSection: React.FC = () => {
   const [candidate, setCandidate] = useState<DisplayCandidate>(FALLBACK_CANDIDATE);
   const [isLoading, setIsLoading] = useState(true);
 
-  // --------------------------------------------------------------------------
-  // Load top featured alumni
-  // --------------------------------------------------------------------------
+  const contentAnim = useSlideUp();
+  const cardAnim = useSlideUp();
+  const stripAnim = useSlideUp();
+
   useEffect(() => {
     let isMounted = true;
 
@@ -120,32 +145,36 @@ export const RecruiterSection: React.FC = () => {
     };
   }, []);
 
-  // --------------------------------------------------------------------------
-  // Render
-  // --------------------------------------------------------------------------
   return (
     <section className={styles.hireFromUs}>
       {/* ====================================================================
-          BACKGROUND SVG DECORATIONS
+          SVG NET GRID BACKGROUND
           ==================================================================== */}
-      <div className={styles.bgDecor} aria-hidden="true">
-        {/* Top Left Dotted Grid */}
-        <svg className={styles.dottedGridLeft} viewBox="0 0 100 100" fill="none">
-          {[...Array(4)].map((_, row) =>
-            [...Array(4)].map((_, col) => (
-              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#ffffff" opacity="0.15" />
-            ))
-          )}
-        </svg>
-
-        {/* Top Right Floating Ring */}
-        <div className={styles.ringRight} />
-
-        {/* Bottom Right Abstract Shape */}
-        <svg className={styles.shapeRight} viewBox="0 0 300 300" fill="none">
-          <path d="M 350 200 C 250 50, 100 0, 50 100 C 0 200, 150 300, 250 300 C 320 300, 400 280, 350 200 Z" fill="#ffffff" opacity="0.03" />
-        </svg>
-      </div>
+      <svg
+        className={styles.netGrid}
+        aria-hidden="true"
+        preserveAspectRatio="xMidYMid slice"
+        viewBox="0 0 1440 900"
+      >
+        <defs>
+          <pattern
+            id="recruiterNetPattern"
+            x="0"
+            y="0"
+            width="80"
+            height="80"
+            patternUnits="userSpaceOnUse"
+          >
+            <path
+              d="M 80 0 L 0 0 0 80"
+              fill="none"
+              stroke="#000000"
+              strokeWidth="1"
+            />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#recruiterNetPattern)" />
+      </svg>
 
       {/* Background blobs */}
       <div className={styles.bgBlobOne} aria-hidden="true" />
@@ -156,93 +185,84 @@ export const RecruiterSection: React.FC = () => {
           {/* ==============================================================
               LEFT — Copy
               ============================================================== */}
-          <div className={styles.contentColumn}>
-            <ScrollReveal animation="left">
-              <span className={styles.badge}>For Recruiters</span>
-              <h2 className={styles.title}>
-                Hire talent that&apos;s{' '}
-                <span className={styles.highlight}>ready to work.</span>
-              </h2>
-              <p className={styles.subtitle}>
-                Access a growing pool of young professionals trained and
-                verified by IQuire. Every candidate has gone through real
-                work-readiness programs — not just certificates.
-              </p>
-            </ScrollReveal>
+          <div ref={contentAnim.ref} className={`${styles.contentColumn} ${styles.slideUpText} ${contentAnim.isVisible ? styles.isVisible : ''}`}>
+            <span className={styles.badge}>For Recruiters</span>
+            <h2 className={styles.title}>
+              Hire talent that&apos;s{' '}
+              <span className={styles.highlight}>ready to work.</span>
+            </h2>
+            <p className={styles.subtitle}>
+              Access a growing pool of young professionals trained and
+              verified by iQuire. Every candidate has gone through real
+              work readiness programs not just certificates.
+            </p>
 
-            <ScrollReveal animation="left" delay={1}>
-              <div className={styles.valueProps}>
-                <div className={styles.valueProp}>
-                  <div className={styles.valuePropIcon}>✓</div>
-                  <div>
-                    <strong>Pre-trained candidates</strong>
-                    <span>
-                      Every IQuire member completes work-readiness training
-                      before appearing in the talent pool.
-                    </span>
-                  </div>
-                </div>
-                <div className={styles.valueProp}>
-                  <div className={styles.valuePropIcon}>✓</div>
-                  <div>
-                    <strong>Verified profiles</strong>
-                    <span>
-                      Skills, education, and readiness are checked — no resume
-                      padding.
-                    </span>
-                  </div>
-                </div>
-                <div className={styles.valueProp}>
-                  <div className={styles.valuePropIcon}>✓</div>
-                  <div>
-                    <strong>Global-ready talent</strong>
-                    <span>
-                      Diverse candidates across Africa, Europe, and beyond —
-                      trained for modern work.
-                    </span>
-                  </div>
+            <div className={styles.valueProps}>
+              <div className={styles.valueProp}>
+                <div className={styles.valuePropIcon}>✓</div>
+                <div>
+                  <strong>Pre-trained candidates</strong>
+                  <span>
+                    Every iQuire member completes work readiness training
+                    before appearing in the talent pool.
+                  </span>
                 </div>
               </div>
-            </ScrollReveal>
-
-            <ScrollReveal animation="left" delay={2}>
-              <div className={styles.talentNeeds}>
-                <h3 className={styles.talentNeedsLabel}>Who you can hire:</h3>
-                <div className={styles.talentChips}>
-                  {TALENT_NEEDS.map((need) => (
-                    <span key={need.id} className={styles.talentChip}>
-                      <span className={styles.talentChipEmoji}>{need.emoji}</span>
-                      {need.label}
-                    </span>
-                  ))}
+              <div className={styles.valueProp}>
+                <div className={styles.valuePropIcon}>✓</div>
+                <div>
+                  <strong>Verified profiles</strong>
+                  <span>
+                    Skills, education, and readiness are checked. No resume
+                    padding.
+                  </span>
                 </div>
               </div>
-            </ScrollReveal>
-
-            <ScrollReveal animation="up" delay={3}>
-              <div className={styles.ctaGroup}>
-                <Button
-                  variant="primary"
-                  color="gradient"
-                  size="lg"
-                  href="/hire-from-us"
-                >
-                  Hire From Us
-                </Button>
-                <Link
-                  to="/register/recruiter"
-                  className={styles.secondaryLink}
-                >
-                  Register as Recruiter →
-                </Link>
+              <div className={styles.valueProp}>
+                <div className={styles.valuePropIcon}>✓</div>
+                <div>
+                  <strong>Global ready talent</strong>
+                  <span>
+                    Diverse candidates across Africa, Europe, and beyond 
+                    trained for modern work.
+                  </span>
+                </div>
               </div>
-            </ScrollReveal>
+            </div>
+
+            <div className={styles.talentNeeds}>
+              <h3 className={styles.talentNeedsLabel}>Who you can hire:</h3>
+              <div className={styles.talentChips}>
+                {TALENT_NEEDS.map((need) => (
+                  <span key={need.id} className={styles.talentChip}>
+                    {need.label}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className={styles.ctaGroup}>
+              <Button
+                variant="primary"
+                color="gradient"
+                size="lg"
+                href="/hire-from-us"
+              >
+                Hire From Us
+              </Button>
+              <Link
+                to="/register/recruiter"
+                className={styles.secondaryLink}
+              >
+                Register as Recruiter →
+              </Link>
+            </div>
           </div>
 
           {/* ==============================================================
               RIGHT — Featured candidate preview
               ============================================================== */}
-          <ScrollReveal animation="right" delay={1} className={styles.visualColumn}>
+          <div ref={cardAnim.ref} className={`${styles.visualColumn} ${styles.slideUpText} ${cardAnim.isVisible ? styles.isVisible : ''}`}>
             {isLoading ? (
               <div className={styles.candidateSkeleton} />
             ) : (
@@ -312,10 +332,10 @@ export const RecruiterSection: React.FC = () => {
 
                   <div className={styles.candidateSection}>
                     <h4 className={styles.candidateSectionLabel}>
-                      IQuire Training
+                      iQuire Training
                     </h4>
                     <span className={styles.trainingPill}>
-                      🎓 {candidate.iquireTraining}
+                      {candidate.iQuireTraining}
                     </span>
                   </div>
                 </div>
@@ -347,26 +367,26 @@ export const RecruiterSection: React.FC = () => {
                     </Link>
                   )}
                   <span className={styles.candidateNote}>
-                    Preview only — full profile available after recruiter
+                    Preview only full profile available after recruiter
                     verification.
                   </span>
                 </div>
               </div>
             )}
-          </ScrollReveal>
+          </div>
         </div>
 
         {/* ==============================================================
             Bottom CTA strip
             ============================================================== */}
-        <ScrollReveal animation="up" delay={2}>
+        <div ref={stripAnim.ref} className={`${styles.slideUpText} ${stripAnim.isVisible ? styles.isVisible : ''}`}>
           <div className={styles.bottomStrip}>
             <div className={styles.bottomStripContent}>
               <h3 className={styles.bottomStripTitle}>
-                Ready to discover work-ready talent?
+                Ready to discover work ready talent?
               </h3>
               <p className={styles.bottomStripText}>
-                Register your organisation to access the full IQuire talent
+                Register your organisation to access the full iQuire talent
                 directory, filter by role, skills, and location.
               </p>
             </div>
@@ -379,30 +399,7 @@ export const RecruiterSection: React.FC = () => {
               Browse Talent
             </Button>
           </div>
-        </ScrollReveal>
-      </div>
-
-      {/* BOTTOM demarcation */}
-      <div className={styles.demarcationBottom} aria-hidden="true">
-        <div className={styles.demarcationLabel}></div>
-        <svg
-          className={styles.demarcationWave}
-          viewBox="0 0 1440 120"
-          preserveAspectRatio="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z"
-            fill="none"
-            stroke="#F9A825"
-            strokeWidth="3"
-            opacity="0.6"
-          />
-          <path
-            d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z"
-            fill="#f8fafc"
-          />
-        </svg>
+        </div>
       </div>
     </section>
   );

@@ -1,132 +1,82 @@
 @import '../../styles/theme.css';
 
 /* ============================================================================
-   Programs / Courses Section
+   Programs Section — Full-Bleed Marquee
    ============================================================================ */
 
 .programs {
   position: relative;
-  /* Reduced top padding to move the content up */
-  padding: 5rem 0 8rem;
-  background-color: #ffffff;
+  padding: 12rem 0 7rem;
+  background: #d6eaff;
   overflow: hidden;
 }
 
-/* ----------------------------------------------------------------------------
-   Background Decorations
-   ---------------------------------------------------------------------------- */
-
-.bgDecor {
+.netGrid {
   position: absolute;
   inset: 0;
-  pointer-events: none;
+  width: 100%;
+  height: 100%;
   z-index: 0;
-  overflow: hidden;
+  opacity: 0.08;
+  pointer-events: none;
 }
 
-/* Top Left */
-.dottedGridLeft {
+.concaveTop {
   position: absolute;
-  top: 8%;
-  left: 3%;
-  width: 100px;
-  height: 100px;
-  opacity: 0.5;
-}
-.circleTopLeft {
-  position: absolute;
-  top: 25%;
-  left: 8%;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 4px solid #D1FAE5;
-  opacity: 0.6;
-}
-
-/* Top Right */
-.leafTopRight {
-  position: absolute;
-  top: -50px;
-  right: -60px;
-  width: 400px;
-  height: 400px;
-  transform: rotate(-20deg);
-}
-.ringsTopRight {
-  position: absolute;
-  top: 15%;
-  right: 5%;
-  width: 150px;
-  height: 150px;
-}
-
-/* Bottom Left */
-.leafBottomLeft {
-  position: absolute;
-  bottom: -80px;
-  left: -80px;
-  width: 350px;
-  height: 350px;
-  transform: rotate(15deg);
-}
-.circleBottomLeft {
-  position: absolute;
-  bottom: 20%;
-  left: 12%;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background-color: #FEF3C7;
-  opacity: 0.8;
-}
-
-/* Bottom Right */
-.dottedGridRight {
-  position: absolute;
-  bottom: 15%;
-  right: 4%;
-  width: 100px;
-  height: 100px;
-  opacity: 0.5;
-}
-.blobBottomRight {
-  position: absolute;
-  bottom: 5%;
-  right: 10%;
-  width: 120px;
+  top: 0;
+  left: -5%;
+  width: 110%;
   height: 120px;
-  background: radial-gradient(circle, #f0fdf4 0%, transparent 70%);
-  border-radius: 50%;
-  opacity: 0.8;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
 }
 
-/* ----------------------------------------------------------------------------
+.concaveTop::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: 0;
+  width: 100%;
+  height: 200%;
+  background: #ffffff;
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.06);
+}
+
+/* ============================================================================
    Header
-   ---------------------------------------------------------------------------- */
+   ============================================================================ */
 
 .header {
   text-align: center;
   max-width: 720px;
-  /* Reduced bottom margin to pull cards up */
   margin: 0 auto 3rem;
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1),
+    transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.headerVisible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.4rem 1rem;
-  background-color: #F9A825;
-  color: #1A1A2E;
+  padding: 0.4rem 1.1rem;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff;
   border-radius: 50px;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  box-shadow: 0 4px 12px rgba(249, 168, 37, 0.25);
   margin-bottom: 1.25rem;
 }
 
@@ -136,14 +86,17 @@
   font-weight: 800;
   line-height: 1.12;
   letter-spacing: -0.025em;
-  color: #0f172a;
+  color: #000000;
   margin: 0 0 1rem 0;
-  text-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
 }
 
 .highlight {
-  color: #F57F17;
-  text-shadow: 0 2px 8px rgba(245, 127, 23, 0.2);
+  background: linear-gradient(90deg, #2BBBAD 0%, #1E88E5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
 }
 
 .subtitle {
@@ -155,215 +108,379 @@
   margin: 0;
 }
 
-/* ----------------------------------------------------------------------------
-   Cards grid
-   ---------------------------------------------------------------------------- */
+/* ============================================================================
+   MARQUEE — FULL BLEED
+   ============================================================================ */
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.75rem;
-  margin-bottom: 3rem;
+.marqueeWrapper {
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  overflow: hidden;
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+  padding: 1rem 0;
+
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 3%,
+    black 97%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 3%,
+    black 97%,
+    transparent 100%
+  );
 }
 
-/* ----------------------------------------------------------------------------
-   Card
-   ---------------------------------------------------------------------------- */
+.marqueeTrack {
+  display: flex;
+  gap: 1.75rem;
+  width: max-content;
+  animation: scrollLeft 60s linear infinite;
+}
+
+.marqueeWrapper:hover .marqueeTrack {
+  animation-play-state: paused;
+}
+
+@keyframes scrollLeft {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ============================================================================
+   Card — Premium Layout
+   ============================================================================ */
 
 .card {
-  position: relative;
+  display: flex;
+  flex-direction: row;
   background-color: #ffffff;
-  border: 1.5px solid #e5e7eb;
   border-radius: 20px;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.08);
+  border: 1px solid #e2e8f0;
+  min-height: 380px;
+  width: 620px;
+  flex-shrink: 0;
   transition: all 0.3s ease;
-  box-shadow: 0 8px 24px -12px rgba(15, 23, 42, 0.1);
 }
 
 .card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 24px 48px -16px rgba(15, 23, 42, 0.2);
+  box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.15);
+  transform: translateY(-4px);
+  border-color: rgba(43, 187, 173, 0.3);
 }
 
-/* Accent top border */
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  z-index: 3;
-  transition: height 0.3s ease;
-}
-
-.card:hover::before {
-  height: 6px;
-}
-
-.accent-blue::before { background: linear-gradient(90deg, #1565C0, #0D47A1); }
-.accent-gradient::before { background: linear-gradient(90deg, #00A878, #0077C8); }
-.accent-purple::before { background: linear-gradient(90deg, #7C3AED, #5B21B6); }
-.accent-orange::before { background: linear-gradient(90deg, #F9A825, #F57F17); }
-
-/* ----------------------------------------------------------------------------
-   Card image
-   ---------------------------------------------------------------------------- */
-
-.cardImage {
+/* LEFT: Image at full brightness, with glassmorphism overlay */
+.cardLeft {
   position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 3;
+  flex-shrink: 0;
+  width: 240px;
+  background: #0f172a;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.25rem;
   overflow: hidden;
-  background-color: #f1f5f9;
 }
 
-.cardImage img {
+.cardLeftImage {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
-  transition: transform 0.5s ease;
+  z-index: 0;
 }
 
-.card:hover .cardImage img {
-  transform: scale(1.05);
-}
-
-.durationBadge {
+/* Elegant bottom gradient so text is readable */
+.cardLeftOverlay {
   position: absolute;
-  bottom: 0.75rem;
-  left: 0.75rem;
-  padding: 0.35rem 0.75rem;
-  background-color: rgba(15, 23, 42, 0.85);
-  color: #ffffff;
-  font-family: 'Satoshi', sans-serif;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  border-radius: 50px;
-  backdrop-filter: blur(6px);
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(10, 25, 47, 0.9) 0%,
+    rgba(10, 25, 47, 0.4) 40%,
+    transparent 100%
+  );
+  z-index: 1;
+}
+
+.cardLeftContent {
+  position: relative;
   z-index: 2;
 }
 
-/* ----------------------------------------------------------------------------
-   Card body
-   ---------------------------------------------------------------------------- */
-
-.cardBody {
-  padding: 1.35rem 1.35rem 1.5rem;
+.cardLeftFor {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.4rem;
+}
+
+.cardLeftForLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #2BBBAD;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cardLeftForList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.cardLeftForList li {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.4;
+  position: relative;
+  padding-left: 0.8rem;
+}
+
+.cardLeftForList li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #2BBBAD;
+}
+
+/* RIGHT: Content */
+.cardRight {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1.5rem 1.25rem;
+  gap: 0.8rem;
+  min-width: 0;
 }
 
 .cardName {
   font-family: 'Satoshi', sans-serif;
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   font-weight: 800;
-  line-height: 1.25;
+  color: #000000;
+  margin: 0;
+  line-height: 1.2;
   letter-spacing: -0.015em;
-  color: #0f172a;
-  margin: 0;
 }
-
-.cardTagline {
-  font-family: 'Satoshi', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 700;
-  font-style: italic;
-  margin: 0;
-  color: #475569;
-}
-
-.accent-blue .cardTagline { color: #1565C0; }
-.accent-gradient .cardTagline { color: #0077C8; }
-.accent-purple .cardTagline { color: #7C3AED; }
-.accent-orange .cardTagline { color: #F57F17; }
 
 .cardDescription {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.85rem;
-  line-height: 1.6;
-  color: #475569;
+  line-height: 1.55;
+  color: #1a1a1a;
   margin: 0;
-  flex: 1;
 }
 
-.audienceRow {
+/* Meta strip */
+.cardMetaStrip {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 0.25rem;
+  gap: 0.8rem;
+  padding: 0.7rem 0;
+  border-top: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f1f5f9;
 }
 
-.audiencePill {
+.cardMetaItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.cardMetaLabel {
   font-family: 'Satoshi', sans-serif;
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 0.25rem 0.6rem;
-  background-color: #f1f5f9;
-  color: #475569;
-  border-radius: 50px;
-  letter-spacing: 0.01em;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.readMore {
+.cardMetaValue {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #000000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardMetaDivider {
+  width: 1px;
+  background-color: #f1f5f9;
+  flex-shrink: 0;
+}
+
+/* Next cohort strip */
+.cardCohortStrip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.55rem 0.8rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #f1f5f9;
+}
+
+.cardCohortLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.cardCohortValue {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #1E88E5; /* Brand Blue */
+}
+
+/* Bottom row: Tuition + CTA */
+.cardBottomRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.cardTuitionBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.cardTuitionLabel {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cardTuitionValue {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #000000;
+  line-height: 1;
+}
+
+.cardTuitionNote {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.65rem;
+  color: #64748b;
+  margin-top: 0.2rem;
+}
+
+/* Updated CTA Button to match global style */
+.cardCta {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  margin-top: 0.75rem;
+  padding: 0.6rem 1rem;
+  background-color: #ffffff;
+  color: #1E88E5 !important;
+  border: 1.5px solid #1E88E5;
+  border-radius: 8px;
   font-family: 'Satoshi', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  text-decoration: none;
+  text-decoration: none !important;
   transition: all 0.2s ease;
-  align-self: flex-start;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.readMore svg {
-  transition: transform 0.2s ease;
+.cardCta:hover {
+  background-color: #1E88E5 !important;
+  color: #ffffff !important;
+  border-color: #1E88E5 !important;
+  box-shadow: 0 4px 12px rgba(30, 136, 229, 0.2);
 }
 
-.accent-blue .readMore { color: #1565C0; }
-.accent-gradient .readMore { color: #0077C8; }
-.accent-purple .readMore { color: #7C3AED; }
-.accent-orange .readMore { color: #F57F17; }
+/* ============================================================================
+   Loading skeleton
+   ============================================================================ */
 
-.readMore:hover {
-  gap: 0.6rem;
+.loadingRowFull {
+  display: flex;
+  gap: 1.75rem;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  overflow: hidden;
+  padding: 1rem calc(50vw - 50%);
+  margin-bottom: 3rem;
 }
 
-.readMore:hover svg {
-  transform: translateX(3px);
+.skeletonCard {
+  height: 380px;
+  width: 620px;
+  flex-shrink: 0;
+  background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+  background-size: 200% 100%;
+  border-radius: 20px;
+  animation: shimmer 1.4s infinite;
 }
 
-/* ----------------------------------------------------------------------------
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ============================================================================
    Scholarship note
-   ---------------------------------------------------------------------------- */
+   ============================================================================ */
 
 .scholarshipNote {
   display: flex;
   align-items: center;
   gap: 1.25rem;
   padding: 1.35rem 1.75rem;
-  background: linear-gradient(135deg, #fffbf0 0%, #fef3c7 100%);
-  border: 1.5px solid #fde68a;
-  border-left: 5px solid #F9A825;
+  background: #ffffff;
+  border: 1.5px solid rgba(43, 187, 173, 0.25);
+  border-left: 5px solid #2BBBAD;
   border-radius: 16px;
   margin-bottom: 3rem;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .scholarshipIcon {
-  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff;
 }
 
 .scholarshipText {
@@ -378,14 +495,13 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 1rem;
   font-weight: 800;
-  color: #713f12;
-  letter-spacing: -0.01em;
+  color: #000000;
 }
 
 .scholarshipText span {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.9rem;
-  color: #78350f;
+  color: #1a1a1a;
   line-height: 1.55;
 }
 
@@ -393,112 +509,103 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.9rem;
   font-weight: 700;
-  color: #92400e;
-  text-decoration: none;
+  color: #1E88E5 !important;
+  text-decoration: none !important;
   white-space: nowrap;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
 }
 
 .scholarshipLink:hover {
-  color: #713f12;
-  text-decoration: underline;
+  color: #1E88E5 !important; /* Stop global green */
+  text-decoration: underline !important;
 }
-
-/* ----------------------------------------------------------------------------
-   Section CTA
-   ---------------------------------------------------------------------------- */
 
 .ctaWrapper {
   text-align: center;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
-/* ============================================================================
-   DEMARCATION — bottom only
-   ============================================================================ */
-
-.demarcationBottom {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  line-height: 0;
-  z-index: 3;
-  pointer-events: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.demarcationBottom .demarcationWave {
-  width: 100%;
-  height: 120px;
-  display: block;
-  filter: drop-shadow(0 -6px 16px rgba(0, 0, 0, 0.15))
-    drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.08));
+.errorBox,
+.emptyBox {
+  padding: 3rem 1rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 16px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  color: #000000;
+  margin-bottom: 3rem;
 }
 
 /* ============================================================================
    Responsive
    ============================================================================ */
 
-@media (max-width: 1200px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+@media (max-width: 900px) {
+  .marqueeWrapper {
+    -webkit-mask-image: none;
+    mask-image: none;
+    padding: 0 1rem;
+    width: 100%;
+    margin-left: 0;
+  }
+  .marqueeTrack {
+    animation: none;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  .marqueeTrack::-webkit-scrollbar {
+    height: 6px;
+  }
+  .marqueeTrack::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+  .card {
+    scroll-snap-align: start;
+    width: 85vw;
+    min-width: 320px;
+  }
+  .loadingRowFull {
+    width: 100%;
+    margin-left: 0;
+    padding: 0 1rem;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .programs {
-    padding: 4rem 0 6rem;
+    padding: 9rem 0 5rem;
   }
-
-  .header {
-    margin-bottom: 2rem;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    margin-bottom: 2.5rem;
-  }
-
-  .scholarshipNote {
+  .card {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-    padding: 1.25rem 1.35rem;
+    min-height: auto;
+    width: 85vw;
   }
-
-  .scholarshipLink {
-    align-self: flex-start;
+  .cardLeft {
+    width: 100%;
+    height: 200px;
+    padding: 1rem;
   }
-
-  .demarcationBottom .demarcationWave {
-    height: 90px;
+  .cardMetaStrip {
+    flex-wrap: wrap;
   }
-
-  /* Dim the background SVGs on mobile so they don't distract */
-  .bgDecor {
-    opacity: 0.4;
+  .cardMetaDivider {
+    display: none;
   }
-}
-
-@media (max-width: 480px) {
-  .cardBody {
-    padding: 1.1rem;
+  .cardBottomRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.25rem;
   }
-  .cardName {
-    font-size: 1.05rem;
+  .cardCta {
+    justify-content: center;
   }
-  .cardDescription {
-    font-size: 0.82rem;
-  }
-
-  .demarcationBottom .demarcationWave {
-    height: 70px;
+  .concaveTop {
+    height: 80px;
   }
 }

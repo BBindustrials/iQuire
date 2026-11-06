@@ -156,7 +156,7 @@ export const AdminAdminForm: React.FC = () => {
           </Link>
           <h1 className={styles.pageTitle}>Create Admin</h1>
           <p className={styles.pageSubtitle}>
-            Add a new administrator to the IQuire team. A temporary password
+            Add a new administrator to the iQuire team. A temporary password
             will be generated — the new admin can reset it on first login.
           </p>
         </div>
@@ -210,7 +210,7 @@ export const AdminAdminForm: React.FC = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              placeholder="admin@iquire.co"
+              placeholder="admin@iQuire.co"
               helperText="This will be their login email."
               error={errors.email}
             />

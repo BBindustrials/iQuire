@@ -461,7 +461,7 @@ export const resolvePostAuthor = (
     const p = post.author_profile;
     const fullName = `${p.first_name ?? ''} ${p.last_name ?? ''}`.trim();
     return {
-      name: fullName || post.author_name || 'IQuire Team',
+      name: fullName || post.author_name || 'iQuire Team',
       role: p.bio_title ?? post.author_role ?? null,
       avatarUrl: p.avatar_url ?? post.author_avatar_url ?? null,
       profileId: p.id,
@@ -469,7 +469,7 @@ export const resolvePostAuthor = (
   }
 
   return {
-    name: post.author_name ?? 'IQuire Team',
+    name: post.author_name ?? 'iQuire Team',
     role: post.author_role ?? null,
     avatarUrl: post.author_avatar_url ?? null,
     profileId: null,

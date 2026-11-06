@@ -2,69 +2,50 @@
 
 /* ============================================================================
    Problem Section
+   Brand palette: teal green #2BBBAD → blue #1E88E5
    ============================================================================ */
 
 .problem {
   position: relative;
   overflow: hidden;
-  background-color: #f8fafc; /* Base background for the bottom section */
+  background-color: #ffffff;
 }
 
 /* ----------------------------------------------------------------------------
-   TOP SECTION (Colored Background + SVGs)
+   TOP SECTION — netted blue background + concave white scoop at bottom
    ---------------------------------------------------------------------------- */
 
 .topSection {
   position: relative;
-  padding: 8rem 0 0; /* No bottom padding, the curve handles it */
-  background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%);
+  padding: 6rem 0 8rem;
+  background: #d6eaff; /* Brand blue tint */
   z-index: 1;
 }
 
-.topDecor {
+/* SVG Net Grid Background */
+.netGrid {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.08;
   pointer-events: none;
-  overflow: hidden;
 }
 
-.dotsTopLeft {
+/* The concave scoop: white ellipse that pokes UP into the tinted section */
+.topSection::after {
+  content: '';
   position: absolute;
-  top: 15%;
-  left: 5%;
-  width: 120px;
-  height: 120px;
-}
-
-.vineTopRight {
-  position: absolute;
-  top: -100px;
-  right: -50px;
-  width: 500px;
-  height: 500px;
-}
-
-.blobTopRight {
-  position: absolute;
-  bottom: 10%;
-  right: 10%;
-  width: 300px;
-  height: 300px;
-  transform: rotate(-20deg);
-}
-
-.curveDivider {
-  position: relative;
-  width: 100%;
-  line-height: 0;
-  margin-top: 2rem;
+  bottom: -50px;
+  left: -5%;
+  width: 110%;
+  height: 100px;
+  background: #ffffff;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  box-shadow: 0 -12px 30px -12px rgba(0, 0, 0, 0.08);
   z-index: 2;
-}
-
-.curveDivider svg {
-  width: 100%;
-  height: 120px;
-  display: block;
+  pointer-events: none;
 }
 
 /* ----------------------------------------------------------------------------
@@ -77,8 +58,7 @@
   gap: 5rem;
   align-items: center;
   position: relative;
-  z-index: 2; /* Above decor */
-  padding-bottom: 4rem;
+  z-index: 3;
 }
 
 .topContent {
@@ -86,22 +66,59 @@
   flex-direction: column;
   gap: 1.5rem;
   max-width: 620px;
+  margin-top: -10rem;
+
+  /* Slide-in base state: pushed LEFT, invisible */
+  opacity: 0;
+  transform: translateX(-80px);
+  transition: opacity 2.5s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 2.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
 }
+
+.topVisual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  /* Slide-in base state: pushed RIGHT, invisible */
+  opacity: 0;
+  transform: translateX(80px);
+  transition: opacity 2.5s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 2.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.slideInLeft {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.slideInRight {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ----------------------------------------------------------------------------
+   Typography
+   ---------------------------------------------------------------------------- */
 
 .badge {
   display: inline-flex;
   align-items: center;
   align-self: flex-start;
-  padding: 0.4rem 1rem;
-  background-color: #F9A825;
-  color: #1A1A2E;
+  padding: 0.4rem 1.1rem;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff;
   border-radius: 50px;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  box-shadow: 0 4px 12px rgba(249, 168, 37, 0.25);
+  box-shadow: 0 4px 14px rgba(43, 187, 173, 0.3);
 }
 
 .title {
@@ -110,14 +127,17 @@
   font-weight: 800;
   line-height: 1.12;
   letter-spacing: -0.025em;
-  color: #0f172a;
+  color: #000000;
   margin: 0;
-  text-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
 }
 
 .highlight {
-  color: #F57F17;
-  text-shadow: 0 2px 8px rgba(245, 127, 23, 0.2);
+  background: linear-gradient(90deg, #2BBBAD 0%, #1E88E5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
 }
 
 .intro {
@@ -130,7 +150,7 @@
 }
 
 .intro strong {
-  color: #1565C0;
+  color: #1E88E5;
   font-weight: 700;
 }
 
@@ -140,9 +160,9 @@
   gap: 1rem;
   padding: 1rem 1.25rem;
   background-color: #ffffff;
-  border-left: 4px solid #F9A825;
+  border-left: 4px solid #2BBBAD;
   border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
   margin-top: 0.5rem;
 }
 
@@ -150,28 +170,20 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 1rem;
   font-weight: 600;
-  color: #0f172a;
+  color: #000000;
   margin: 0;
   line-height: 1.5;
 }
 
 .turningPointText em {
   font-style: italic;
-  color: #F57F17;
+  color: #1E88E5;
   font-weight: 700;
 }
 
 /* ----------------------------------------------------------------------------
    Image & Shadow
    ---------------------------------------------------------------------------- */
-
-.topVisual {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  height: 100%;
-}
 
 .imageWrapper {
   position: relative;
@@ -180,7 +192,6 @@
   align-items: flex-end;
   width: 100%;
   max-width: 500px;
-  margin-bottom: 0; /* Let the image hit the curve */
 }
 
 .problemImage {
@@ -192,7 +203,6 @@
   display: block;
 }
 
-/* Realistic shadow beneath the image */
 .imageShadow {
   position: absolute;
   bottom: -20px;
@@ -200,45 +210,47 @@
   transform: translateX(-50%);
   width: 70%;
   height: 40px;
-  background: radial-gradient(ellipse at center, rgba(15, 23, 42, 0.15) 0%, transparent 100%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.18) 0%,
+    transparent 100%
+  );
   z-index: 1;
   border-radius: 50%;
   filter: blur(4px);
 }
 
 /* ----------------------------------------------------------------------------
-   BOTTOM SECTION (Questions & Solution)
+   BOTTOM SECTION — white background
+   Bottom edge is a CONVEX bulge (curve faces outside)
    ---------------------------------------------------------------------------- */
 
 .bottomSection {
   position: relative;
-  padding: 4rem 0 8rem;
+  /* Reduced bottom padding from 10rem to 4rem */
+  padding: 6rem 0 4rem; 
+  background: #ffffff;
   z-index: 1;
 }
 
-.bottomDecor {
+/* Convex bulge: white half-ellipse extending DOWNWARD past the section's bottom */
+.convexBottom {
   position: absolute;
-  inset: 0;
+  /* Adjusted so it doesn't add extra height below */
+  bottom: -40px;
+  left: -5%;
+  width: 110%;
+  height: 80px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.12);
+  z-index: 2;
   pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
 }
 
-.leafLeft {
-  position: absolute;
-  bottom: 0px;
-  left: -20px;
-  width: 350px;
-  height: 350px;
-}
-
-.leafRight {
-  position: absolute;
-  top: 20%;
-  right: -20px;
-  width: 350px;
-  height: 350px;
-}
+/* ----------------------------------------------------------------------------
+   Questions header
+   ---------------------------------------------------------------------------- */
 
 .questionsHeader {
   text-align: center;
@@ -251,7 +263,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: clamp(1.4rem, 2.4vw, 1.9rem);
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   margin: 0 0 0.5rem 0;
   letter-spacing: -0.02em;
 }
@@ -259,15 +271,21 @@
 .questionsSubtitle {
   font-family: 'Satoshi', sans-serif;
   font-size: 1rem;
-  color: #475569;
+  color: #1a1a1a;
   margin: 0;
+  font-weight: 500;
 }
+
+/* ----------------------------------------------------------------------------
+   Quote grid — staggered 4.0s slide-up
+   ---------------------------------------------------------------------------- */
 
 .questionsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem 2.5rem;
-  margin-bottom: 5rem;
+  /* Reduced bottom margin from 5rem to 4rem */
+  margin-bottom: 4rem; 
   position: relative;
   z-index: 1;
 }
@@ -275,26 +293,58 @@
 .bubbleCard {
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 0.85rem;
   position: relative;
+
+  /* Base state: hidden, pushed down */
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
 }
+
+/* Staggered delays */
+.bubbleCard:nth-child(1) { transition-delay: 0s; }
+.bubbleCard:nth-child(2) { transition-delay: 0.15s; }
+.bubbleCard:nth-child(3) { transition-delay: 0.3s; }
+.bubbleCard:nth-child(4) { transition-delay: 0.45s; }
+.bubbleCard:nth-child(5) { transition-delay: 0.6s; }
+.bubbleCard:nth-child(6) { transition-delay: 0.75s; }
+
+.quoteVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ----------------------------------------------------------------------------
+   Bubble card visuals
+   ---------------------------------------------------------------------------- */
 
 .bubbleAvatar {
   flex-shrink: 0;
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   overflow: hidden;
   border: 3px solid #ffffff;
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 4px 14px rgba(43, 187, 173, 0.18);
   background-color: #f1f5f9;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.bubbleCard:hover .bubbleAvatar {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(43, 187, 173, 0.28);
 }
 
 .bubbleAvatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
   display: block;
+  transform: scale(1.08);
 }
 
 .bubbleBody {
@@ -302,7 +352,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.55rem;
 }
 
 .bubbleQuote {
@@ -312,13 +362,13 @@
   border: 1.5px solid #e5e7eb;
   border-radius: 16px;
   border-bottom-left-radius: 4px;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
   transition: all 0.25s ease;
 }
 
 .bubbleCard:hover .bubbleQuote {
-  border-color: #F9A825;
-  box-shadow: 0 12px 28px rgba(249, 168, 37, 0.15);
+  border-color: #2BBBAD;
+  box-shadow: 0 12px 28px rgba(43, 187, 173, 0.18);
   transform: translateY(-2px);
 }
 
@@ -329,7 +379,7 @@
   font-family: Georgia, serif;
   font-size: 2.75rem;
   line-height: 1;
-  color: #F9A825;
+  color: #2BBBAD;
   opacity: 0.35;
   pointer-events: none;
   user-select: none;
@@ -340,7 +390,7 @@
   font-size: 0.92rem;
   font-style: italic;
   line-height: 1.55;
-  color: #0f172a;
+  color: #000000;
   margin: 0;
   position: relative;
   z-index: 1;
@@ -360,39 +410,53 @@
 }
 
 .bubbleCard:hover .bubbleTail {
-  border-left-color: #F9A825;
-  border-bottom-color: #F9A825;
+  border-left-color: #2BBBAD;
+  border-bottom-color: #2BBBAD;
 }
 
 .bubblePersona {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #64748b;
+  color: #1a1a1a;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   padding-left: 1.4rem;
+  display: inline-block;
 }
 
 /* ----------------------------------------------------------------------------
-   BOTTOM: Solution card — Unified Soft Yellow Block
+   Solution card — fades and lifts into place
    ---------------------------------------------------------------------------- */
 
 .solution {
-  background: linear-gradient(180deg, #FEF3C7 0%, #FFFDF5 100%);
+  background: linear-gradient(180deg, #f0fdfb 0%, #f5f9ff 100%);
   border-radius: 32px;
   padding: 3rem 2.5rem;
-  box-shadow: 0 20px 50px -20px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.1);
   text-align: center;
   position: relative;
   z-index: 1;
+  border: 1px solid rgba(43, 187, 173, 0.15);
+
+  /* Base state */
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 2s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.solutionVisible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .solutionTitle {
   font-family: 'Satoshi', sans-serif;
   font-size: clamp(1.4rem, 2.4vw, 1.9rem);
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   margin: 0 0 3rem 0;
   letter-spacing: -0.02em;
 }
@@ -428,18 +492,18 @@
 }
 
 .icon-blue {
-  background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
-  box-shadow: 0 6px 16px -4px rgba(21, 101, 192, 0.4);
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  box-shadow: 0 6px 16px -4px rgba(43, 187, 173, 0.4);
 }
 
 .icon-green {
-  background: linear-gradient(135deg, #00A878 0%, #047857 100%);
-  box-shadow: 0 6px 16px -4px rgba(0, 168, 120, 0.4);
+  background: linear-gradient(135deg, #1E88E5 0%, #2BBBAD 100%);
+  box-shadow: 0 6px 16px -4px rgba(30, 136, 229, 0.4);
 }
 
 .icon-gold {
-  background: linear-gradient(135deg, #F9A825 0%, #F57F17 100%);
-  box-shadow: 0 6px 16px -4px rgba(249, 168, 37, 0.4);
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  box-shadow: 0 6px 16px -4px rgba(43, 187, 173, 0.4);
 }
 
 .pillarTextContent {
@@ -452,7 +516,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 1.05rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   margin: 0;
   letter-spacing: -0.01em;
 }
@@ -460,9 +524,10 @@
 .pillarDesc {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.85rem;
-  color: #475569;
+  color: #1a1a1a;
   line-height: 1.5;
   margin: 0;
+  font-weight: 500;
 }
 
 .pillarArrow {
@@ -471,7 +536,7 @@
   right: -1.5rem;
   transform: translateY(-50%);
   font-size: 1.25rem;
-  color: #cbd5e1;
+  color: #94a3b8;
   font-weight: 700;
   pointer-events: none;
 }
@@ -488,7 +553,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
-  color: #1565C0;
+  color: #1E88E5;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -497,33 +562,8 @@
 }
 
 .secondaryLink:hover {
-  color: #0D47A1;
+  color: #2BBBAD;
   gap: 0.5rem;
-}
-
-/* ============================================================================
-   DEMARCATION — bottom wave only (bold)
-   ============================================================================ */
-
-.demarcationBottom {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  line-height: 0;
-  z-index: 3;
-  pointer-events: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.demarcationBottom .demarcationWave {
-  width: 100%;
-  height: 120px;
-  display: block;
-  filter: drop-shadow(0 -6px 16px rgba(0, 0, 0, 0.15))
-    drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.08));
 }
 
 /* ============================================================================
@@ -535,13 +575,26 @@
     grid-template-columns: 1fr;
     gap: 3rem;
     text-align: center;
-    padding-bottom: 2rem;
   }
 
   .topContent {
     align-items: center;
     max-width: 100%;
     text-align: center;
+    margin-top: 0;
+    transform: translateY(40px);
+  }
+
+  .slideInLeft {
+    transform: translateY(0);
+  }
+
+  .topVisual {
+    transform: translateY(40px);
+  }
+
+  .slideInRight {
+    transform: translateY(0);
   }
 
   .badge {
@@ -555,10 +608,6 @@
   .imageWrapper {
     max-width: 400px;
     margin: 0 auto;
-  }
-
-  .curveDivider svg {
-    height: 80px;
   }
 
   .questionsGrid {
@@ -584,36 +633,35 @@
 
 @media (max-width: 768px) {
   .topSection {
-    padding: 6rem 0 0;
+    padding: 5rem 0 6rem;
   }
 
   .bottomSection {
-    padding: 2rem 0 6rem;
+    padding: 4rem 0 5rem; 
   }
 
   .questionsGrid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+    margin-bottom: 3rem;
   }
 
   .solution {
     padding: 2rem 1.5rem;
   }
 
-  .leafLeft, .leafRight {
-    opacity: 0.3;
+  .topSection::after {
+    height: 70px;
+    bottom: -35px;
   }
 
-  .demarcationBottom .demarcationWave {
-    height: 90px;
+  .convexBottom {
+    height: 60px;
+    bottom: -30px;
   }
 }
 
 @media (max-width: 480px) {
-  .curveDivider svg {
-    height: 50px;
-  }
-
   .bubbleAvatar {
     width: 44px;
     height: 44px;
@@ -637,7 +685,13 @@
     font-size: 2.2rem;
   }
 
-  .demarcationBottom .demarcationWave {
-    height: 70px;
+  .topSection::after {
+    height: 50px;
+    bottom: -25px;
+  }
+
+  .convexBottom {
+    height: 50px;
+    bottom: -20px;
   }
 }

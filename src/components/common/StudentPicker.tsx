@@ -32,7 +32,7 @@ export const StudentPicker: React.FC<StudentPickerProps> = ({
   selectedUserId,
   onChange,
   disabled = false,
-  placeholder = 'Search students by name, email, or IQuire ID…',
+  placeholder = 'Search students by name, email, or iQuire ID…',
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');

@@ -99,7 +99,7 @@ export const AdminRecruiters: React.FC = () => {
         <div>
           <h1 className={styles.pageTitle}>Recruiters</h1>
           <p className={styles.pageSubtitle}>
-            Review and verify companies looking to hire IQuire talent.
+            Review and verify companies looking to hire iQuire talent.
           </p>
         </div>
       </div>

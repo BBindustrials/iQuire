@@ -11,8 +11,8 @@
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none !important; /* Prevents link underlines */
   position: relative;
   letter-spacing: 0.01em;
   white-space: nowrap;
@@ -35,17 +35,22 @@
 .primary.green {
   background-color: #2E7D32;
   color: #FFFFFF;
-  box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .primary.green:hover:not(:disabled) {
-  background-color: #1B5E20;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(46, 125, 50, 0.4);
+  /* Force colors to stay the same */
+  background-color: #2E7D32 !important;
+  color: #FFFFFF !important;
+  
+  /* Slide up and add black shadow */
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 }
 
 .primary.green:active:not(:disabled) {
-  transform: translateY(0);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .secondary.green {
@@ -55,9 +60,10 @@
 }
 
 .secondary.green:hover:not(:disabled) {
-  background-color: #2E7D32;
-  color: #FFFFFF;
-  transform: translateY(-2px);
+  background-color: transparent !important;
+  color: #2E7D32 !important;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 .outline.green {
@@ -67,30 +73,36 @@
 }
 
 .outline.green:hover:not(:disabled) {
-  background-color: rgba(46, 125, 50, 0.08);
+  background-color: transparent !important;
+  color: #2E7D32 !important;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 /* -------------------------------------------------------------------------- */
-/* Variants - Brand Gradient (NEW)                                            */
+/* Variants - Brand Gradient                                                  */
 /* -------------------------------------------------------------------------- */
 .primary.gradient {
-  /* Teal to Blue gradient matching the iQuire logo */
-  background: linear-gradient(135deg, #00A878 0%, #0077C8 100%);
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
   background-size: 150% 150%;
   background-position: 0% 0%;
   color: #FFFFFF;
-  box-shadow: 0 4px 15px rgba(0, 119, 200, 0.25);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .primary.gradient:hover:not(:disabled) {
-  /* Shifts the gradient for a premium hover effect */
-  background-position: 100% 0%;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 119, 200, 0.4);
+  /* Force colors to stay the same */
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%) !important;
+  color: #FFFFFF !important;
+  
+  /* Slide up and add black shadow */
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 }
 
 .primary.gradient:active:not(:disabled) {
-  transform: translateY(0);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -99,13 +111,14 @@
 .primary.gold {
   background-color: #FFB300;
   color: #000000;
-  box-shadow: 0 4px 15px rgba(255, 179, 0, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .primary.gold:hover:not(:disabled) {
-  background-color: #FFA000;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(255, 179, 0, 0.4);
+  background-color: #FFB300 !important;
+  color: #000000 !important;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 }
 
 .secondary.gold {
@@ -115,9 +128,10 @@
 }
 
 .secondary.gold:hover:not(:disabled) {
-  background-color: #FFB300;
-  color: #000000;
-  transform: translateY(-2px);
+  background-color: transparent !important;
+  color: #FFB300 !important;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 /* Ghost variant */
@@ -127,8 +141,10 @@
 }
 
 .ghost:hover:not(:disabled) {
-  background-color: rgba(0, 0, 0, 0.04);
-  color: var(--color-text-primary);
+  background-color: transparent !important;
+  color: var(--color-text-secondary) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
 /* Disabled state */

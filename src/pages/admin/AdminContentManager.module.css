@@ -1,0 +1,202 @@
+@import '../../styles/theme.css';
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.pageHeader { margin-bottom: 1rem; }
+.pageTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.25rem 0;
+}
+.pageSubtitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Selectors */
+.selectorsRow {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.25rem;
+  background-color: #f8fafc;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.selectGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+  max-width: 400px;
+}
+
+.selectGroup label {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.select {
+  padding: 0.75rem 1rem;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  background-color: #fff;
+  color: #0f172a;
+  outline: none;
+}
+.select:focus { border-color: #0f172a; }
+
+/* Content Panel */
+.contentPanel {
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1.5px solid #e5e7eb;
+  background-color: #f8fafc;
+}
+
+.tab {
+  padding: 1rem 1.5rem;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tab:hover { color: #0f172a; }
+.tabActive { color: #0f172a; border-bottom-color: #0f172a; }
+
+.toolbar {
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.addBtn {
+  padding: 0.6rem 1.25rem;
+  background-color: #0f172a;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.addBtn:hover { background-color: #1e293b; }
+
+/* List Items */
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.itemRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+.itemRow:last-child { border-bottom: none; }
+.itemRow:hover { background-color: #f8fafc; }
+
+.itemTitle {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.25rem 0;
+}
+
+.itemMeta {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.deleteBtn {
+  padding: 0.4rem 0.8rem;
+  background-color: #fef2f2;
+  color: #C62828;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.deleteBtn:hover { background-color: #fee2e2; }
+
+/* Empty / Loading */
+.loading, .emptyText {
+  padding: 2rem;
+  text-align: center;
+  font-family: 'Satoshi', sans-serif;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 2rem;
+  background-color: #ffffff;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 14px;
+  text-align: center;
+}
+.emptyIcon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
+.emptyState h3 { font-family: 'Satoshi', sans-serif; font-size: 1.2rem; color: #0f172a; margin: 0 0 0.5rem; }
+.emptyState p { font-family: 'Satoshi', sans-serif; color: #64748b; margin: 0; }
+.itemActions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .editBtn {
+    padding: 0.4rem 0.8rem;
+    background-color: #f8fafc;
+    color: #0f172a;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  
+  .editBtn:hover {
+    background-color: #e2e8f0;
+    border-color: #94a3b8;
+  }

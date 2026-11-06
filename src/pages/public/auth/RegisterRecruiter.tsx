@@ -1,10 +1,9 @@
 // ============================================================================
-// iQuire — Recruiter Registration (Phase 12C.3b)
+// iQuire — Recruiter Registration (Phase 12C.3b — Resend Updated)
 // ============================================================================
-// Public recruiter signup. After account creation, sends:
-//   1. Admin notification email (FormSubmit)
-//   2. Recruiter confirmation email (FormSubmit → admin inbox)
-// Both emails are non-blocking — signup succeeds even if emails fail.
+// Public recruiter signup. After account creation, sends one email:
+//   1. Admin notification email (via Resend + send-notification-email Edge Function)
+// The email is non-blocking — signup succeeds even if it fails.
 // ============================================================================
 
 import React, { useState, useMemo, type FormEvent } from 'react';
@@ -39,10 +38,7 @@ import {
 
 import { supabase } from '../../../integrations/supabase/client';
 
-import {
-  notifyAdminNewRecruiter,
-  sendRecruiterSignupConfirmation,
-} from '../../../services/email.service';
+import { notifyAdminNewRecruiter } from '../../../services/notifications.service';
 
 // ============================================================================
 // Form state
@@ -226,7 +222,10 @@ export const RegisterRecruiter: React.FC = () => {
 
       if (error) {
         const msg = error.message.toLowerCase();
-        if (msg.includes('already registered') || msg.includes('already exists')) {
+        if (
+          msg.includes('already registered') ||
+          msg.includes('already exists')
+        ) {
           setErrors({
             submit:
               'An account with this email already exists. Please login instead.',
@@ -238,28 +237,19 @@ export const RegisterRecruiter: React.FC = () => {
       }
 
       // ------------------------------------------------------------------
-      // 2. Send emails (non-blocking)
+      // 2. Send admin notification email via Resend (non-blocking)
       // ------------------------------------------------------------------
-      // These run in parallel. Failures are logged but don't affect the
-      // signup success — the user still sees the success screen.
-      Promise.all([
-        notifyAdminNewRecruiter({
-          fullName: `${formData.firstName.trim()} ${formData.lastName.trim()}`.trim(),
-          email: formData.workEmail.trim().toLowerCase(),
-          position: formData.position.trim(),
-          companyName: formData.companyName.trim(),
-          industry: formData.industry,
-          companyWebsite: formData.companyWebsite?.trim() || undefined,
-          companySize: formData.companySize || undefined,
-        }),
-        sendRecruiterSignupConfirmation({
-          email: formData.workEmail.trim().toLowerCase(),
-          firstName: formData.firstName.trim(),
-          companyName: formData.companyName.trim(),
-        }),
-      ]).catch((err) => {
-        // Non-blocking — log but don't fail
-        console.error('[RegisterRecruiter] Email send failed:', err);
+      notifyAdminNewRecruiter({
+        fullName: `${formData.firstName.trim()} ${formData.lastName.trim()}`.trim(),
+        email: formData.workEmail.trim().toLowerCase(),
+        position: formData.position.trim(),
+        companyName: formData.companyName.trim(),
+        industry: formData.industry,
+        companyWebsite: formData.companyWebsite?.trim() || undefined,
+        companySize: formData.companySize || undefined,
+      }).catch((err) => {
+        // Non-blocking — log but don't fail the signup
+        console.error('[RegisterRecruiter] Email notification failed:', err);
       });
 
       // ------------------------------------------------------------------
@@ -295,7 +285,7 @@ export const RegisterRecruiter: React.FC = () => {
             </svg>
           </div>
           <h2 className={styles.successTitle}>
-            Welcome to IQuire, {formData.firstName}!
+            Welcome to iQuire, {formData.firstName}!
           </h2>
           <p className={styles.successText}>
             We&apos;ve received your registration for{' '}
@@ -312,14 +302,12 @@ export const RegisterRecruiter: React.FC = () => {
             <h3 className={styles.nextStepsTitle}>What happens next?</h3>
             <ol className={styles.nextStepsList}>
               <li>Our team reviews your organisation details</li>
-              <li>
-                Log in anytime to check your verification status
-              </li>
+              <li>Log in anytime to check your verification status</li>
               <li>
                 Once verified, you&apos;ll get full access to the talent
                 directory
               </li>
-              <li>Start discovering IQuire-trained talent</li>
+              <li>Start discovering iQuire-trained talent</li>
             </ol>
           </div>
 
@@ -348,11 +336,11 @@ export const RegisterRecruiter: React.FC = () => {
   return (
     <AuthLayout
       image={registerRecruiterImg}
-      imageAlt="Join IQuire as a recruiter"
+      imageAlt="Join iQuire as a recruiter"
     >
       <AuthPageTitle
         title="Register as a Recruiter"
-        subtitle="Get access to work-ready, verified IQuire talent."
+        subtitle="Get access to work-ready, verified iQuire talent."
       />
 
       <form onSubmit={handleSubmit} noValidate>
@@ -550,7 +538,7 @@ export const RegisterRecruiter: React.FC = () => {
             name="marketingOptIn"
             checked={formData.marketingOptIn}
             onChange={handleChange}
-            label="Send me hiring insights, talent updates, and IQuire events."
+            label="Send me hiring insights, talent updates, and iQuire events."
           />
         </div>
 

@@ -71,7 +71,7 @@ Deno.serve(async (req: Request) => {
       return errorResponse('Missing required fields', 400);
     }
 
-    const appUrl = Deno.env.get('APP_URL') || 'https://iquire.vercel.app';
+    const appUrl = Deno.env.get('APP_URL') || 'https://iQuire.io';
 
     // ---------------------------------------------------------------------
     // 3. Branch by account_type
@@ -89,7 +89,7 @@ Deno.serve(async (req: Request) => {
         bioTitle: body.bio_title,
         loginUrl: appUrl,
       });
-      subject = `Welcome to the IQuire Admin Team — Your login credentials`;
+      subject = `Welcome to the iQuire Admin Team — Your login credentials`;
     } else {
       // -------- MEMBER --------
       if (!body.iq_id) {
@@ -107,7 +107,7 @@ Deno.serve(async (req: Request) => {
         tempPassword: body.temp_password,
         loginUrl: `${appUrl}/login`,
       });
-      subject = `Welcome to IQuire — Your login credentials`;
+      subject = `Welcome to iQuire — Your login credentials`;
     }
 
     // ---------------------------------------------------------------------

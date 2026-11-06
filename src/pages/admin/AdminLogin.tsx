@@ -1,7 +1,7 @@
 // ============================================================================
 // iQuire — Admin Login
 // ============================================================================
-// Secure entry point for IQuire administrators.
+// Secure entry point for iQuire administrators.
 // Only users with account_type = 'admin' can access the admin dashboard.
 // ============================================================================
 
@@ -147,7 +147,7 @@ export const AdminLogin: React.FC = () => {
 
       <AuthPageTitle
         title="Admin Login"
-        subtitle="Authorized personnel only. Sign in to manage the IQuire platform."
+        subtitle="Authorized personnel only. Sign in to manage the iQuire platform."
       />
 
       <form onSubmit={handleSubmit} noValidate>
@@ -158,7 +158,7 @@ export const AdminLogin: React.FC = () => {
           value={formData.email}
           onChange={handleChange}
           required
-          placeholder="admin@iquire.co"
+          placeholder="admin@iQuire.co"
           autoComplete="email"
           error={errors.email}
         />

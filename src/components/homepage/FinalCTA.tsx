@@ -1,39 +1,74 @@
+/* eslint-disable react-hooks/refs */
 // ============================================================================
 // iQuire — Final CTA Section (Rebuilt)
 // ============================================================================
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ScrollReveal } from '../common/ScrollReveal';
 import styles from './FinalCTA.module.css';
 
 // Import image
 import finalCTAImage from '../../assets/images/final-cta-image.png';
 
+// ============================================================================
+// Custom Hook for 4s Animation
+// ============================================================================
+const useSlideUp = (threshold = 0.1) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold }
+    );
+
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [threshold]);
+
+  return { ref, isVisible };
+};
+
 export const FinalCTA: React.FC = () => {
+  const imageAnim = useSlideUp();
+  const textAnim = useSlideUp();
+
   return (
     <section className={styles.finalCTA}>
       {/* ====================================================================
-          BACKGROUND SVG DECORATIONS
+          SVG NET GRID BACKGROUND
           ==================================================================== */}
-      <div className={styles.bgDecor} aria-hidden="true">
-        {/* Top Left Dotted Grid */}
-        <svg className={styles.dottedGridLeft} viewBox="0 0 100 100" fill="none">
-          {[...Array(4)].map((_, row) =>
-            [...Array(4)].map((_, col) => (
-              <circle key={`${row}-${col}`} cx={10 + col * 20} cy={10 + row * 20} r="2" fill="#ffffff" opacity="0.15" />
-            ))
-          )}
-        </svg>
-
-        {/* Top Right Floating Ring */}
-        <div className={styles.ringRight} />
-
-        {/* Bottom Left Abstract Leaf */}
-        <svg className={styles.leafLeft} viewBox="0 0 300 300" fill="none">
-          <path d="M -50 200 C 50 50, 200 0, 250 100 C 300 200, 150 300, 50 300 C -20 300, -100 280, -50 200 Z" fill="#00A878" opacity="0.08" />
-        </svg>
-      </div>
+      <svg
+        className={styles.netGrid}
+        aria-hidden="true"
+        preserveAspectRatio="xMidYMid slice"
+        viewBox="0 0 1440 900"
+      >
+        <defs>
+          <pattern
+            id="ctaNetPattern"
+            x="0"
+            y="0"
+            width="80"
+            height="80"
+            patternUnits="userSpaceOnUse"
+          >
+            <path
+              d="M 80 0 L 0 0 0 80"
+              fill="none"
+              stroke="#000000"
+              strokeWidth="1"
+            />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#ctaNetPattern)" />
+      </svg>
 
       {/* Background accents (Blur rings) */}
       <div className={styles.bgAccentOne} aria-hidden="true" />
@@ -42,21 +77,29 @@ export const FinalCTA: React.FC = () => {
       <div className={styles.container}>
         <div className={styles.content}>
           {/* ================================================================
-              IMAGE
+              IMAGE (Slides up)
               ================================================================ */}
-          <ScrollReveal animation="left" className={styles.imageWrapper}>
+          <div ref={imageAnim.ref} className={styles.imageWrapper}>
             <img
               src={finalCTAImage}
-              alt="IQuire graduates ready for career opportunities"
-              className={styles.ctaImage}
+              alt="iQuire graduates ready for career opportunities"
+              className={`${styles.ctaImage} ${styles.slideUpText} ${
+                imageAnim.isVisible ? styles.isVisible : ''
+              }`}
               loading="lazy"
             />
-          </ScrollReveal>
+          </div>
 
           {/* ================================================================
-              TEXT CONTENT
+              TEXT CONTENT (Slides up with delay)
               ================================================================ */}
-          <ScrollReveal animation="right" delay={1} className={styles.textContent}>
+          <div
+            ref={textAnim.ref}
+            className={`${styles.textContent} ${styles.slideUpText} ${
+              textAnim.isVisible ? styles.isVisible : ''
+            }`}
+            style={{ transitionDelay: '0.2s' }}
+          >
             <span className={styles.badge}>Ready When You Are</span>
 
             <h2 className={styles.title}>
@@ -66,72 +109,48 @@ export const FinalCTA: React.FC = () => {
 
             <p className={styles.subtitle}>
               Learn the skills. Build your professional identity. Connect with
-              opportunities. Launch the career you've been working toward.
+              opportunities. Launch the career you have been working toward.
             </p>
 
             <div className={styles.ctaGroup}>
               <Link to="/courses" className={styles.ctaPrimary}>
                 Browse Courses
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <path
-                    d="M5 12H19M19 12L12 5M19 12L12 19"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
               </Link>
 
               <Link to="/hire-from-us" className={styles.ctaSecondary}>
                 Hire Talent
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <path
-                    d="M5 12H19M19 12L12 5M19 12L12 19"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
               </Link>
             </div>
-          </ScrollReveal>
+          </div>
         </div>
       </div>
 
       {/* ================================================================
-          BOTTOM demarcation
+          BOTTOM demarcation (Brand Wave)
           ================================================================ */}
       <div className={styles.demarcationBottom} aria-hidden="true">
-        <div className={styles.demarcationLabel}>
-        </div>
         <svg
           className={styles.demarcationWave}
           viewBox="0 0 1440 120"
           preserveAspectRatio="none"
           xmlns="http://www.w3.org/2000/svg"
         >
+          <defs>
+            <linearGradient id="ctaWaveStroke" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#2BBBAD" />
+              <stop offset="100%" stopColor="#1E88E5" />
+            </linearGradient>
+          </defs>
           <path
             d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z"
             fill="none"
-            stroke="#F9A825"
+            stroke="url(#ctaWaveStroke)"
             strokeWidth="3"
             opacity="0.6"
           />
           <path
             d="M0,60 C240,15 480,105 720,60 C960,15 1200,105 1440,60 L1440,120 L0,120 Z"
-            fill="#000000"
+            fill="#0A192F"
           />
         </svg>
       </div>

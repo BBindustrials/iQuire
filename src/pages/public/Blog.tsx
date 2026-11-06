@@ -1,13 +1,9 @@
 // ============================================================================
 // iQuire — Public Blog Listing (Phase 14.13.7)
 // ============================================================================
-// Featured post + grid cards now show the resolved author (linked profile
-// or manual fields).
-// ============================================================================
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ScrollReveal } from '../../components/common/ScrollReveal';
 import {
   fetchPublishedPosts,
   fetchCategories,
@@ -118,13 +114,22 @@ export const Blog: React.FC = () => {
   // --------------------------------------------------------------------------
   return (
     <div className={styles.blogPage}>
-      {/* HERO */}
+      {/* HERO (Netted Blue) */}
       <section className={styles.hero}>
+        <svg className={styles.netGrid} aria-hidden="true" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1440 900">
+          <defs>
+            <pattern id="blogHeroNet" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+              <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#000000" strokeWidth="1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#blogHeroNet)" />
+        </svg>
+
         <div className={styles.heroBgBlobOne} aria-hidden="true" />
         <div className={styles.heroBgBlobTwo} aria-hidden="true" />
 
         <div className="container">
-          <ScrollReveal animation="up" className={styles.heroContent}>
+          <div className={`${styles.heroContent} ${styles.slideUpText}`}>
             <span className={styles.badge}>Insights</span>
             <h1 className={styles.heroTitle}>
               Insights for the{' '}
@@ -134,9 +139,9 @@ export const Blog: React.FC = () => {
             </h1>
             <p className={styles.heroSubtitle}>
               Career tips, employability insights, industry trends, AI
-              developments, and stories from the IQuire community.
+              developments, and stories from the iQuire community.
             </p>
-          </ScrollReveal>
+          </div>
         </div>
       </section>
 
@@ -144,26 +149,57 @@ export const Blog: React.FC = () => {
       <section className={styles.contentSection}>
         <div className="container">
           {isLoading ? (
-            <LoadingSkeleton />
+            <div className={styles.skeletonWrapper}>
+              <div className={styles.skeletonFeatured} />
+              <div className={styles.skeletonPills}>
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className={styles.skeletonPill} />
+                ))}
+              </div>
+              <div className={styles.grid}>
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className={styles.skeletonCard} />
+                ))}
+              </div>
+            </div>
           ) : error ? (
-            <ErrorBox message={error} />
+            <div className={styles.errorBox}>
+              <div className={styles.errorIcon}>
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+              </div>
+              <h3 className={styles.errorTitle}>Couldn't load blog posts</h3>
+              <p className={styles.errorText}>{error}</p>
+            </div>
           ) : posts.length === 0 ? (
-            <EmptyState type="no-posts" />
+            <div className={styles.emptyBox}>
+              <div className={styles.emptyIcon}>
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                </svg>
+              </div>
+              <h3 className={styles.emptyTitle}>No blog posts yet</h3>
+              <p className={styles.emptyText}>
+                Our blog is coming soon. Check back for insights and stories from the iQuire community.
+              </p>
+            </div>
           ) : (
             <>
               {/* FEATURED POST */}
               {isFeaturedVisible && featuredPost && (
-                <ScrollReveal animation="up" className={styles.featuredWrapper}>
+                <div className={`${styles.featuredWrapper} ${styles.slideUpText} ${styles['delay-1']}`}>
                   <FeaturedPostCard post={featuredPost} />
-                </ScrollReveal>
+                </div>
               )}
 
               {/* FILTERS */}
-              <ScrollReveal
-                animation="up"
-                delay={1}
-                className={styles.filtersWrapper}
-              >
+              <div className={`${styles.filtersWrapper} ${styles.slideUpText} ${styles['delay-2']}`}>
                 <div className={styles.categoryPills}>
                   <button
                     type="button"
@@ -176,8 +212,7 @@ export const Blog: React.FC = () => {
                   </button>
                   {categories.map((cat) => {
                     const count = posts.filter(
-                      (p) =>
-                        p.category_id === cat.id && p.id !== featuredPost?.id
+                      (p) => p.category_id === cat.id && p.id !== featuredPost?.id
                     ).length;
                     if (count === 0) return null;
                     return (
@@ -198,38 +233,50 @@ export const Blog: React.FC = () => {
 
                 <div className={styles.searchBox}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <circle
-                      cx="11"
-                      cy="11"
-                      r="8"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    />
-                    <path
-                      d="M21 21L16.65 16.65"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
+                    <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2" />
+                    <path d="M21 21L16.65 16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                   </svg>
                   <input
                     type="text"
-                    placeholder="Search posts…"
+                    placeholder="Search posts..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className={styles.searchInput}
                   />
                 </div>
-              </ScrollReveal>
+              </div>
 
               {/* GRID */}
               {filteredPosts.length === 0 ? (
                 hasActiveFilters ? (
-                  <EmptyState type="no-match" onClear={clearFilters} />
+                  <div className={styles.emptyBox}>
+                    <div className={styles.emptyIcon}>
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                      </svg>
+                    </div>
+                    <h3 className={styles.emptyTitle}>No posts match your filters</h3>
+                    <p className={styles.emptyText}>Try adjusting your search or clearing the filters.</p>
+                    <button type="button" className={styles.emptyCta} onClick={clearFilters}>
+                      Clear filters
+                    </button>
+                  </div>
                 ) : isFeaturedVisible ? (
                   null
                 ) : (
-                  <EmptyState type="no-posts" />
+                  <div className={styles.emptyBox}>
+                    <div className={styles.emptyIcon}>
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                      </svg>
+                    </div>
+                    <h3 className={styles.emptyTitle}>No blog posts yet</h3>
+                    <p className={styles.emptyText}>Our blog is coming soon.</p>
+                  </div>
                 )
               ) : (
                 <>
@@ -242,21 +289,18 @@ export const Blog: React.FC = () => {
                           {' '}
                           in{' '}
                           <strong>
-                            {
-                              categories.find((c) => c.id === activeCategory)
-                                ?.name
-                            }
+                            {categories.find((c) => c.id === activeCategory)?.name}
                           </strong>
                         </>
                       )}
                     </p>
                   )}
 
-                  <ScrollReveal animation="up" stagger className={styles.grid}>
+                  <div className={`${styles.grid} ${styles.slideUpText} ${styles['delay-3']}`}>
                     {filteredPosts.map((post) => (
                       <BlogCard key={post.id} post={post} />
                     ))}
-                  </ScrollReveal>
+                  </div>
                 </>
               )}
             </>
@@ -264,15 +308,24 @@ export const Blog: React.FC = () => {
         </div>
       </section>
 
-      {/* FINAL CTA */}
+      {/* FINAL CTA (Netted Blue) */}
       <section className={styles.ctaSection}>
-        <div className="container">
-          <ScrollReveal animation="up" className={styles.ctaInner}>
+        <svg className={styles.netGrid} aria-hidden="true" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1440 900">
+          <defs>
+            <pattern id="blogCtaNet" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+              <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#000000" strokeWidth="1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#blogCtaNet)" />
+        </svg>
+
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          <div className={`${styles.ctaInner} ${styles.slideUpText} ${styles['delay-4']}`}>
             <h2 className={styles.ctaTitle}>
               Ready to write your own success story?
             </h2>
             <p className={styles.ctaSubtitle}>
-              Create a free account and start building your career with IQuire.
+              Create a free account and start building your career with iQuire.
             </p>
             <div className={styles.ctaButtons}>
               <Link to="/courses" className={styles.ctaPrimary}>
@@ -282,7 +335,7 @@ export const Blog: React.FC = () => {
                 Explore Courses →
               </Link>
             </div>
-          </ScrollReveal>
+          </div>
         </div>
       </section>
     </div>
@@ -293,16 +346,7 @@ export const Blog: React.FC = () => {
 // Sub-components
 // ============================================================================
 
-// ----------------------------------------------------------------------------
-// Author chip — reusable across featured + grid cards
-// ----------------------------------------------------------------------------
-
-interface AuthorChipProps {
-  author: ResolvedAuthor;
-  size?: 'sm' | 'md';
-}
-
-const AuthorChip: React.FC<AuthorChipProps> = ({ author, size = 'sm' }) => {
+const AuthorChip: React.FC<{ author: ResolvedAuthor; size?: 'sm' | 'md' }> = ({ author, size = 'sm' }) => {
   const initials = author.name
     .split(' ')
     .map((n) => n[0])
@@ -311,16 +355,8 @@ const AuthorChip: React.FC<AuthorChipProps> = ({ author, size = 'sm' }) => {
     .toUpperCase();
 
   return (
-    <div
-      className={`${styles.authorChip} ${
-        size === 'md' ? styles.authorChipMd : ''
-      }`}
-    >
-      <div
-        className={`${styles.authorChipAvatar} ${
-          size === 'md' ? styles.authorChipAvatarMd : ''
-        }`}
-      >
+    <div className={`${styles.authorChip} ${size === 'md' ? styles.authorChipMd : ''}`}>
+      <div className={`${styles.authorChipAvatar} ${size === 'md' ? styles.authorChipAvatarMd : ''}`}>
         {author.avatarUrl ? (
           <img src={author.avatarUrl} alt={author.name} loading="lazy" />
         ) : (
@@ -337,15 +373,7 @@ const AuthorChip: React.FC<AuthorChipProps> = ({ author, size = 'sm' }) => {
   );
 };
 
-// ----------------------------------------------------------------------------
-// Featured post card
-// ----------------------------------------------------------------------------
-
-interface FeaturedPostCardProps {
-  post: BlogPostWithCategory;
-}
-
-const FeaturedPostCard: React.FC<FeaturedPostCardProps> = ({ post }) => {
+const FeaturedPostCard: React.FC<{ post: BlogPostWithCategory }> = ({ post }) => {
   const author = resolvePostAuthor(post);
 
   return (
@@ -354,7 +382,12 @@ const FeaturedPostCard: React.FC<FeaturedPostCardProps> = ({ post }) => {
         {post.featured_image_url ? (
           <img src={post.featured_image_url} alt={post.title} loading="eager" />
         ) : (
-          <div className={styles.featuredImagePlaceholder}>📝</div>
+          <div className={styles.featuredImagePlaceholder}>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+            </svg>
+          </div>
         )}
         <span className={styles.featuredBadge}>Featured</span>
       </div>
@@ -362,36 +395,23 @@ const FeaturedPostCard: React.FC<FeaturedPostCardProps> = ({ post }) => {
       <div className={styles.featuredContent}>
         <div className={styles.featuredMeta}>
           {post.category && (
-            <span className={styles.featuredCategory}>
-              {post.category.name}
-            </span>
+            <span className={styles.featuredCategory}>{post.category.name}</span>
           )}
           {post.published_at && (
-            <span className={styles.featuredDate}>
-              {formatBlogDate(post.published_at)}
-            </span>
+            <span className={styles.featuredDate}>{formatBlogDate(post.published_at)}</span>
           )}
         </div>
 
         <h2 className={styles.featuredTitle}>{post.title}</h2>
 
-        {post.excerpt && (
-          <p className={styles.featuredExcerpt}>{post.excerpt}</p>
-        )}
+        {post.excerpt && <p className={styles.featuredExcerpt}>{post.excerpt}</p>}
 
         <div className={styles.featuredFooter}>
           <AuthorChip author={author} size="md" />
-
           <span className={styles.featuredReadMore}>
             Read article
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M5 12H19M19 12L12 5M19 12L12 19"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+              <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </span>
         </div>
@@ -400,15 +420,7 @@ const FeaturedPostCard: React.FC<FeaturedPostCardProps> = ({ post }) => {
   );
 };
 
-// ----------------------------------------------------------------------------
-// Grid card
-// ----------------------------------------------------------------------------
-
-interface BlogCardProps {
-  post: BlogPostWithCategory;
-}
-
-const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
+const BlogCard: React.FC<{ post: BlogPostWithCategory }> = ({ post }) => {
   const author = resolvePostAuthor(post);
 
   return (
@@ -417,7 +429,12 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
         {post.featured_image_url ? (
           <img src={post.featured_image_url} alt={post.title} loading="lazy" />
         ) : (
-          <div className={styles.cardImagePlaceholder}>📝</div>
+          <div className={styles.cardImagePlaceholder}>
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+            </svg>
+          </div>
         )}
       </div>
 
@@ -427,9 +444,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
             <span className={styles.cardCategory}>{post.category.name}</span>
           )}
           {post.published_at && (
-            <span className={styles.cardDate}>
-              {formatBlogDate(post.published_at)}
-            </span>
+            <span className={styles.cardDate}>{formatBlogDate(post.published_at)}</span>
           )}
         </div>
 
@@ -441,13 +456,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
           <AuthorChip author={author} />
           <span className={styles.cardArrow}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M5 12H19M19 12L12 5M19 12L12 19"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+              <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </span>
         </div>
@@ -455,57 +464,3 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
     </Link>
   );
 };
-
-// ----------------------------------------------------------------------------
-// Loading / error / empty states
-// ----------------------------------------------------------------------------
-
-const LoadingSkeleton: React.FC = () => (
-  <>
-    <div className={styles.skeletonFeatured} />
-    <div className={styles.skeletonPills}>
-      {[...Array(4)].map((_, i) => (
-        <div key={i} className={styles.skeletonPill} />
-      ))}
-    </div>
-    <div className={styles.grid}>
-      {[...Array(4)].map((_, i) => (
-        <div key={i} className={styles.skeletonCard} />
-      ))}
-    </div>
-  </>
-);
-
-const ErrorBox: React.FC<{ message: string }> = ({ message }) => (
-  <div className={styles.errorBox}>
-    <div className={styles.errorIcon}>⚠️</div>
-    <h3 className={styles.errorTitle}>Couldn't load blog posts</h3>
-    <p className={styles.errorText}>{message}</p>
-  </div>
-);
-
-interface EmptyStateProps {
-  type: 'no-posts' | 'no-match';
-  onClear?: () => void;
-}
-
-const EmptyState: React.FC<EmptyStateProps> = ({ type, onClear }) => (
-  <div className={styles.emptyBox}>
-    <div className={styles.emptyIcon}>{type === 'no-match' ? '🔍' : '📝'}</div>
-    <h3 className={styles.emptyTitle}>
-      {type === 'no-match'
-        ? 'No posts match your filters'
-        : 'No blog posts yet'}
-    </h3>
-    <p className={styles.emptyText}>
-      {type === 'no-match'
-        ? 'Try adjusting your search or clearing the filters.'
-        : 'Our blog is coming soon. Check back for insights and stories from the IQuire community.'}
-    </p>
-    {type === 'no-match' && onClear && (
-      <button type="button" className={styles.emptyCta} onClick={onClear}>
-        Clear filters
-      </button>
-    )}
-  </div>
-);

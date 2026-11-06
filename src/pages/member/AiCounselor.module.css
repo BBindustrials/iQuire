@@ -719,3 +719,87 @@
     font-size: 0.72rem;
   }
 }
+/* Add these to your existing AiCounselor.module.css */
+
+.messageActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  margin-left: 2.5rem; /* Align with the bubble, past the avatar */
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.messageRow:hover .messageActions {
+  opacity: 1;
+}
+
+.actionBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.15s ease, transform 0.1s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actionBtn:hover {
+  background: #e2e8f0;
+  transform: scale(1.1);
+}
+
+.attachBtn:hover {
+  color: #0f172a !important;
+}
+/* Add these to your existing AiCounselor.module.css */
+
+/* Action Buttons Container */
+.messageActions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.4rem;
+  margin-left: 2.5rem; /* Align with the bubble, past the avatar */
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Show actions when hovering over the message row */
+.messageRow:hover .messageActions {
+  opacity: 1;
+}
+
+.actionBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #94a3b8;
+  padding: 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.actionBtn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  transform: scale(1.05);
+}
+
+.attachBtn:hover {
+  color: #0f172a !important;
+}
+
+/* Pulse animation for the microphone button */
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}

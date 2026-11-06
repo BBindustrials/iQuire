@@ -22,7 +22,7 @@ export const RecruiterDashboard: React.FC = () => {
           </div>
           <h1 className={styles.welcomeTitle}>Welcome back, {firstName}</h1>
           <p className={styles.welcomeText}>
-            Your account is verified. You now have full access to the IQuire
+            Your account is verified. You now have full access to the iQuire
             talent directory.
           </p>
         </div>
@@ -51,7 +51,7 @@ export const RecruiterDashboard: React.FC = () => {
           </Link>
           <Link to="/contact" className={styles.quickLink}>
             <span className={styles.quickIcon}>💬</span>
-            <span className={styles.quickLabel}>Contact IQuire Team</span>
+            <span className={styles.quickLabel}>Contact iQuire Team</span>
           </Link>
         </div>
       </div>

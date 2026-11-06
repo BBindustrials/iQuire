@@ -4,7 +4,6 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ScrollReveal } from '../../components/common/ScrollReveal';
 import { Button } from '../../components/common/Button';
 import {
   fetchPublishedJobs,
@@ -37,12 +36,8 @@ export const Jobs: React.FC = () => {
   // Filters
   const [search, setSearch] = useState('');
   const [workMode, setWorkMode] = useState<JobWorkMode | 'all'>('all');
-  const [opportunityType, setOpportunityType] = useState<
-    JobOpportunityType | 'all'
-  >('all');
-  const [experienceLevel, setExperienceLevel] = useState<
-    JobExperienceLevel | 'all'
-  >('all');
+  const [opportunityType, setOpportunityType] = useState<JobOpportunityType | 'all'>('all');
+  const [experienceLevel, setExperienceLevel] = useState<JobExperienceLevel | 'all'>('all');
 
   // --------------------------------------------------------------------------
   // Load
@@ -127,49 +122,49 @@ export const Jobs: React.FC = () => {
   // --------------------------------------------------------------------------
   return (
     <div className={styles.page}>
-      {/* ================================================================
-          HERO
-          ================================================================ */}
+      {/* HERO (Netted Blue) */}
       <section className={styles.hero}>
+        <svg className={styles.netGrid} aria-hidden="true" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1440 900">
+          <defs>
+            <pattern id="jobsHeroNet" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+              <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#000000" strokeWidth="1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#jobsHeroNet)" />
+        </svg>
+
         <div className={styles.heroBlobOne} aria-hidden="true" />
         <div className={styles.heroBlobTwo} aria-hidden="true" />
 
         <div className="container">
-          <ScrollReveal animation="up" className={styles.heroContent}>
+          <div className={`${styles.heroContent} ${styles.slideUpText}`}>
             <span className={styles.heroBadge}>Opportunities</span>
             <h1 className={styles.heroTitle}>
               Find work that{' '}
               <span className={styles.heroHighlight}>fits you.</span>
             </h1>
             <p className={styles.heroSubtitle}>
-              Real openings from verified employers across Africa — internships,
-              graduate roles, apprenticeships, and full-time positions. All
-              curated for early-career talent.
+              Real openings from verified employers across Africa internships,
+              graduate roles, apprenticeships, and full time positions. All
+              curated for early career talent.
             </p>
-          </ScrollReveal>
+          </div>
         </div>
       </section>
 
-      {/* ================================================================
-          FILTERS + MAIN CONTENT
-          ================================================================ */}
+      {/* FILTERS + MAIN CONTENT */}
       <section className={styles.contentSection}>
         <div className="container">
           {/* Filters bar */}
-          <ScrollReveal animation="up" className={styles.filtersWrapper}>
+          <div className={`${styles.filtersWrapper} ${styles.slideUpText} ${styles['delay-1']}`}>
             <div className={styles.searchBox}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                 <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2" />
-                <path
-                  d="M21 21L16.65 16.65"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
+                <path d="M21 21L16.65 16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
               <input
                 type="text"
-                placeholder="Search jobs by title, company, or skill…"
+                placeholder="Search jobs by title, company, or skill..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className={styles.searchInput}
@@ -179,60 +174,86 @@ export const Jobs: React.FC = () => {
             <select
               className={styles.filterSelect}
               value={workMode}
-              onChange={(e) =>
-                setWorkMode(e.target.value as JobWorkMode | 'all')
-              }
+              onChange={(e) => setWorkMode(e.target.value as JobWorkMode | 'all')}
             >
               <option value="all">Any work mode</option>
               {JOB_WORK_MODE_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
+                <option key={o.value} value={o.value}>{o.label}</option>
               ))}
             </select>
 
             <select
               className={styles.filterSelect}
               value={opportunityType}
-              onChange={(e) =>
-                setOpportunityType(e.target.value as JobOpportunityType | 'all')
-              }
+              onChange={(e) => setOpportunityType(e.target.value as JobOpportunityType | 'all')}
             >
               <option value="all">Any type</option>
               {JOB_OPPORTUNITY_TYPE_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
+                <option key={o.value} value={o.value}>{o.label}</option>
               ))}
             </select>
 
             <select
               className={styles.filterSelect}
               value={experienceLevel}
-              onChange={(e) =>
-                setExperienceLevel(
-                  e.target.value as JobExperienceLevel | 'all'
-                )
-              }
+              onChange={(e) => setExperienceLevel(e.target.value as JobExperienceLevel | 'all')}
             >
               <option value="all">Any level</option>
               {JOB_EXPERIENCE_LEVEL_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
+                <option key={o.value} value={o.value}>{o.label}</option>
               ))}
             </select>
-          </ScrollReveal>
+          </div>
 
           {/* Content */}
           {isLoading ? (
-            <LoadingSkeleton />
+            <div className={styles.grid}>
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className={styles.skeletonCard} />
+              ))}
+            </div>
           ) : error ? (
-            <ErrorBox message={error} />
+            <div className={styles.errorBox}>
+              <div className={styles.errorIcon}>
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+              </div>
+              <h3 className={styles.errorTitle}>Couldn't load jobs</h3>
+              <p className={styles.errorText}>{error}</p>
+            </div>
           ) : jobs.length === 0 ? (
-            <EmptyState type="no-jobs" />
+            <div className={styles.emptyBox}>
+              <div className={styles.emptyIcon}>
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                </svg>
+              </div>
+              <h3 className={styles.emptyTitle}>No jobs are open right now</h3>
+              <p className={styles.emptyText}>
+                New opportunities are posted regularly. Check back soon, or explore our courses to become work ready.
+              </p>
+              <Link to="/courses" className={styles.emptyCta}>
+                Explore Courses →
+              </Link>
+            </div>
           ) : filtered.length === 0 ? (
-            <EmptyState type="no-match" onClear={clearFilters} />
+            <div className={styles.emptyBox}>
+              <div className={styles.emptyIcon}>
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+              </div>
+              <h3 className={styles.emptyTitle}>No jobs match your filters</h3>
+              <p className={styles.emptyText}>Try adjusting your search or clearing the filters.</p>
+              <button type="button" onClick={clearFilters} className={styles.emptyCta}>
+                Clear filters
+              </button>
+            </div>
           ) : (
             <>
               {/* Result count */}
@@ -257,34 +278,41 @@ export const Jobs: React.FC = () => {
               </div>
 
               {/* Grid */}
-              <ScrollReveal animation="up" stagger className={styles.grid}>
+              <div className={`${styles.grid} ${styles.slideUpText} ${styles['delay-2']}`}>
                 {filtered.map((job) => (
                   <JobCard key={job.id} job={job} />
                 ))}
-              </ScrollReveal>
+              </div>
             </>
           )}
         </div>
       </section>
 
-      {/* ================================================================
-          FINAL CTA
-          ================================================================ */}
+      {/* FINAL CTA (Netted Blue) */}
       <section className={styles.finalCta}>
+        <svg className={styles.netGrid} aria-hidden="true" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1440 900">
+          <defs>
+            <pattern id="jobsCtaNet" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+              <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#000000" strokeWidth="1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#jobsCtaNet)" />
+        </svg>
+
         <div className={styles.finalCtaBlob} aria-hidden="true" />
-        <div className="container">
-          <ScrollReveal animation="up" className={styles.finalCtaInner}>
+        
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          <div className={`${styles.finalCtaInner} ${styles.slideUpText} ${styles['delay-3']}`}>
             <h2 className={styles.finalCtaTitle}>
               Ready to be the candidate they hire?
             </h2>
             <p className={styles.finalCtaSubtitle}>
-              Join an IQuire programme and become work-ready for the roles you
-              actually want.
+              Join an iQuire programme and become work ready for the roles you actually want.
             </p>
             <div className={styles.finalCtaButtons}>
               <Button
                 variant="primary"
-                color="green"
+                color="gradient"
                 size="lg"
                 href="/courses"
               >
@@ -294,7 +322,7 @@ export const Jobs: React.FC = () => {
                 Hire From Us →
               </Link>
             </div>
-          </ScrollReveal>
+          </div>
         </div>
       </section>
     </div>
@@ -314,26 +342,21 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
   const isClosed = isJobDeadlinePassed(job.deadline);
   const canApply = !isClosed && !!job.apply_url;
 
-  // Determine deadline variant for badge color
   const deadlineVariant = (() => {
     if (!job.deadline || isClosed) return 'closed';
     const d = new Date(job.deadline);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const days = Math.ceil(
-      (d.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
-    );
+    const days = Math.ceil((d.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
     if (days <= 7) return 'urgent';
     if (days <= 14) return 'soon';
     return 'neutral';
   })();
 
   return (
-    <article
-      className={`${styles.card} ${job.featured ? styles.cardFeatured : ''}`}
-    >
+    <article className={`${styles.card} ${job.featured ? styles.cardFeatured : ''}`}>
       {job.featured && (
-        <span className={styles.featuredBadge}>⭐ Featured</span>
+        <span className={styles.featuredBadge}>Featured</span>
       )}
 
       {/* Header */}
@@ -375,14 +398,19 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
       {/* Description preview */}
       <p className={styles.cardDescription}>
         {job.description.length > 160
-          ? `${job.description.slice(0, 160).trim()}…`
+          ? `${job.description.slice(0, 160).trim()}...`
           : job.description}
       </p>
 
       {/* Salary */}
       {job.salary_range && (
         <div className={styles.salaryRow}>
-          <span className={styles.salaryIcon}>💰</span>
+          <span className={styles.salaryIcon}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23" />
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>
+          </span>
           <span className={styles.salaryText}>{job.salary_range}</span>
         </div>
       )}
@@ -391,9 +419,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
       {job.required_skills.length > 0 && (
         <div className={styles.skillsRow}>
           {job.required_skills.slice(0, 4).map((skill) => (
-            <span key={skill} className={styles.skillTag}>
-              {skill}
-            </span>
+            <span key={skill} className={styles.skillTag}>{skill}</span>
           ))}
           {job.required_skills.length > 4 && (
             <span className={styles.skillMore}>
@@ -405,101 +431,37 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
 
       {/* Optional course link */}
       {job.course && (
-        <Link
-          to={`/courses/${job.course.slug}`}
-          className={styles.courseLink}
-        >
-          🎓 Prep course: {job.course.title} →
+        <Link to={`/courses/${job.course.slug}`} className={styles.courseLink}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+            <path d="M6 12v5c3 3 9 3 12 0v-5" />
+          </svg>
+          Prep course: {job.course.title} →
         </Link>
       )}
 
       {/* Footer */}
       <div className={styles.cardFooter}>
         {deadlineText && (
-          <span
-            className={`${styles.deadlineBadge} ${
-              styles[`deadline-${deadlineVariant}`]
-            }`}
-          >
+          <span className={`${styles.deadlineBadge} ${styles[`deadline-${deadlineVariant}`]}`}>
             {deadlineText}
           </span>
         )}
 
         {canApply ? (
-          <a
-            href={job.apply_url!}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.applyBtn}
-          >
+          <a href={job.apply_url!} target="_blank" rel="noopener noreferrer" className={styles.applyBtn}>
             View & Apply →
           </a>
         ) : isClosed ? (
-          <button
-            type="button"
-            className={styles.applyBtnDisabled}
-            disabled
-          >
+          <button type="button" className={styles.applyBtnDisabled} disabled>
             Closed
           </button>
         ) : (
           <Link to="/contact" className={styles.applyBtn}>
-            Contact Us →
+            Contact Us
           </Link>
         )}
       </div>
     </article>
   );
 };
-
-// ============================================================================
-// States
-// ============================================================================
-
-const LoadingSkeleton: React.FC = () => (
-  <div className={styles.grid}>
-    {[...Array(4)].map((_, i) => (
-      <div key={i} className={styles.skeletonCard} />
-    ))}
-  </div>
-);
-
-const ErrorBox: React.FC<{ message: string }> = ({ message }) => (
-  <div className={styles.errorBox}>
-    <div className={styles.errorIcon}>⚠️</div>
-    <h3 className={styles.errorTitle}>Couldn't load jobs</h3>
-    <p className={styles.errorText}>{message}</p>
-  </div>
-);
-
-interface EmptyStateProps {
-  type: 'no-jobs' | 'no-match';
-  onClear?: () => void;
-}
-
-const EmptyState: React.FC<EmptyStateProps> = ({ type, onClear }) => (
-  <div className={styles.emptyBox}>
-    <div className={styles.emptyIcon}>
-      {type === 'no-match' ? '🔍' : '💼'}
-    </div>
-    <h3 className={styles.emptyTitle}>
-      {type === 'no-match'
-        ? 'No jobs match your filters'
-        : 'No jobs are open right now'}
-    </h3>
-    <p className={styles.emptyText}>
-      {type === 'no-match'
-        ? 'Try adjusting your search or clearing the filters.'
-        : 'New opportunities are posted regularly. Check back soon, or explore our courses to become work-ready.'}
-    </p>
-    {type === 'no-match' && onClear ? (
-      <button type="button" onClick={onClear} className={styles.emptyCta}>
-        Clear filters
-      </button>
-    ) : (
-      <Link to="/courses" className={styles.emptyCta}>
-        Explore Courses →
-      </Link>
-    )}
-  </div>
-);

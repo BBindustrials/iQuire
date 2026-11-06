@@ -6,7 +6,6 @@
 
 .howItWorks {
   position: relative;
-  /* Reduced top padding to pull content up */
   padding: 3.5rem 0 8rem;
   background: linear-gradient(180deg, #f1f5f9 0%, #f8fafc 100%);
   overflow: hidden;
@@ -24,7 +23,6 @@
   overflow: hidden;
 }
 
-/* Top Left */
 .dottedGridLeft {
   position: absolute;
   top: 10%;
@@ -41,15 +39,6 @@
   height: 32px;
 }
 
-/* Top Right */
-.leafTopRight {
-  position: absolute;
-  top: -50px;
-  right: -60px;
-  width: 450px;
-  height: 450px;
-  transform: rotate(-20deg);
-}
 .sweepingRing {
   position: absolute;
   top: 15%;
@@ -58,7 +47,6 @@
   height: 180px;
 }
 
-/* Bottom Left */
 .leafBottomLeft {
   position: absolute;
   bottom: -80px;
@@ -68,7 +56,6 @@
   transform: rotate(15deg);
 }
 
-/* Bottom Right */
 .circleBottomRight {
   position: absolute;
   bottom: 25%;
@@ -76,7 +63,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 6px solid #FEF3C7;
+  border: 6px solid #e0f7f2;
   opacity: 0.6;
 }
 .dottedGridRight {
@@ -89,7 +76,7 @@
 }
 
 /* ----------------------------------------------------------------------------
-   Background accents (Blur rings)
+   Background accents
    ---------------------------------------------------------------------------- */
 
 .bgAccentOne,
@@ -105,7 +92,7 @@
 .bgAccentOne {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, #1565C0 0%, transparent 70%);
+  background: radial-gradient(circle, #1E88E5 0%, transparent 70%);
   top: -160px;
   left: -140px;
 }
@@ -113,7 +100,7 @@
 .bgAccentTwo {
   width: 560px;
   height: 560px;
-  background: radial-gradient(circle, #F9A825 0%, transparent 70%);
+  background: radial-gradient(circle, #2BBBAD 0%, transparent 70%);
   bottom: -160px;
   right: -160px;
 }
@@ -127,29 +114,39 @@
 }
 
 /* ----------------------------------------------------------------------------
-   Header
+   Header — Slide up 4s animation
    ---------------------------------------------------------------------------- */
 
 .header {
   text-align: center;
   max-width: 720px;
-  /* Reduced margin to pull the circle up */
-  margin: 0 auto 2.5rem;
+  margin: 0 auto 6rem;
+  
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.headerVisible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .badge {
   display: inline-flex;
   align-items: center;
   padding: 0.4rem 1rem;
-  background-color: #F9A825;
-  color: #1A1A2E;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff;
   border-radius: 50px;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  box-shadow: 0 4px 12px rgba(249, 168, 37, 0.25);
+  box-shadow: 0 4px 14px rgba(43, 187, 173, 0.3);
   margin-bottom: 1.25rem;
 }
 
@@ -159,14 +156,17 @@
   font-weight: 800;
   line-height: 1.12;
   letter-spacing: -0.025em;
-  color: #0f172a;
+  color: #000000;
   margin: 0 0 1rem 0;
-  text-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
 }
 
 .highlight {
-  color: #F57F17;
-  text-shadow: 0 2px 8px rgba(245, 127, 23, 0.2);
+  background: linear-gradient(90deg, #2BBBAD 0%, #1E88E5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
 }
 
 .description {
@@ -205,16 +205,28 @@
   z-index: 0;
 }
 
-.ringOuter {
-  width: 88%;
-  height: 88%;
-  border: 1.5px dashed rgba(21, 101, 192, 0.12);
-}
-
 .ringInner {
   width: 60%;
   height: 60%;
-  border: 1.5px dashed rgba(249, 168, 37, 0.12);
+  border: 1.5px dashed rgba(43, 187, 173, 0.12);
+}
+
+/* 
+ * The outer faint spinning circle.
+ * It is 96% of the container, making it larger than the SVG path (84%).
+ */
+.outerFaintRing {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 88%;
+  height: 88%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px dashed rgba(30, 136, 229, 0.4);
+  animation: spinReverse 40s linear infinite;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Connector SVG */
@@ -225,6 +237,26 @@
   height: 100%;
   z-index: 1;
   pointer-events: none;
+}
+
+/* Inner thick line animation */
+.animatedDash {
+  animation: dashSpin 30s linear infinite;
+}
+
+@keyframes dashSpin {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+@keyframes spinReverse {
+  from {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
 }
 
 /* ----------------------------------------------------------------------------
@@ -249,23 +281,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 20px 50px -12px rgba(21, 101, 192, 0.35),
-    0 0 0 12px rgba(249, 168, 37, 0.1),
-    0 0 0 24px rgba(21, 101, 192, 0.05);
+  box-shadow: 0 20px 50px -12px rgba(30, 136, 229, 0.35),
+    0 0 0 12px rgba(43, 187, 173, 0.1),
+    0 0 0 24px rgba(30, 136, 229, 0.05);
   animation: hubPulse 4s ease-in-out infinite;
   padding: 2rem;
 }
 
 @keyframes hubPulse {
   0%, 100% {
-    box-shadow: 0 20px 50px -12px rgba(21, 101, 192, 0.35),
-      0 0 0 12px rgba(249, 168, 37, 0.1),
-      0 0 0 24px rgba(21, 101, 192, 0.05);
+    box-shadow: 0 20px 50px -12px rgba(30, 136, 229, 0.35),
+      0 0 0 12px rgba(43, 187, 173, 0.1),
+      0 0 0 24px rgba(30, 136, 229, 0.05);
   }
   50% {
-    box-shadow: 0 20px 50px -12px rgba(21, 101, 192, 0.5),
-      0 0 0 18px rgba(249, 168, 37, 0.14),
-      0 0 0 34px rgba(21, 101, 192, 0.07);
+    box-shadow: 0 20px 50px -12px rgba(30, 136, 229, 0.5),
+      0 0 0 18px rgba(43, 187, 173, 0.14),
+      0 0 0 34px rgba(30, 136, 229, 0.07);
   }
 }
 
@@ -312,15 +344,15 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: #F9A825;
-  color: #1A1A2E;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.72rem;
   font-weight: 800;
-  box-shadow: 0 6px 16px rgba(249, 168, 37, 0.45);
+  box-shadow: 0 6px 16px rgba(43, 187, 173, 0.45);
   z-index: 4;
   border: 2px solid #ffffff;
 }
@@ -333,24 +365,25 @@
   overflow: hidden;
   border: 4px solid #ffffff;
   box-shadow: 0 12px 30px -8px rgba(15, 23, 42, 0.25),
-    0 0 0 6px rgba(21, 101, 192, 0.08);
+    0 0 0 6px rgba(30, 136, 229, 0.08);
   background-color: #f1f5f9;
   transition: all 0.3s ease;
-  margin-bottom: 0.005rem; /* Increased from 0.75rem to push text down */
-}
-
-.node:hover .nodeAvatar {
-  transform: translateY(-4px) scale(1.05);
-  box-shadow: 0 20px 40px -10px rgba(21, 101, 192, 0.35),
-    0 0 0 8px rgba(249, 168, 37, 0.15);
-  border-color: #F9A825;
+  margin-bottom: 0.005rem;
 }
 
 .nodeAvatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
   display: block;
+}
+
+.node:hover .nodeAvatar {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 20px 40px -10px rgba(30, 136, 229, 0.35),
+    0 0 0 8px rgba(43, 187, 173, 0.15);
+  border-color: #2BBBAD;
 }
 
 /* Title + description */
@@ -358,7 +391,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 1rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   margin: 0 0 0.35rem 0;
   letter-spacing: -0.01em;
 }
@@ -400,22 +433,22 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #F9A825;
-  color: #1A1A2E;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.85rem;
   font-weight: 800;
-  box-shadow: 0 6px 16px rgba(249, 168, 37, 0.4);
+  box-shadow: 0 6px 16px rgba(43, 187, 173, 0.4);
   flex-shrink: 0;
 }
 
 .mobileConnector {
   flex: 1;
   width: 2px;
-  background: linear-gradient(to bottom, #00A878, #0077C8);
+  background: linear-gradient(to bottom, #2BBBAD, #1E88E5);
   opacity: 0.4;
   margin-top: 0.5rem;
   border-radius: 2px;
@@ -442,6 +475,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
   display: block;
 }
 
@@ -449,7 +483,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 1.05rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   margin: 0 0 0.25rem 0;
 }
 
@@ -479,7 +513,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
-  color: #1565C0;
+  color: #1E88E5;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -488,7 +522,7 @@
 }
 
 .secondaryLink:hover {
-  color: #0D47A1;
+  color: #2BBBAD;
   gap: 0.5rem;
 }
 
@@ -602,6 +636,6 @@
   }
 
   .demarcationBottom .demarcationWave {
-    height: 70px;
+    height: 90px;
   }
 }

@@ -8,14 +8,24 @@
   background-color: #ffffff;
 }
 
+.netGrid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.08;
+  pointer-events: none;
+}
+
 /* ----------------------------------------------------------------------------
-   HERO
+   HERO (Netted Light Blue)
    ---------------------------------------------------------------------------- */
 
 .hero {
   position: relative;
-  padding: 5rem 0 4rem;
-  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  padding: 6rem 0 5rem;
+  background: #d6eaff; 
   overflow: hidden;
 }
 
@@ -25,14 +35,14 @@
   border-radius: 50%;
   filter: blur(100px);
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
 }
 
 .heroBgBlobOne {
   width: 480px;
   height: 480px;
-  background: radial-gradient(circle, #1565C0 0%, transparent 70%);
-  opacity: 0.12;
+  background: radial-gradient(circle, #2BBBAD 0%, transparent 70%);
+  opacity: 0.15;
   top: -180px;
   right: -120px;
 }
@@ -40,15 +50,15 @@
 .heroBgBlobTwo {
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, #F9A825 0%, transparent 70%);
-  opacity: 0.1;
+  background: radial-gradient(circle, #1E88E5 0%, transparent 70%);
+  opacity: 0.15;
   bottom: -120px;
   left: -140px;
 }
 
 .heroContent {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   text-align: center;
   max-width: 800px;
   margin: 0 auto;
@@ -58,32 +68,35 @@
   display: inline-flex;
   align-items: center;
   padding: 0.4rem 1rem;
-  background-color: #F9A825;
-  color: #1A1A2E;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff;
   border-radius: 50px;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  box-shadow: 0 4px 12px rgba(249, 168, 37, 0.25);
+  box-shadow: 0 4px 14px rgba(43, 187, 173, 0.3);
   margin-bottom: 1.5rem;
 }
 
 .heroTitle {
   font-family: 'Satoshi', sans-serif;
-  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-size: clamp(2.25rem, 4vw, 3.25rem);
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.03em;
-  color: #0f172a;
+  color: #000000;
   margin: 0 0 1.25rem 0;
-  text-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
 }
 
 .highlight {
-  color: #F57F17;
-  text-shadow: 0 2px 8px rgba(245, 127, 23, 0.2);
+  background: linear-gradient(90deg, #2BBBAD 0%, #1E88E5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
 }
 
 .heroSubtitle {
@@ -107,21 +120,21 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+  gap: 1.5rem;
+  /* Columns are set dynamically inline in the TSX */
 }
 
 /* Card */
 .card {
   position: relative;
   background-color: #ffffff;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 24px;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: all 0.3s ease;
-  box-shadow: 0 8px 24px -12px rgba(15, 23, 42, 0.1);
+  box-shadow: 0 4px 16px -8px rgba(15, 23, 42, 0.08);
 }
 
 .card::before {
@@ -136,24 +149,24 @@
 }
 
 .card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 30px 60px -20px rgba(15, 23, 42, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px -12px rgba(15, 23, 42, 0.15);
 }
 
 .card:hover::before {
   height: 6px;
 }
 
-.accent-blue::before { background: linear-gradient(90deg, #1565C0, #0D47A1); }
-.accent-green::before { background: linear-gradient(90deg, #2E7D32, #1B5E20); }
-.accent-purple::before { background: linear-gradient(90deg, #7C3AED, #5B21B6); }
-.accent-orange::before { background: linear-gradient(90deg, #F9A825, #F57F17); }
+.accent-blue::before { background: linear-gradient(90deg, #1E88E5, #1565C0); }
+.accent-teal::before { background: linear-gradient(90deg, #2BBBAD, #1a9c91); }
+.accent-gradient::before { background: linear-gradient(90deg, #2BBBAD, #1E88E5); }
+.accent-cyan::before { background: linear-gradient(90deg, #1a9c91, #1E88E5); }
 
 /* Card image */
 .cardImage {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
   background-color: #f1f5f9;
 }
@@ -167,7 +180,7 @@
 }
 
 .card:hover .cardImage img {
-  transform: scale(1.06);
+  transform: scale(1.05);
 }
 
 .cardImageOverlay {
@@ -175,21 +188,21 @@
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(15, 23, 42, 0.1) 0%,
-    rgba(15, 23, 42, 0.5) 100%
+    rgba(15, 23, 42, 0.05) 0%,
+    rgba(15, 23, 42, 0.4) 100%
   );
   z-index: 1;
 }
 
 .cardDuration {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  padding: 0.4rem 0.85rem;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.3rem 0.65rem;
   background-color: rgba(15, 23, 42, 0.85);
   color: #ffffff;
   font-family: 'Satoshi', sans-serif;
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   border-radius: 50px;
@@ -199,59 +212,57 @@
 
 /* Card body */
 .cardBody {
-  padding: 1.75rem 1.75rem 1.5rem;
+  padding: 1.25rem 1.25rem 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.5rem;
   flex: 1;
-}
-
-.cardEmoji {
-  font-size: 2rem;
-  line-height: 1;
-  margin-bottom: 0.25rem;
 }
 
 .cardTitle {
   font-family: 'Satoshi', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.15rem;
   font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  color: #0f172a;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: #000000;
   margin: 0;
 }
 
 .cardTagline {
   font-family: 'Satoshi', sans-serif;
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   font-weight: 700;
   font-style: italic;
-  color: #475569;
   margin: 0;
 }
 
-.accent-blue .cardTagline { color: #1565C0; }
-.accent-green .cardTagline { color: #2E7D32; }
-.accent-purple .cardTagline { color: #7C3AED; }
-.accent-orange .cardTagline { color: #F57F17; }
+.accent-blue .cardTagline { color: #1E88E5; }
+.accent-teal .cardTagline { color: #2BBBAD; }
+.accent-gradient .cardTagline { color: #1E88E5; }
+.accent-cyan .cardTagline { color: #1a9c91; }
 
 .cardDescription {
   font-family: 'Satoshi', sans-serif;
-  font-size: 0.92rem;
-  line-height: 1.65;
-  color: #475569;
-  margin: 0.25rem 0 0.75rem 0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #000000;
+  margin: 0.25rem 0 0.5rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* Meta row */
 .cardMeta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.85rem;
-  padding: 0.75rem 0;
+  gap: 0.75rem;
+  padding: 0.65rem 0;
   border-top: 1px solid #f1f5f9;
   border-bottom: 1px solid #f1f5f9;
+  margin-top: auto;
 }
 
 .cardMetaItem {
@@ -259,9 +270,9 @@
   align-items: center;
   gap: 0.35rem;
   font-family: 'Satoshi', sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  color: #64748b;
+  color: #000000;
 }
 
 .cardMetaItem svg {
@@ -269,49 +280,17 @@
   flex-shrink: 0;
 }
 
-/* Cohort */
-.cardCohort {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  padding: 0.5rem 0;
-}
-
-.cardCohortLabel {
-  font-family: 'Satoshi', sans-serif;
-  font-size: 0.7rem;
-  font-weight: 800;
-  color: #94a3b8;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.cardCohortValue {
-  font-family: 'Satoshi', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-.cardCohortEmpty {
-  font-family: 'Satoshi', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #94a3b8;
-  font-style: italic;
-}
-
 /* Fee */
 .cardFee {
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
-  padding: 0.25rem 0 0.75rem;
+  gap: 0.4rem;
+  padding: 0.5rem 0 0.25rem;
 }
 
 .cardFeeLabel {
   font-family: 'Satoshi', sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 800;
   color: #94a3b8;
   text-transform: uppercase;
@@ -320,9 +299,9 @@
 
 .cardFeeValue {
   font-family: 'Satoshi', sans-serif;
-  font-size: 1.15rem;
+  font-size: 1rem;
   font-weight: 800;
-  color: #F57F17;
+  color: #1E88E5;
   letter-spacing: -0.01em;
 }
 
@@ -331,26 +310,29 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.85rem 1.5rem;
+  gap: 0.4rem;
+  padding: 0.65rem 1rem;
   border-radius: 50px;
   font-family: 'Satoshi', sans-serif;
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  text-decoration: none;
-  transition: all 0.25s ease;
-  margin-top: auto;
-  color: #ffffff;
+  text-decoration: none !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-top: 0.5rem;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff !important;
 }
 
-.accent-blue .cardCta { background-color: #1565C0; }
-.accent-green .cardCta { background-color: #2E7D32; }
-.accent-purple .cardCta { background-color: #7C3AED; }
-.accent-orange .cardCta { background-color: #F9A825; color: #1A1A2E; }
-
 .cardCta:hover {
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%) !important;
+  color: #ffffff !important;
   transform: translateY(-2px);
-  box-shadow: 0 12px 24px -8px rgba(21, 101, 192, 0.35);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+}
+
+.cardCta:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .cardCta svg {
@@ -358,7 +340,7 @@
 }
 
 .cardCta:hover svg {
-  transform: translateX(3px);
+  transform: translateX(2px);
 }
 
 /* ----------------------------------------------------------------------------
@@ -373,34 +355,41 @@
 .scholarshipCard {
   display: flex;
   align-items: center;
-  gap: 1.75rem;
-  padding: 2rem 2.5rem;
-  background: linear-gradient(135deg, #fffbf0 0%, #fef3c7 100%);
-  border: 1.5px solid #fde68a;
-  border-left: 5px solid #F9A825;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  background: #ffffff;
+  border: 1.5px solid rgba(43, 187, 173, 0.2);
+  border-left: 5px solid #2BBBAD;
   border-radius: 20px;
-  box-shadow: 0 20px 40px -20px rgba(249, 168, 37, 0.3);
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.08);
 }
 
 .scholarshipIcon {
-  font-size: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff;
   flex-shrink: 0;
-  line-height: 1;
+  box-shadow: 0 6px 16px -4px rgba(43, 187, 173, 0.4);
 }
 
 .scholarshipContent {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.25rem;
   min-width: 0;
 }
 
 .scholarshipTitle {
   font-family: 'Satoshi', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 800;
-  color: #713f12;
+  color: #000000;
   margin: 0;
   letter-spacing: -0.01em;
 }
@@ -408,7 +397,7 @@
 .scholarshipText {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.9rem;
-  color: #78350f;
+  color: #000000;
   line-height: 1.6;
   margin: 0;
 }
@@ -417,34 +406,35 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 0.9rem;
   font-weight: 700;
-  color: #92400e;
-  text-decoration: none;
+  color: #1E88E5 !important;
+  text-decoration: none !important;
   white-space: nowrap;
   transition: all 0.2s ease;
   flex-shrink: 0;
   padding: 0.6rem 1.25rem;
   border-radius: 50px;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(30, 136, 229, 0.05);
 }
 
 .scholarshipCta:hover {
-  background-color: #ffffff;
-  color: #713f12;
-  box-shadow: 0 6px 16px rgba(249, 168, 37, 0.25);
+  background-color: rgba(30, 136, 229, 0.1);
+  color: #2BBBAD !important;
 }
 
 /* ----------------------------------------------------------------------------
-   FINAL CTA
+   FINAL CTA (Netted Light Blue)
    ---------------------------------------------------------------------------- */
 
 .ctaSection {
-  padding: 4rem 0 6rem;
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  position: relative;
+  padding: 5rem 0 6rem;
+  background: #d6eaff;
+  overflow: hidden;
 }
 
 .ctaInner {
   text-align: center;
-  max-width: 640px;
+  max-width: 800px; /* Widened to keep text on one line */
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -456,7 +446,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: clamp(1.5rem, 2.5vw, 2rem);
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   margin: 0;
   letter-spacing: -0.02em;
   line-height: 1.2;
@@ -465,9 +455,12 @@
 .ctaSubtitle {
   font-family: 'Satoshi', sans-serif;
   font-size: 1rem;
-  color: #475569;
+  color: #000000;
   margin: 0;
   line-height: 1.7;
+  font-weight: 500;
+  /* Forces text on one line for desktop */
+  white-space: nowrap; 
 }
 
 .ctaButtons {
@@ -484,29 +477,30 @@
   align-items: center;
   justify-content: center;
   padding: 0.9rem 2rem;
-  background-color: #2E7D32;
-  color: #ffffff;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff !important;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
   border-radius: 50px;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  box-shadow: 0 8px 20px -8px rgba(46, 125, 50, 0.4);
+  text-decoration: none !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 20px -8px rgba(43, 187, 173, 0.4);
 }
 
 .ctaPrimary:hover {
-  background-color: #1B5E20;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%) !important;
+  color: #ffffff !important;
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px -8px rgba(46, 125, 50, 0.5);
+  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.25);
 }
 
 .ctaSecondary {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
-  color: #1565C0;
-  text-decoration: none;
+  color: #1E88E5 !important;
+  text-decoration: none !important;
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
@@ -514,8 +508,25 @@
 }
 
 .ctaSecondary:hover {
-  color: #0D47A1;
+  color: #2BBBAD !important;
   gap: 0.5rem;
+}
+
+/* ============================================================================
+   TEXT SLIDE-UP ANIMATION (4 SECONDS)
+   ============================================================================ */
+
+.slideUpText {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.isVisible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ============================================================================
@@ -524,9 +535,19 @@
 
 @media (max-width: 1024px) {
   .grid {
-    grid-template-columns: 1fr;
-    gap: 1.75rem;
-    max-width: 640px;
+    grid-template-columns: repeat(2, 1fr) !important; /* Force 2 columns on tablet */
+  }
+}
+
+@media (max-width: 768px) {
+  .hero { padding: 5rem 0 3rem; }
+  .heroSubtitle { font-size: 1rem; }
+
+  .listSection { padding: 3rem 0 4rem; }
+  
+  .grid {
+    grid-template-columns: 1fr !important; /* Force 1 column on mobile */
+    max-width: 400px;
     margin: 0 auto;
   }
 
@@ -534,55 +555,36 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
-    padding: 1.75rem;
+    padding: 1.5rem;
   }
 
   .scholarshipCta {
     align-self: flex-start;
   }
-}
-
-@media (max-width: 768px) {
-  .hero { padding: 4rem 0 3rem; }
-  .heroSubtitle { font-size: 1rem; }
-
-  .listSection { padding: 3rem 0 4rem; }
-
-  .cardBody { padding: 1.5rem 1.35rem 1.25rem; }
-  .cardTitle { font-size: 1.3rem; }
-
-  .scholarshipTitle { font-size: 1.05rem; }
-  .scholarshipIcon { font-size: 2rem; }
 
   .ctaButtons {
     flex-direction: column;
     gap: 1rem;
   }
+  
+  /* Allow wrapping on mobile */
+  .ctaSubtitle {
+    white-space: normal; 
+  }
 }
 
 @media (max-width: 480px) {
   .heroTitle { font-size: 1.75rem; }
-
+  
   .cardImage { aspect-ratio: 4 / 3; }
-
-  .cardBody { padding: 1.25rem 1.15rem 1.15rem; }
-  .cardTitle { font-size: 1.2rem; }
-  .cardDescription { font-size: 0.88rem; }
-
-  .cardCta {
-    padding: 0.75rem 1.25rem;
-    font-size: 0.85rem;
-  }
-
-  .scholarshipCard { padding: 1.5rem 1.25rem; }
 }
 
 /* ============================================================================
-   NEW — Loading skeleton, error, empty states
+   Loading skeleton, error, empty states
    ============================================================================ */
 
 .skeletonCard {
-  aspect-ratio: 1 / 1.4;
+  height: 380px;
   background: linear-gradient(
     90deg,
     #f1f5f9 0%,
@@ -590,7 +592,7 @@
     #f1f5f9 100%
   );
   background-size: 200% 100%;
-  border-radius: 24px;
+  border-radius: 20px;
   animation: coursesShimmer 1.4s infinite;
 }
 
@@ -612,8 +614,7 @@
 
 .errorIcon,
 .emptyIcon {
-  font-size: 3.5rem;
-  line-height: 1;
+  color: #94a3b8;
   margin-bottom: 0.5rem;
 }
 
@@ -622,7 +623,7 @@
   font-family: 'Satoshi', sans-serif;
   font-size: 1.35rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
   margin: 0;
   letter-spacing: -0.015em;
 }
@@ -631,7 +632,7 @@
 .emptyText {
   font-family: 'Satoshi', sans-serif;
   font-size: 0.95rem;
-  color: #64748b;
+  color: #000000;
   max-width: 460px;
   line-height: 1.7;
   margin: 0 0 0.5rem;
@@ -642,21 +643,22 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.85rem 1.75rem;
-  background-color: #2E7D32;
-  color: #ffffff;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%);
+  color: #ffffff !important;
   font-family: 'Satoshi', sans-serif;
   font-size: 0.9rem;
   font-weight: 700;
   border-radius: 50px;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  box-shadow: 0 8px 20px -8px rgba(46, 125, 50, 0.4);
+  text-decoration: none !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 20px -8px rgba(43, 187, 173, 0.4);
 }
 
 .emptyCta:hover {
-  background-color: #1B5E20;
+  background: linear-gradient(135deg, #2BBBAD 0%, #1E88E5 100%) !important;
+  color: #ffffff !important;
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px -8px rgba(46, 125, 50, 0.5);
+  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.25);
 }
 
 /* Image placeholder (for courses without a hero image) */
@@ -668,4 +670,12 @@
   justify-content: center;
   background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
   font-size: 3rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slideUpText {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }

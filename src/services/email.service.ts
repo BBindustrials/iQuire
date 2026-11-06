@@ -17,7 +17,7 @@ const FORMSUBMIT_URL = (email: string) =>
   `https://formsubmit.co/ajax/${email}`;
 
 /** Where the future branded emails will come from */
-export const PUBLIC_SITE_URL = 'https://iquire.vercel.app';
+export const PUBLIC_SITE_URL = 'https://iQuire.vercel.app';
 
 // ============================================================================
 // Types
@@ -94,7 +94,7 @@ export const notifyAdminNewRecruiter = async (data: {
   return sendEmail({
     subject: `New Recruiter Signup — ${data.companyName}`,
     replyTo: data.email,
-    message: `A new recruiter has registered on IQuire and is awaiting verification.
+    message: `A new recruiter has registered on iQuire and is awaiting verification.
 
 COMPANY
 - Name: ${data.companyName}
@@ -131,25 +131,25 @@ export const sendRecruiterSignupConfirmation = async (data: {
 }): Promise<SendEmailResult> => {
   return sendEmail({
     intendedFor: data.email,
-    subject: `Welcome to IQuire — Verification in progress`,
+    subject: `Welcome to iQuire — Verification in progress`,
     replyTo: ADMIN_EMAIL,
     message: `Hi ${data.firstName},
 
-Thank you for registering ${data.companyName} with IQuire.
+Thank you for registering ${data.companyName} with iQuire.
 
 Your account has been created and is currently under review. Our team will verify your organisation details within 24–48 hours.
 
 WHAT HAPPENS NEXT
 1. Our team reviews your organisation info
 2. You'll receive an email once your account is verified
-3. You'll then have full access to the IQuire talent directory
+3. You'll then have full access to the iQuire talent directory
 
 You can log in at any time to check your verification status:
 ${PUBLIC_SITE_URL}/login/recruiter
 
 If you have any questions, reply to this email.
 
-— The IQuire Team
+— The iQuire Team
 
 ─────────────────────────────
 NOTE TO ADMIN: Forward this email to ${data.email}
@@ -173,19 +173,19 @@ export const sendRecruiterApprovedEmail = async (data: {
 }): Promise<SendEmailResult> => {
   return sendEmail({
     intendedFor: data.email,
-    subject: `Your IQuire account is verified`,
+    subject: `Your iQuire account is verified`,
     replyTo: ADMIN_EMAIL,
     message: `Hi ${data.firstName},
 
 Great news — your account for ${data.companyName} has been verified!
 
-You now have full access to the IQuire talent directory. Log in to start discovering work-ready African talent:
+You now have full access to the iQuire talent directory. Log in to start discovering work-ready African talent:
 
 ${PUBLIC_SITE_URL}/login/recruiter
 
 Welcome aboard.
 
-— The IQuire Team
+— The iQuire Team
 
 ─────────────────────────────
 NOTE TO ADMIN: Forward this email to ${data.email}
@@ -210,11 +210,11 @@ export const sendRecruiterRejectedEmail = async (data: {
 }): Promise<SendEmailResult> => {
   return sendEmail({
     intendedFor: data.email,
-    subject: `Update on your IQuire registration`,
+    subject: `Update on your iQuire registration`,
     replyTo: ADMIN_EMAIL,
     message: `Hi ${data.firstName},
 
-Thank you for your interest in hiring IQuire talent.
+Thank you for your interest in hiring iQuire talent.
 
 After reviewing your registration for ${data.companyName}, our team was unable to approve your account at this time.
 
@@ -223,7 +223,7 @@ ${data.reason}
 
 If you believe this was a mistake or would like to discuss further, please reply to this email.
 
-— The IQuire Team
+— The iQuire Team
 
 ─────────────────────────────
 NOTE TO ADMIN: Forward this email to ${data.email}
