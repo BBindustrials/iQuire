@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/refs */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/set-state-in-effect */
 // ============================================================================
 // iQuire Public — Course Detail Page (Phase 11A.4)
@@ -54,7 +54,6 @@ export const CourseDetail: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [openModule, setOpenModule] = useState<string | null>(null);
 
   // --------------------------------------------------------------------------
   // Animation Hooks — Pass course?.id as dependency
@@ -171,7 +170,6 @@ export const CourseDetail: React.FC = () => {
   // Safe Data Destructuring
   // --------------------------------------------------------------------------
   const nextCohort = course.next_cohort || null;
-  const previousCohorts = course.previous_cohorts || [];
   const challenges = course.challenges || [];
   const whatYouLearn = course.what_you_learn || [];
   const outcomes = course.outcomes || [];

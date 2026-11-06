@@ -1,4 +1,4 @@
-/* eslint-disable prefer-const */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // ============================================================================
@@ -543,9 +543,9 @@ export const calculateScore = (
 
 export const recommendCourse = async (
   role: string,
-  score: number,
+  _score: number,
   gaps: string[],
-  experienceLevel: string
+  _experienceLevel: string
 ): Promise<CourseRecommendation | null> => {
   try {
     const { data: courses, error } = await supabase

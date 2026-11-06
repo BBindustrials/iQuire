@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // ============================================================================
 // iQuire — Admin Content Service (Phase 17.11 - Fixed)
 // ============================================================================
@@ -138,7 +139,7 @@ export const upsertLesson = async (lesson: Lesson): Promise<ServiceResponse<Less
   try {
     const { data, error } = await supabase
       .from('lessons')
-      .upsert(lesson)
+      .upsert(lesson as any)
       .select()
       .single();
 
@@ -182,7 +183,7 @@ export const upsertMaterial = async (material: Material): Promise<ServiceRespons
   try {
     const { data, error } = await supabase
       .from('materials')
-      .upsert(material)
+      .upsert(material as any)
       .select()
       .single();
 
@@ -226,7 +227,7 @@ export const upsertAssignment = async (assignment: Assignment): Promise<ServiceR
   try {
     const { data, error } = await supabase
       .from('assignments')
-      .upsert(assignment)
+      .upsert(assignment as any)
       .select()
       .single();
 

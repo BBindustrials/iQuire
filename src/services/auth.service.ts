@@ -232,7 +232,7 @@ export const fetchCurrentProfile = async (userId: string): Promise<Profile | nul
     console.error('[fetchCurrentProfile] Error:', error.message);
     return null;
   }
-  return data as Profile;
+  return data as unknown as Profile;
 };
 
 // ============================================================================

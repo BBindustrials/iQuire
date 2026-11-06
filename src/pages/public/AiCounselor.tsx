@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prefer-const */
 // ============================================================================
 // iQuire — Public AI Career Counselor (Phase 17.26 — AI-Driven Conversation)
 // ============================================================================
@@ -26,7 +26,6 @@ import {
   generateCourseBridge,
   generateSoftAsk,
   generateObjectionResponse,
-  generateCourseReveal,
   generateGracefulClose,
 } from '../../services/ai.service';
 import styles from './AiCounselor.module.css';
