@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './Header.module.css';
 import { useAuth } from '../../contexts/AuthContext';
-import logo from '../../assets/logo/iQuire-logo.png';
+import logo from '../../assets/logo/iquire-logo.png';
 
 export const Header: React.FC = () => {
   const navigate = useNavigate();

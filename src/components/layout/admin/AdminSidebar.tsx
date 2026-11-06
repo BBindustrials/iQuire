@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './AdminSidebar.module.css';
 import { fetchUnreadMessageCount } from '../../../services/messages.service';
-import iQuireLogo from '../../../assets/logo/iQuire-logo.png';
+import iQuireLogo from '../../../assets/logo/iquire-logo.png';
 
 // ============================================================================
 // Navigation Types

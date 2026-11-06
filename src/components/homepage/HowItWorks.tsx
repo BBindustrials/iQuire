@@ -11,7 +11,7 @@ import styles from './HowItWorks.module.css';
 // IMAGE SOURCES
 // ============================================================================
 
-import logo from '../../assets/logo/iQuire-logo.png';
+import logo from '../../assets/logo/iquire-logo.png';
 
 // Using the same avatars as the Problem section
 import avatar1 from '../../assets/images/avatar-1.jpeg';

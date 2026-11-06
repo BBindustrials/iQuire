@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './AuthHeader.module.css';
-import logo from '../../assets/logo/iQuire-logo.png';
+import logo from '../../assets/logo/iquire-logo.png';
 
 export const AuthHeader: React.FC = () => {
   return (

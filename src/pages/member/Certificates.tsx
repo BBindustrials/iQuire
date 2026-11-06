@@ -12,7 +12,7 @@ import {
 import styles from './Certificates.module.css';
 
 // Load logo via Vite import
-import iQuireLogo from '../../assets/logo/iQuire-logo.png';
+import iQuireLogo from '../../assets/logo/iquire-logo.png';
 
 // ============================================================================
 // Component

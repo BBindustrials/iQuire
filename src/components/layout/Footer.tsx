@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../integrations/supabase/client';
 import styles from './Footer.module.css';
-import logo from '../../assets/logo/iQuire-logo.png';
+import logo from '../../assets/logo/iquire-logo.png';
 
 // ============================================================================
 // Types
