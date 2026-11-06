@@ -6,7 +6,7 @@ import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import styles from './MemberSidebar.module.css';
-import iQuireLogo from '../../../assets/logo/iQuire-logo.png';
+import iQuireLogo from '../../../assets/logo/iquire-logo.png';
 
 // ============================================================================
 // Icons
